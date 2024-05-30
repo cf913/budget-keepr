@@ -44,7 +44,7 @@ export function AppleSignInButton({setLoading}: {setLoading: (value: boolean) =>
               setLoading(false)
               throw new Error('No identityToken.')
             }
-          } catch (e) {
+          } catch (e: any) {
             if (e.code === 'ERR_REQUEST_CANCELED') {
               // handle that the user canceled the sign-in flow
             } else {

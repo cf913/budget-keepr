@@ -1,3 +1,4 @@
+import Page from '@/components/Layout/Page'
 import {ThemedText} from '@/components/ThemedText'
 import {ThemedView} from '@/components/ThemedView'
 import {useLocalSettings} from '@/stores/localSettings'
@@ -15,7 +16,7 @@ export default function SelectBudget() {
   }
 
   return (
-    <ThemedView>
+    <Page withHeader>
       <ThemedText>TODO: Select Budget Screen</ThemedText>
       <Pressable onPress={() => onSelectBudget('food')}>
         <ThemedText>Food</ThemedText>
@@ -26,6 +27,6 @@ export default function SelectBudget() {
       <Pressable onPress={() => onSelectBudget()}>
         <ThemedText>Null</ThemedText>
       </Pressable>
-    </ThemedView>
+    </Page>
   )
 }

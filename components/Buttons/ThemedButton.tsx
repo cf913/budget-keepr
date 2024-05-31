@@ -3,6 +3,7 @@ import {StyleSheet, Pressable, View, type ViewProps} from 'react-native'
 import {useThemeColor} from '@/hooks/useThemeColor'
 import {ThemedText} from '../ThemedText'
 import {Colors} from '@/constants/Colors'
+import {HEIGHT, RADIUS} from '@/constants/Styles'
 
 export type ThemedViewProps = ViewProps & {
   text: string
@@ -40,8 +41,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    height: 50,
-    borderRadius: 12,
+    height: HEIGHT.item,
+    borderRadius: RADIUS,
   },
   text: {
     fontWeight: 'bold',

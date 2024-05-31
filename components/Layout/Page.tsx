@@ -1,32 +1,40 @@
 import {ReactNode} from 'react'
 import {ThemedView} from '../ThemedView'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
-import {StyleSheet} from 'react-native'
+import {ScrollView, StyleSheet} from 'react-native'
 import {ThemedText} from '../ThemedText'
 import {PADDING, TYPO} from '@/constants/Styles'
+import {useHeaderHeight} from '@react-navigation/elements'
 
 export default function Page({
+  withHeader = false,
   title,
   children,
 }: {
+  withHeader?: boolean
   title?: string
   children: ReactNode
 }) {
   const insets = useSafeAreaInsets()
+  const headerHeight = useHeaderHeight()
 
   return (
     <ThemedView
       style={[
-        {paddingTop: insets.top, paddingBottom: insets.bottom},
+        {
+          paddingBottom: insets.bottom,
+        },
         styles.container,
       ]}
     >
-      <ThemedView style={styles.header}>
+      <ScrollView style={{paddingTop: withHeader ? headerHeight : insets.top}}>
         {title ? (
-          <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
+          <ThemedView style={styles.header}>
+            <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
+          </ThemedView>
         ) : null}
-      </ThemedView>
-      {children}
+        {children}
+      </ScrollView>
     </ThemedView>
   )
 }

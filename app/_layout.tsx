@@ -8,6 +8,7 @@ import 'react-native-reanimated'
 import {useColorScheme} from '@/hooks/useColorScheme'
 import {SessionProvider} from '@/stores/session'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
+import {LocalSettingsProvider} from '@/stores/localSettings'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -20,7 +21,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded) {
-      SplashScreen.hideAsync()
+      // SplashScreen.hideAsync()
     }
   }, [loaded])
 
@@ -32,7 +33,9 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <SessionProvider>
-          <Slot />
+          <LocalSettingsProvider>
+            <Slot />
+          </LocalSettingsProvider>
         </SessionProvider>
       </ThemeProvider>
     </SafeAreaProvider>

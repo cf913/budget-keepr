@@ -1,13 +1,16 @@
-import {Image, StyleSheet, Platform} from 'react-native'
+import {Image, StyleSheet, Platform, Pressable} from 'react-native'
 
 import ParallaxScrollView from '@/components/ParallaxScrollView'
 import {ThemedText} from '@/components/ThemedText'
 import {ThemedView} from '@/components/ThemedView'
 import {useEffect, useState} from 'react'
 import {getBudgets} from '@/data/queries'
+import {Link, Redirect} from 'expo-router'
+import {useLocalSettings} from '@/stores/localSettings'
 
 export default function HomeScreen() {
   const [budgets, setBudgets] = useState<any>([])
+  const {defaultBudgetId} = useLocalSettings()
 
   useEffect(() => {
     const load = async () => {
@@ -17,6 +20,9 @@ export default function HomeScreen() {
 
     load()
   }, [])
+
+  if (!defaultBudgetId) return <Redirect href="select-budget" />
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{light: '#A1CEDC', dark: '#1D3D47'}}
@@ -28,8 +34,15 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText>TODO: title</ThemedText>
+        <ThemedText style={{fontWeight: 'bold', fontSize: 30, lineHeight: 32}}>
+          {defaultBudgetId}
+        </ThemedText>
       </ThemedView>
+      <Link href="select-budget" asChild>
+        <Pressable>
+          <ThemedText>To Select Budget</ThemedText>
+        </Pressable>
+      </Link>
       <ThemedView style={styles.stepContainer}>
         <ThemedText>Budgets:</ThemedText>
         {budgets.map((b: any) => {
@@ -42,9 +55,9 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // gap: 8,
   },
   stepContainer: {
     gap: 8,

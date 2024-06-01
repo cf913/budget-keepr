@@ -16,6 +16,7 @@ export default function SettingsLayout() {
         options={{
           // Set the presentation mode to modal for our modal route.
           presentation: 'modal',
+          headerShown: false,
         }}
       />
     </Stack>

@@ -1,18 +1,22 @@
 import {Image, StyleSheet, Platform, Pressable} from 'react-native'
 
 import {ThemedText} from '@/components/ThemedText'
-import {Link, Redirect} from 'expo-router'
+import {Link, Redirect, router} from 'expo-router'
 import {useLocalSettings} from '@/stores/localSettings'
 import Page from '@/components/Layout/Page'
 import Content from '@/components/Layout/Content'
 import RecentEntries from '@/components/RecentEntries'
 import Padder from '@/components/Layout/Padder'
 import {useState} from 'react'
+import {ThemedView} from '@/components/ThemedView'
+import {ThemedButton} from '@/components/Buttons/ThemedButton'
+import AddNewEntry from '@/components/Modal/AddNewEntry'
 
 export default function HomeScreen() {
   const {defaultBudget} = useLocalSettings()
   const [refreshing, setRefreshing] = useState(false)
   const [counter, setCounter] = useState(0)
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   if (!defaultBudget) return <Redirect href="select-budget-onboarding" />
 
@@ -52,6 +56,21 @@ export default function HomeScreen() {
           - TODO: Show big fat ADD_ENTRY button down bottom
         </ThemedText>
       </Content>
+      <Content>
+        <ThemedView>
+          <ThemedButton
+            onPress={() => router.push('add-new-entry')}
+            text="ADD NEW ENTRY"
+          ></ThemedButton>
+        </ThemedView>
+      </Content>
+      <AddNewEntry
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+      >
+        {/* A list of emoji component will go here */}
+        <ThemedText>Modal content here</ThemedText>
+      </AddNewEntry>
     </Page>
   )
 }

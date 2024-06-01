@@ -10,9 +10,9 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000"
     },
-    "backgroundColor": "#ffffff",
+    "backgroundColor": "#000",
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn": true
@@ -28,11 +28,7 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-apple-authentication",
-      "expo-font"
-    ],
+    "plugins": ["expo-router", "expo-apple-authentication", "expo-font"],
     "experiments": {
       "typedRoutes": true
     },

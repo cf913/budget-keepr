@@ -25,7 +25,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false)
   const {session} = useSession()
 
-  if (session) return <Redirect href="/(tabs)" />
+  if (session) return <Redirect href="/(main)" />
 
   async function signInWithEmail() {
     setLoading(true)

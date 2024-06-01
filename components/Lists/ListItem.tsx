@@ -6,6 +6,8 @@ import {Pressable, StyleSheet} from 'react-native'
 import {HEIGHT, PADDING, RADIUS, TYPO} from '@/constants/Styles'
 import {Link} from 'expo-router'
 import {ReactNode} from 'react'
+import FadeInView from '../FadeInView'
+import {Category} from '../RecentEntries'
 
 const Wrapper = ({href, children}: {href?: string; children: ReactNode}) =>
   href ? (
@@ -18,39 +20,64 @@ const Wrapper = ({href, children}: {href?: string; children: ReactNode}) =>
 
 export default function ListItem({
   href,
+  title,
   description,
+  category,
   lastItem = false,
+  right,
 }: {
   href?: string
+  title: string
   description?: string | null
+  category?: Category
   lastItem?: boolean
+  right?: string
 }) {
   const backgroundColor = useThemeColor({}, 'bg_secondary')
-  const borderColor = useThemeColor({}, 'bg')
+  const borderColor = useThemeColor({}, 'mid2')
   const chevronColor = useThemeColor({}, 'mid')
+  const rightColor = useThemeColor({}, 'tint')
+
+  const withCategory = category
+    ? {
+        borderStartWidth: 5,
+        borderStartColor: title === 'Coles' ? 'red' : 'gold',
+      }
+    : null
 
   return (
     <Wrapper href={href}>
       <ThemedView
         style={[
           styles.container,
-          {backgroundColor, borderColor, borderBottomWidth: +!lastItem},
+          {
+            backgroundColor,
+            ...withCategory,
+          },
         ]}
       >
         <ThemedView style={[{}, styles.left]}>
-          <ThemedText style={[{}, styles.title]}>Default Budget</ThemedText>
+          <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
           {description ? (
             <ThemedText style={[{}, styles.description]}>
               {description}
             </ThemedText>
           ) : null}
         </ThemedView>
-        <ThemedView style={[{}, styles.right]}>
+        <FadeInView style={[{}, styles.right]}>
           {href ? (
             <Feather name="chevron-right" size={24} color={chevronColor} />
           ) : null}
-        </ThemedView>
+          {right ? (
+            <ThemedText style={{color: rightColor}}>{right}</ThemedText>
+          ) : null}
+        </FadeInView>
       </ThemedView>
+      {!+lastItem ? (
+        <ThemedView
+          style={{width: '100%', height: 1, backgroundColor: borderColor}}
+        ></ThemedView>
+      ) : null}
     </Wrapper>
   )
 }
@@ -68,7 +95,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: PADDING,
     height: HEIGHT.item,
-    borderBottomWidth: 1,
   },
   left: {
     ...common_styles.bg_view,
@@ -77,7 +103,8 @@ const styles = StyleSheet.create({
   description: {
     ...TYPO.small,
     paddingVertical: 3,
-    opacity: 0.5,
+    fontFamily: 'SpaceMono',
+    opacity: 0.4,
   },
   right: {
     ...common_styles.bg_view,

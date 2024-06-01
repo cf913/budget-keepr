@@ -24,6 +24,7 @@ export default function AppLayout() {
         name="settings"
         options={{
           title: 'Settings',
+          headerShown: false,
         }}
       />
     </Stack>

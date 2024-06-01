@@ -1,4 +1,3 @@
-import {Profile} from '@/app/(app)/(tabs)/profile'
 import {supabase} from '@/lib/supabase'
 import {logRes} from '@/utils/helpers'
 
@@ -38,6 +37,31 @@ export const getBudgets = async () => {
 
   /// DEV
   logRes('getBudgets', data, error)
+
+  return data
+}
+
+export const getEntries = async (budgetId: string) => {
+  const user = await getSupabaseUser()
+  if (!user) return
+
+  const {data, error} = await supabase
+    .from('entries')
+    .select(
+      `
+      id,
+      categories(id, name),
+      sub_categories(id, name),
+      amount,
+      created_at
+      `,
+    )
+    .eq('budget_id', budgetId)
+    .order('created_at', {ascending: false})
+    .limit(5)
+
+  /// DEV
+  logRes('getEntries', data, error)
 
   return data
 }

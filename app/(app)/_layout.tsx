@@ -12,14 +12,13 @@ export default function AppLayout() {
 
   return (
     <Stack
-      initialRouteName="select-budget"
       screenOptions={{headerTransparent: true, headerBlurEffect: 'regular'}}
     >
       <Stack.Screen
-        name="select-budget"
-        options={{title: 'Select Budget', headerRight: SettingsButton}}
+        name="select-budget-onboarding"
+        options={{title: 'Select Budget'}}
       />
-      <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+      <Stack.Screen name="(main)" options={{headerShown: false}} />
       <Stack.Screen name="+not-found" />
       <Stack.Screen
         name="settings"

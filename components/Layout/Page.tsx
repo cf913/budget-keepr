@@ -5,12 +5,15 @@ import {ScrollView, StyleSheet} from 'react-native'
 import {ThemedText} from '../ThemedText'
 import {PADDING, TYPO} from '@/constants/Styles'
 import {useHeaderHeight} from '@react-navigation/elements'
+import SettingsButton from '../Buttons/SettingsButton'
 
 export default function Page({
+  withSettings = false,
   withHeader = false,
   title,
   children,
 }: {
+  withSettings?: boolean
   withHeader?: boolean
   title?: string
   children: ReactNode
@@ -28,11 +31,14 @@ export default function Page({
       ]}
     >
       <ScrollView style={{paddingTop: withHeader ? headerHeight : insets.top}}>
-        {title ? (
-          <ThemedView style={styles.header}>
-            <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
-          </ThemedView>
-        ) : null}
+        <ThemedView style={[{}, styles.header]}>
+          {title ? (
+            <ThemedView style={styles.title_container}>
+              <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
+            </ThemedView>
+          ) : null}
+          {withSettings ? <SettingsButton /> : null}
+        </ThemedView>
         {children}
       </ScrollView>
     </ThemedView>
@@ -43,10 +49,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  title_container: {},
   title: {
     ...TYPO.title,
   },
   header: {
     padding: PADDING,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 })

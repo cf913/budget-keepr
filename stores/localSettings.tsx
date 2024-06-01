@@ -1,15 +1,26 @@
 import {Loader} from '@/components/Loader'
-import {getData, getDataMany, storeData} from '@/utils/async-storage'
+import {
+  getData,
+  getDataMany,
+  getDataManyObj,
+  storeData,
+  storeDataObj,
+} from '@/utils/async-storage'
 import {SplashScreen} from 'expo-router'
 import React, {useEffect, useState} from 'react'
 
+export interface Budget {
+  id: string
+  name: string
+}
+
 const LocalSettingsContext = React.createContext<{
-  defaultBudgetId: string | null
-  setDefaultBudgetId: (id?: string) => Promise<void>
+  defaultBudget: Budget | null
+  setDefaultBudget: (budget: Budget | null) => Promise<void>
   loadingSettings: boolean
 }>({
-  defaultBudgetId: null,
-  setDefaultBudgetId: async () => {},
+  defaultBudget: null,
+  setDefaultBudget: async () => {},
   loadingSettings: true,
 })
 
@@ -26,25 +37,24 @@ export function useLocalSettings() {
 }
 
 export function LocalSettingsProvider(props: React.PropsWithChildren) {
-  const [defaultBudgetId, setStateDefaultBudgetId] = useState<string | null>(
-    null,
-  )
+  const [defaultBudget, setStateDefaultBudget] = useState<Budget | null>(null)
   const [loadingSettings, setLoadingSettings] = useState(true)
 
   const KEYS: any = {
-    DEFAULT_BUDGET_ID: {
-      key: 'DEFAULT_BUDGET_ID',
-      setter: setStateDefaultBudgetId,
+    DEFAULT_BUDGET: {
+      key: 'DEFAULT_BUDGET',
+      setter: setStateDefaultBudget,
     },
   }
 
   useEffect(() => {
     const load = async () => {
-      const values = await getDataMany([KEYS.DEFAULT_BUDGET_ID.key])
+      const values = await getDataManyObj([KEYS.DEFAULT_BUDGET.key])
       if (values) {
-        values.map(([k, v]) => {
+        const nextValues = values.map(([k, v]) => {
           KEYS[k].setter(v)
         })
+        console.log('values', nextValues)
       }
       // DONE, READY TO LOAD APP CONTENT
       setLoadingSettings(false)
@@ -55,17 +65,17 @@ export function LocalSettingsProvider(props: React.PropsWithChildren) {
     load()
   }, [])
 
-  const setDefaultBudgetId = async (id?: string) => {
-    setStateDefaultBudgetId(id ?? null)
-    await storeData(KEYS.DEFAULT_BUDGET_ID.key, id)
+  const setDefaultBudget = async (budget: Budget | null) => {
+    setStateDefaultBudget(budget ?? null)
+    await storeDataObj(KEYS.DEFAULT_BUDGET.key, budget)
     return
   }
 
   return (
     <LocalSettingsContext.Provider
       value={{
-        defaultBudgetId,
-        setDefaultBudgetId,
+        defaultBudget,
+        setDefaultBudget,
         loadingSettings,
       }}
     >

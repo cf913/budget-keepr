@@ -40,6 +40,17 @@ const getDataMany = async (keys: string[]) => {
   }
 }
 
+const getDataManyObj = async (keys: string[]) => {
+  try {
+    const value = await AsyncStorage.multiGet(keys)
+    if (value !== null) {
+      return value.map(([k, v]) => [k, v != null ? JSON.parse(v) : null])
+    }
+  } catch (e) {
+    alert('getData error for ' + keys)
+  }
+}
+
 const getDataObj = async (key: string) => {
   try {
     const jsonValue = await AsyncStorage.getItem(key)
@@ -48,4 +59,11 @@ const getDataObj = async (key: string) => {
     alert('getDataObj error for ' + key)
   }
 }
-export {storeData, storeDataObj, getData, getDataMany, getDataObj}
+export {
+  storeData,
+  storeDataObj,
+  getData,
+  getDataMany,
+  getDataManyObj,
+  getDataObj,
+}

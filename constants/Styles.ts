@@ -14,6 +14,10 @@ export const TYPO = StyleSheet.create({
     lineHeight: 38,
     fontWeight: 'bold',
   },
+  small: {
+    fontSize: 12,
+    lineHeight: 14,
+  },
 })
 
 export const STYLES = StyleSheet.create({

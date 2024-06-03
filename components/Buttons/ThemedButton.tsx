@@ -4,9 +4,11 @@ import {useThemeColor} from '@/hooks/useThemeColor'
 import {ThemedText} from '../ThemedText'
 import {HEIGHT, RADIUS} from '@/constants/Styles'
 import {Feather} from '@expo/vector-icons'
+import {Loader} from '../Loader'
 
 export type ThemedViewProps = ViewProps & {
   round?: boolean
+  loading?: boolean
   title: string
   onPress?: () => void
   lightColor?: string
@@ -17,6 +19,7 @@ const ROUND_WIDTH = HEIGHT.item * 1.2
 
 export function ThemedButton({
   round = false,
+  loading = false,
   title,
   onPress,
   style,
@@ -34,6 +37,7 @@ export function ThemedButton({
   return (
     <Pressable
       onPress={onPress}
+      disabled={loading}
       style={[
         {backgroundColor},
         round ? styles.round : styles.default_shape,
@@ -42,7 +46,9 @@ export function ThemedButton({
       hitSlop={20}
       {...otherProps}
     >
-      {round ? (
+      {loading ? (
+        <Loader />
+      ) : round ? (
         // ICON
         <Feather name="plus" size={ROUND_WIDTH / 2} color={textColor} />
       ) : (

@@ -16,6 +16,7 @@ export interface Category {
 export interface SubCategory {
   id: string
   name: string
+  categories?: Category
 }
 
 export interface Entry {

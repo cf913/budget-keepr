@@ -9,16 +9,31 @@ import {ReactNode} from 'react'
 import FadeInView from '../FadeInView'
 import {Category} from '../RecentEntries'
 
-const Wrapper = ({href, children}: {href?: string; children: ReactNode}) =>
-  href ? (
-    <Link href={href} asChild>
-      <Pressable>{children}</Pressable>
-    </Link>
-  ) : (
-    <>{children}</>
-  )
+const Wrapper = ({
+  href,
+  onSelectItem,
+  children,
+}: {
+  href?: string
+  onSelectItem: (item: any) => void
+  children: ReactNode
+}) => {
+  if (href)
+    return (
+      <Link href={href} asChild>
+        <Pressable>{children}</Pressable>
+      </Link>
+    )
+
+  if (onSelectItem)
+    return <Pressable onPress={onSelectItem}>{children}</Pressable>
+
+  return children
+}
 
 export default function ListItem({
+  item,
+  onSelect,
   href,
   title,
   description,
@@ -26,6 +41,8 @@ export default function ListItem({
   lastItem = false,
   right,
 }: {
+  item?: any
+  onSelect?: (item: any) => void
   href?: string
   title: string
   description?: string | null
@@ -41,12 +58,15 @@ export default function ListItem({
   const withCategory = category
     ? {
         borderStartWidth: 5,
-        borderStartColor: title === 'Coles' ? 'red' : 'gold',
+        borderStartColor:
+          title === 'Coles' ? 'red' : title === 'Aldi' ? 'blue' : 'gold',
       }
     : null
 
+  const onSelectItem = () => (onSelect ? onSelect(item) : null)
+
   return (
-    <Wrapper href={href}>
+    <Wrapper href={href} onSelectItem={onSelectItem}>
       <ThemedView
         style={[
           styles.container,

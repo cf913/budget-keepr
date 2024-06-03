@@ -65,3 +65,47 @@ export const getEntries = async (budgetId: string) => {
 
   return data
 }
+
+export const searchCategories = async (
+  budgetId: string,
+  searchText?: string,
+) => {
+  const user = await getSupabaseUser()
+  if (!user) return
+
+  let {data, error} = await supabase.rpc('fuzzy_search', {
+    search_text: searchText,
+  })
+
+  /// DEV
+  logRes('searchCategories', data, error)
+
+  return data
+}
+
+export const getCategories = async (budgetId: string, searchText?: string) => {
+  const user = await getSupabaseUser()
+  if (!user) return
+
+  let query = supabase
+    .from('sub_categories')
+    .select(
+      `
+      id,
+      name,
+      categories:parent_id(id, name)
+      `,
+    )
+    .eq('budget_id', budgetId)
+
+  console.log('SEARCHING FOR', searchText)
+
+  if (searchText) query = query.ilike('name', `%${searchText}%`)
+
+  const {data, error} = await query.order('name', {ascending: true})
+
+  /// DEV
+  logRes('getCategories', data, error)
+
+  return data
+}

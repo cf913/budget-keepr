@@ -6,6 +6,7 @@ export function Loader() {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   }
 
   return (

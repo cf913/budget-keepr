@@ -2,7 +2,6 @@ import {StyleSheet, Pressable, View, type ViewProps} from 'react-native'
 
 import {useThemeColor} from '@/hooks/useThemeColor'
 import {ThemedText} from '../ThemedText'
-import {Colors} from '@/constants/Colors'
 import {HEIGHT, RADIUS} from '@/constants/Styles'
 import {Feather} from '@expo/vector-icons'
 

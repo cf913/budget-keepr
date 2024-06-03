@@ -1,7 +1,16 @@
 import {ReactNode} from 'react'
 import {ThemedView} from '../ThemedView'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
-import {Pressable, RefreshControl, ScrollView, StyleSheet} from 'react-native'
+import {
+  Pressable,
+  RefreshControl,
+  RefreshControlProps,
+  ScrollView,
+  ScrollViewProps,
+  StyleSheet,
+  ViewProps,
+  ViewStyle,
+} from 'react-native'
 import {ThemedText} from '../ThemedText'
 import {PADDING, TYPO} from '@/constants/Styles'
 import {useHeaderHeight} from '@react-navigation/elements'
@@ -9,22 +18,49 @@ import SettingsButton from '../Buttons/SettingsButton'
 import {Feather} from '@expo/vector-icons'
 import {useThemeColor} from '@/hooks/useThemeColor'
 import {router} from 'expo-router'
+import Content from './Content'
+
+const Wrapper = ({
+  scroll,
+  refreshControl,
+  children,
+  ...props
+}: ViewProps &
+  ScrollViewProps & {
+    scroll?: boolean
+    refreshControl: React.JSX.Element
+    children: ReactNode
+  }) => {
+  return scroll ? (
+    <ScrollView refreshControl={refreshControl} {...props}>
+      {children}
+    </ScrollView>
+  ) : (
+    <ThemedView {...props}>{children}</ThemedView>
+  )
+}
 
 export default function Page({
+  scroll = false,
   back = false,
   refreshing = false,
   onRefresh,
   withSettings = false,
   withHeader = false,
   title,
+  style,
+  footer = null,
   children,
 }: {
+  scroll?: boolean
   back?: boolean
   refreshing?: boolean
   onRefresh?: () => void
   withSettings?: boolean
   withHeader?: boolean
   title?: string
+  style?: ViewStyle
+  footer?: ReactNode
   children: ReactNode
 }) {
   const insets = useSafeAreaInsets()
@@ -45,14 +81,21 @@ export default function Page({
     <ThemedView
       style={[
         {
-          paddingBottom: insets.bottom,
+          // paddingBottom: insets.bottom,
         },
         styles.container,
+        {...style},
       ]}
     >
-      <ScrollView
+      <Wrapper
+        scroll={scroll}
         refreshControl={refreshControl}
-        style={{paddingTop: withHeader ? headerHeight : insets.top}}
+        style={{
+          paddingTop: withHeader ? headerHeight : insets.top,
+          flex: 1,
+          flexGrow: 1,
+        }}
+        contentContainerStyle={{flex: 1, flexGrow: 1}}
       >
         <ThemedView style={[{}, styles.header]}>
           {title ? (
@@ -65,7 +108,7 @@ export default function Page({
                 >
                   <Feather
                     name="chevron-left"
-                    size={32}
+                    size={28}
                     color={colorText}
                     style={{marginLeft: -10}}
                   />
@@ -77,7 +120,15 @@ export default function Page({
           {withSettings ? <SettingsButton /> : null}
         </ThemedView>
         {children}
-      </ScrollView>
+      </Wrapper>
+      {footer ? (
+        <Content
+          floating
+          style={{paddingBottom: insets.bottom, backgroundColor: 'transparent'}}
+        >
+          {footer}
+        </Content>
+      ) : null}
     </ThemedView>
   )
 }
@@ -85,6 +136,7 @@ export default function Page({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'relative',
   },
   title_container: {
     flexDirection: 'row',

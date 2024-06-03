@@ -4,16 +4,21 @@ import {useThemeColor} from '@/hooks/useThemeColor'
 import {ThemedText} from '../ThemedText'
 import {Colors} from '@/constants/Colors'
 import {HEIGHT, RADIUS} from '@/constants/Styles'
+import {Feather} from '@expo/vector-icons'
 
 export type ThemedViewProps = ViewProps & {
-  text: string
+  round?: boolean
+  title: string
   onPress?: () => void
   lightColor?: string
   darkColor?: string
 }
 
+const ROUND_WIDTH = HEIGHT.item * 1.2
+
 export function ThemedButton({
-  text,
+  round = false,
+  title,
   onPress,
   style,
   lightColor,
@@ -25,24 +30,53 @@ export function ThemedButton({
     'bg_secondary',
   )
 
+  const textColor = useThemeColor({}, 'text')
+
   return (
     <Pressable
       onPress={onPress}
-      style={[{backgroundColor}, styles.shape, style]}
+      style={[
+        {backgroundColor},
+        round ? styles.round : styles.default_shape,
+        style,
+      ]}
+      hitSlop={20}
       {...otherProps}
     >
-      <ThemedText style={styles.text}>{text}</ThemedText>
+      {round ? (
+        // ICON
+        <Feather name="plus" size={ROUND_WIDTH / 2} color={textColor} />
+      ) : (
+        // TEXT
+        <ThemedText style={styles.text}>{title}</ThemedText>
+      )}
     </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
-  shape: {
+  default_shape: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     height: HEIGHT.item,
     borderRadius: RADIUS,
+  },
+  round: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    width: ROUND_WIDTH,
+    height: ROUND_WIDTH,
+    borderRadius: ROUND_WIDTH / 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
+    elevation: 24,
   },
   text: {
     fontWeight: 'bold',

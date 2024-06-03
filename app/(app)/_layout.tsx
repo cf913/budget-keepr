@@ -1,4 +1,3 @@
-import SettingsButton from '@/components/Buttons/SettingsButton'
 import {useSession} from '@/stores/session'
 import {Redirect, Stack} from 'expo-router'
 import {Text} from 'react-native'

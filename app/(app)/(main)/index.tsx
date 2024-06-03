@@ -11,6 +11,7 @@ import {useState} from 'react'
 import {ThemedView} from '@/components/ThemedView'
 import {ThemedButton} from '@/components/Buttons/ThemedButton'
 import AddNewEntry from '@/components/Modal/AddNewEntry'
+import Spacer from '@/components/Layout/Spacer'
 
 export default function HomeScreen() {
   const {defaultBudget} = useLocalSettings()
@@ -26,10 +27,19 @@ export default function HomeScreen() {
 
   return (
     <Page
+      scroll
       title={defaultBudget.name}
       withSettings
       refreshing={refreshing}
       onRefresh={onRefresh}
+      footer={
+        <ThemedButton
+          round
+          onPress={() => router.push('add-new-entry')}
+          title="ADD NEW ENTRY"
+          style={{zIndex: 99}}
+        ></ThemedButton>
+      }
     >
       <Content>
         {/* /////// RECENT ENTRIES ///////// */}
@@ -56,21 +66,15 @@ export default function HomeScreen() {
           - TODO: Show big fat ADD_ENTRY button down bottom
         </ThemedText>
       </Content>
-      <Content>
+      {/* <Spacer /> */}
+      {/* <Content floating>
         <ThemedView>
           <ThemedButton
             onPress={() => router.push('add-new-entry')}
-            text="ADD NEW ENTRY"
+            title="ADD NEW ENTRY"
           ></ThemedButton>
         </ThemedView>
-      </Content>
-      <AddNewEntry
-        isVisible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-      >
-        {/* A list of emoji component will go here */}
-        <ThemedText>Modal content here</ThemedText>
-      </AddNewEntry>
+      </Content> */}
     </Page>
   )
 }

@@ -41,7 +41,7 @@ export default function Settings() {
         }}
       >
         <ThemedButton
-          text="Sign Out"
+          title="Sign Out"
           onPress={() => supabase.auth.signOut()}
         ></ThemedButton>
       </ThemedView>

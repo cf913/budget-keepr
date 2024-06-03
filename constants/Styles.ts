@@ -11,8 +11,8 @@ export const HEIGHT = {
 
 export const TYPO = StyleSheet.create({
   title: {
-    fontSize: 36,
-    lineHeight: 38,
+    fontSize: 30,
+    lineHeight: 32,
     fontWeight: 'bold',
   },
   small: {

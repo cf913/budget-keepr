@@ -35,7 +35,7 @@ export default function HomeScreen() {
       footer={
         <ThemedButton
           round
-          onPress={() => router.push('add-new-entry')}
+          onPress={() => router.navigate('add-new-entry')}
           title="ADD NEW ENTRY"
           style={{zIndex: 99}}
         ></ThemedButton>

@@ -1,5 +1,15 @@
-import {Slot} from 'expo-router'
+import {Stack} from 'expo-router'
 
 export default function SettingsLayout() {
-  return <Slot />
+  return (
+    <Stack screenOptions={{headerShown: false}}>
+      <Stack.Screen
+        name="category-create"
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+    </Stack>
+  )
 }

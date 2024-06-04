@@ -8,13 +8,14 @@ import {Link} from 'expo-router'
 import {ReactNode} from 'react'
 import FadeInView from '../FadeInView'
 import {Category} from '../RecentEntries'
+import {ExpoRouter} from '@/.expo/types/router'
 
 const Wrapper = ({
   href,
   onSelectItem,
   children,
 }: {
-  href?: string
+  href?: ExpoRouter.Href
   onSelectItem: (item: any) => void
   children: ReactNode
 }) => {
@@ -43,7 +44,7 @@ export default function ListItem({
 }: {
   item?: any
   onSelect?: (item: any) => void
-  href?: string
+  href?: ExpoRouter.Href
   title: string
   description?: string | null
   category?: Category
@@ -84,9 +85,14 @@ export default function ListItem({
             </ThemedText>
           ) : null}
         </ThemedView>
-        <FadeInView style={[{}, styles.right]}>
+        <FadeInView style={styles.right}>
           {href ? (
-            <Feather name="chevron-right" size={24} color={chevronColor} />
+            <Feather
+              name="chevron-right"
+              size={24}
+              color={chevronColor}
+              style={{paddingLeft: PADDING / 4}}
+            />
           ) : null}
           {right ? (
             <ThemedText style={{color: rightColor}}>{right}</ThemedText>
@@ -127,6 +133,7 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   right: {
+    flexDirection: 'row-reverse',
     ...common_styles.bg_view,
   },
 })

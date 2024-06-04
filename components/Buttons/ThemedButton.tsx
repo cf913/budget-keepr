@@ -47,7 +47,7 @@ export function ThemedButton({
       {...otherProps}
     >
       {loading ? (
-        <Loader />
+        <Loader size="small" />
       ) : round ? (
         // ICON
         <Feather name="plus" size={ROUND_WIDTH / 2} color={textColor} />

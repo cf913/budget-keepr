@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Modal,
-  Pressable,
-  KeyboardAvoidingView,
-  TextInput,
-  Keyboard,
-} from 'react-native'
+import {StyleSheet, TextInput, Keyboard} from 'react-native'
 import {ThemedView} from '@/components/ThemedView'
 import {ReactNode, useRef, useState} from 'react'
 import {ThemedText} from '@/components/ThemedText'
@@ -18,7 +11,6 @@ import Padder from '@/components/Layout/Padder'
 import {Redirect, router} from 'expo-router'
 import {Category, SubCategory} from '@/components/RecentEntries'
 import Spacer from '@/components/Layout/Spacer'
-import {HEIGHT, PADDING} from '@/constants/Styles'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import CategorySuggestions from '@/components/CategorySuggestions'
 import {useDebouncedValue} from '@/hooks/useDebounce'
@@ -26,19 +18,10 @@ import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import dayjs from 'dayjs'
 import {toMoney} from '@/utils/helpers'
-import {supabase} from '@/lib/supabase'
 import {useLocalSettings} from '@/stores/localSettings'
 import {createEntry} from '@/data/mutations'
 
-export default function AddNewEntry({
-  isVisible,
-  children,
-  onClose,
-}: {
-  isVisible: boolean
-  children: ReactNode
-  onClose: () => void
-}) {
+export default function AddNewEntry({}: {}) {
   const {defaultBudget} = useLocalSettings()
   const insets = useSafeAreaInsets()
   const [saving, setSaving] = useState(false)

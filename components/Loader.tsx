@@ -1,7 +1,7 @@
 import {ActivityIndicator, ViewStyle} from 'react-native'
 import {ThemedView} from './ThemedView'
 
-export function Loader() {
+export function Loader({size = 'large'}: {size?: number | 'large' | 'small'}) {
   const styles: ViewStyle = {
     width: '100%',
     justifyContent: 'center',
@@ -11,7 +11,7 @@ export function Loader() {
 
   return (
     <ThemedView style={styles}>
-      <ActivityIndicator size={'large'} />
+      <ActivityIndicator size={size} />
     </ThemedView>
   )
 }

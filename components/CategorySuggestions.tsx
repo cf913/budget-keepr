@@ -3,12 +3,12 @@ import {Loader} from './Loader'
 import {SubCategory} from './RecentEntries'
 import {ThemedText} from './ThemedText'
 import {ThemedView} from './ThemedView'
-import {getCategories, searchCategories} from '@/data/queries'
 import {useLocalSettings} from '@/stores/localSettings'
 import ListItem from './Lists/ListItem'
 import Padder from './Layout/Padder'
 import {Divider} from './Divider'
 import List from './Lists/List'
+import {getSubCategories, searchSubCategories} from '@/data/sub_categories'
 
 export default function CategorySuggestions({
   onSelect,
@@ -26,12 +26,12 @@ export default function CategorySuggestions({
     const load = async () => {
       if (!defaultBudget) return
       if (searchText?.length < 1) {
-        setSubCategories(null)
+        getSubCategories()
         return
       }
       if (!subCategories) setLoading(true)
 
-      const data: any = await getCategories(defaultBudget.id, searchText)
+      const data: any = await searchSubCategories(searchText)
 
       console.log('DATA', JSON.stringify(data, null, 2))
       setSubCategories(data || [])

@@ -33,3 +33,8 @@ const formatter = new Intl.NumberFormat('en-US', {
 export const toMoney = (cents: number) => {
   return formatter.format(cents / 100)
 }
+
+export const isLastItem = (arr: any[], index: number) => {
+  if (!arr) return false
+  return index === arr.length - 1
+}

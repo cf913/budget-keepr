@@ -22,7 +22,7 @@ export default function Settings() {
             title="Default Budget"
             description={defaultBudget?.name}
           />
-          <ListItem title="Some setting" />
+          <ListItem title="Categories" href="settings/categories" />
           <ListItem title="Another one" description="with a desc" lastItem />
         </List>
         <Padder />

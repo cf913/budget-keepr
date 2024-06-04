@@ -9,46 +9,92 @@ import Padder from './Layout/Padder'
 import {Divider} from './Divider'
 import List from './Lists/List'
 import {getSubCategories, searchSubCategories} from '@/data/sub_categories'
+import {useQuery} from '@tanstack/react-query'
+import Fuse from 'fuse.js'
+import ListItemWithMatch from './Lists/ListItemWithMatch'
+import {ThemedButton} from './Buttons/ThemedButton'
+import {router} from 'expo-router'
 
 export default function CategorySuggestions({
+  visible,
   onSelect,
   searchText,
 }: {
+  visible: boolean
   onSelect: (subCat: SubCategory) => void
   searchText: string
 }) {
-  const {defaultBudget} = useLocalSettings()
-  const [loading, setLoading] = useState(false)
+  const {data, error, isLoading} = useQuery({
+    queryKey: ['sub_categories'],
+    queryFn: () => getSubCategories(),
+  })
+
+  if (error) return <ThemedText>Error: {error.message} </ThemedText>
+
+  if (!visible) return null
+
+  return (
+    <CategorySuggestionsScreen {...{isLoading, data, onSelect, searchText}} />
+  )
+}
+
+function CategorySuggestionsScreen({
+  isLoading,
+  data,
+  onSelect,
+  searchText,
+}: {
+  isLoading: boolean
+  data: SubCategory[] | undefined
+  onSelect: (subCat: SubCategory) => void
+  searchText: string
+}) {
   const [subCategories, setSubCategories] = useState<SubCategory[] | null>(null)
 
   useEffect(() => {
-    // API call or other actions to be performed with debounced value
-    const load = async () => {
-      if (!defaultBudget) return
-      if (searchText?.length < 1) {
-        getSubCategories()
-        return
-      }
-      if (!subCategories) setLoading(true)
+    if (!data) return
 
-      const data: any = await searchSubCategories(searchText)
-
-      console.log('DATA', JSON.stringify(data, null, 2))
-      setSubCategories(data || [])
-      setLoading(false)
+    const options = {
+      includeMatches: true,
+      minMatchCharLength: 0,
+      keys: ['name'],
     }
-    load()
+
+    const fuse = new Fuse(data, options)
+
+    const result = fuse.search(searchText)
+    setSubCategories(result.map(({item, ...rest}) => ({...item, ...rest})))
   }, [searchText])
 
   return (
     <ThemedView>
-      {loading ? (
+      {!subCategories?.length ? (
+        <ThemedView>
+          <Padder h={0.5} />
+          <ThemedText>
+            No results found for '
+            <ThemedText style={{fontWeight: 'bold'}}>{searchText}</ThemedText>'
+          </ThemedText>
+          <Padder h={0.5} />
+          <ThemedButton
+            title="+ Add new category"
+            onPress={() => {
+              router.back()
+              router.navigate({
+                pathname: '/settings/categories',
+                params: {from: '/add-new-entry'},
+              })
+            }}
+          />
+        </ThemedView>
+      ) : null}
+      {isLoading ? (
         <Loader />
       ) : (
         <List>
           {(subCategories || []).map((subCat: SubCategory, i: number) => {
             return (
-              <ListItem
+              <ListItemWithMatch
                 onSelect={onSelect}
                 item={subCat}
                 lastItem={i === (subCategories || []).length - 1}

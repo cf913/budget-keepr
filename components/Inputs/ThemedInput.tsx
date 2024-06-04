@@ -22,6 +22,8 @@ const withTimingConfig = {
 const ThemedInput = forwardRef(
   (
     {
+      onInputFocus,
+      onInputBlur,
       value,
       onChangeText,
       placeholder,
@@ -29,6 +31,8 @@ const ThemedInput = forwardRef(
       autofocus = false,
       ...props
     }: TextInputProps & {
+      onInputFocus?: () => void
+      onInputBlur?: () => void
       value: string
       onChangeText: any
       placeholder?: string
@@ -55,9 +59,11 @@ const ThemedInput = forwardRef(
     }))
 
     const onFocus = useCallback(() => {
+      if (onInputFocus) onInputFocus()
       animatedColor.value = withTiming(1, withTimingConfig)
     }, [])
     const onBlur = useCallback(() => {
+      if (onInputBlur) onInputBlur()
       animatedColor.value = withTiming(0, withTimingConfig)
     }, [])
 

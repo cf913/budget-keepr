@@ -9,10 +9,11 @@ import {ThemedText} from '@/components/ThemedText'
 import {getCategories} from '@/data/categories'
 import {isLastItem} from '@/utils/helpers'
 import {useQuery} from '@tanstack/react-query'
-import {router} from 'expo-router'
+import {router, useLocalSearchParams} from 'expo-router'
 import {useState} from 'react'
 
 export default function Categories() {
+  const {from} = useLocalSearchParams()
   const [refreshing, setRefreshing] = useState(false)
 
   const {data, error, refetch, isLoading} = useQuery({

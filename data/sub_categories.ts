@@ -1,14 +1,26 @@
 import {supabase} from '@/lib/supabase'
 import {getSupabaseUser} from './api'
 import {logRes} from '@/utils/helpers'
+import {SubCategory} from '@/components/RecentEntries'
 
-export const getSubCategories = async (categoryId?: string) => {
+export const getSubCategories = async (
+  categoryId?: string,
+): Promise<SubCategory[]> => {
   const user = await getSupabaseUser()
-  if (!user) return
+  if (!user) throw new Error('Current user not found')
 
   let query = supabase
     .from('sub_categories')
-    .select('*')
+    .select(
+      `
+      id,
+      name,
+      categories:parent_id(
+      id,
+      name
+      )
+      `,
+    )
     .order('name', {ascending: true})
 
   if (categoryId) query = query.eq('parent_id', categoryId)

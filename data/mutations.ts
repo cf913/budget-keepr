@@ -1,6 +1,6 @@
 import {supabase} from '@/lib/supabase'
-import {getSupabaseUser} from './queries'
 import {logRes} from '@/utils/helpers'
+import {getSupabaseUser} from './api'
 
 export const createEntry = async (entry: any) => {
   const user = await getSupabaseUser()

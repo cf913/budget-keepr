@@ -5,7 +5,7 @@ import {ThemedView} from '../ThemedView'
 import {Pressable, StyleSheet} from 'react-native'
 import {HEIGHT, PADDING, RADIUS, TYPO} from '@/constants/Styles'
 import {Link} from 'expo-router'
-import {ReactNode} from 'react'
+import {ReactNode, useMemo} from 'react'
 import FadeInView from '../FadeInView'
 import {Category} from '../RecentEntries'
 import {ExpoRouter} from '@/.expo/types/router'
@@ -32,7 +32,7 @@ const Wrapper = ({
   return children
 }
 
-export default function ListItem({
+export default function ListItemWithMatch({
   item,
   onSelect,
   href,
@@ -49,7 +49,7 @@ export default function ListItem({
   description?: string | null
   category?: Category
   lastItem?: boolean
-  right?: string | number
+  right?: string
 }) {
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   const borderColor = useThemeColor({}, 'mid2')
@@ -66,6 +66,25 @@ export default function ListItem({
 
   const onSelectItem = () => (onSelect ? onSelect(item) : null)
 
+  const matchingTitle = useMemo(() => {
+    const {matches, name} = item
+    const {indices} = matches[0]
+    const [start, end] = indices[0]
+    const pre = name.slice(0, start)
+    const mid = name.slice(start, end + 1)
+    const suf = name.slice(end + 1)
+
+    return (
+      <ThemedText style={[{}, styles.title]}>
+        {pre}
+        <ThemedText style={{color: rightColor, fontWeight: 'bold'}}>
+          {mid}
+        </ThemedText>
+        {suf}
+      </ThemedText>
+    )
+  }, [item])
+
   return (
     <Wrapper href={href} onSelectItem={onSelectItem}>
       <ThemedView
@@ -78,7 +97,7 @@ export default function ListItem({
         ]}
       >
         <ThemedView style={[{}, styles.left]}>
-          <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
+          {matchingTitle}
           {description ? (
             <ThemedText style={[{}, styles.description]}>
               {description}

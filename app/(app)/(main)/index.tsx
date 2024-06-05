@@ -7,11 +7,12 @@ import Page from '@/components/Layout/Page'
 import Content from '@/components/Layout/Content'
 import RecentEntries from '@/components/RecentEntries'
 import Padder from '@/components/Layout/Padder'
-import {useState} from 'react'
+import React, {useState} from 'react'
 import {ThemedView} from '@/components/ThemedView'
 import {ThemedButton} from '@/components/Buttons/ThemedButton'
 import AddNewEntry from '@/components/Modal/AddNewEntry'
 import Spacer from '@/components/Layout/Spacer'
+import Analytics from '@/components/Analytics'
 
 export default function HomeScreen() {
   const {defaultBudget} = useLocalSettings()
@@ -42,6 +43,8 @@ export default function HomeScreen() {
       }
     >
       <Content>
+        {/* ANALYTICS */}
+        <Analytics {...{counter}} />
         {/* /////// RECENT ENTRIES ///////// */}
         <RecentEntries {...{counter}} />
 

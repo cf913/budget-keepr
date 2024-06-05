@@ -29,6 +29,7 @@ export default function CategoryCreate() {
     },
     onError: error => {
       console.log('error', error.message)
+      alert('Oops. ' + error.message)
     },
   })
 

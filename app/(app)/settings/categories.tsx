@@ -6,25 +6,35 @@ import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import {Loader} from '@/components/Loader'
 import {ThemedText} from '@/components/ThemedText'
+import {isAdmin} from '@/data/api'
 import {getCategories} from '@/data/categories'
+import {useSession} from '@/stores/session'
 import {isLastItem} from '@/utils/helpers'
 import {useQuery} from '@tanstack/react-query'
 import {router, useLocalSearchParams} from 'expo-router'
 import {useState} from 'react'
 
 export default function Categories() {
-  const {from} = useLocalSearchParams()
   const [refreshing, setRefreshing] = useState(false)
+  const {session} = useSession()
 
   const {data, error, refetch, isLoading} = useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
   })
 
+  // const {data: isUserAdmin} = useQuery({
+  //   queryKey: ['isAdmin'],
+  //   queryFn: isAdmin,
+  // })
+
   // console.log('isPending', isPending)
   // console.log('data', JSON.stringify(data, null, 2))
   // console.log('isError', isError)
-  // console.log('error', error?.message)
+  if (error) {
+    console.log('error', error.message)
+    alert('Oops. ' + error.message)
+  }
 
   return (
     <Page
@@ -38,12 +48,14 @@ export default function Categories() {
         setRefreshing(false)
       }}
       footer={
-        <ThemedButton
-          round
-          onPress={() => router.push('/settings/category-create')}
-          title=""
-          style={{zIndex: 99}}
-        ></ThemedButton>
+        isAdmin(session) ? (
+          <ThemedButton
+            round
+            onPress={() => router.push('/settings/category-create')}
+            title=""
+            style={{zIndex: 99}}
+          ></ThemedButton>
+        ) : null
       }
     >
       <Content>

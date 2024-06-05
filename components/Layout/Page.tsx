@@ -48,6 +48,7 @@ export default function Page({
   withSettings = false,
   withHeader = false,
   title,
+  subtitle,
   style,
   footer = null,
   children,
@@ -59,6 +60,7 @@ export default function Page({
   withSettings?: boolean
   withHeader?: boolean
   title?: string
+  subtitle?: string
   style?: ViewStyle
   footer?: ReactNode
   children: ReactNode
@@ -114,7 +116,21 @@ export default function Page({
                   />
                 </Pressable>
               ) : null}
-              <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
+              <ThemedView>
+                <ThemedText
+                  style={[
+                    styles.title,
+                    subtitle ? TYPO.title_compact : TYPO.title,
+                  ]}
+                >
+                  {title}
+                </ThemedText>
+                {subtitle ? (
+                  <ThemedText style={[{}, styles.subtitle]}>
+                    {subtitle}
+                  </ThemedText>
+                ) : null}
+              </ThemedView>
             </ThemedView>
           ) : null}
           {withSettings ? <SettingsButton /> : null}
@@ -144,6 +160,11 @@ const styles = StyleSheet.create({
   },
   title: {
     ...TYPO.title,
+  },
+  subtitle: {
+    fontSize: 14,
+    lineHeight: 15,
+    opacity: 0.5,
   },
   header: {
     padding: PADDING,

@@ -21,10 +21,14 @@ export default function Category() {
     queryFn: () => getSubCategories(id),
   })
 
+  const firstItem = data?.[0]?.categories?.name
+
+  console.log('firstItem', firstItem)
+
   return (
     <Page
       scroll
-      title="Sub Category"
+      title={firstItem ? firstItem : ''}
       back
       refreshing={refreshing}
       onRefresh={async () => {

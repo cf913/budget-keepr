@@ -1,6 +1,6 @@
 import {StyleSheet, TextInput, Keyboard} from 'react-native'
 import {AnimatedView, ThemedView} from '@/components/ThemedView'
-import {useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {ThemedText} from '@/components/ThemedText'
 import Page from '@/components/Layout/Page'
 import ThemedInput from '@/components/Inputs/ThemedInput'
@@ -16,18 +16,21 @@ import CategorySuggestions from '@/components/CategorySuggestions'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import dayjs from 'dayjs'
-import {toMoney} from '@/utils/helpers'
+import {getWeekNumber, toMoney} from '@/utils/helpers'
 import {useLocalSettings} from '@/stores/localSettings'
 import {createEntry} from '@/data/mutations'
 import {
   useAnimatedStyle,
   useSharedValue,
+  withDelay,
   withTiming,
 } from 'react-native-reanimated'
 import {TYPO} from '@/constants/Styles'
+import {Picker} from '@react-native-picker/picker'
 
 export default function AddNewEntry({}: {}) {
   const translateValue = useSharedValue(48 + 8)
+  const opacityValue = useSharedValue(1)
   const {defaultBudget} = useLocalSettings()
   const insets = useSafeAreaInsets()
   const [suggestionsVisible, setSuggestionsVisible] = useState(false)
@@ -36,6 +39,7 @@ export default function AddNewEntry({}: {}) {
   const [subCategory, setSubCategory] = useState<SubCategory | null>(null)
   const [subCategorySearchText, setSubCategorySearchText] = useState<string>('')
   const subCategoryInput = useRef<TextInput>(null)
+  const [selectedLanguage, setSelectedLanguage] = useState()
 
   const handleSave = async () => {
     if (!amount)
@@ -46,13 +50,19 @@ export default function AddNewEntry({}: {}) {
     setSaving(true)
     // insert query
     console.log('setSaving')
+    const now = new Date()
     const {data, error}: any = await createEntry({
       amount: Math.round(+amount * 100),
       sub_category_id: subCategory.id,
       category_id: subCategory.categories?.id,
       budget_id: defaultBudget?.id,
+      year: now.getFullYear(),
+      month: now.getMonth(),
+      week: getWeekNumber(now),
+      day: now.getDay(),
     })
 
+    console.log(getWeekNumber(new Date()))
     console.log('after createEntry')
 
     // if error reset loading and show error message
@@ -78,6 +88,7 @@ export default function AddNewEntry({}: {}) {
 
   const animatedStyles = useAnimatedStyle(() => ({
     height: translateValue.value,
+    opacity: opacityValue.value,
   }))
 
   return (
@@ -121,18 +132,28 @@ export default function AddNewEntry({}: {}) {
           onChangeText={setSubCategorySearchText}
           returnKeyType="search"
           onInputFocus={() => {
-            translateValue.value = withTiming(0)
+            opacityValue.value = withTiming(0, {duration: 200})
+            translateValue.value = withTiming(0, {duration: 500})
             setSuggestionsVisible(true)
           }}
           onInputBlur={() => {
-            translateValue.value = withTiming(48 + 8)
+            opacityValue.value = withTiming(1, {duration: 500})
+            translateValue.value = withDelay(
+              100,
+              withTiming(48 + 8, {duration: 200}),
+            )
             setSuggestionsVisible(false)
           }}
         />
+
         <CategorySuggestions
           onSelect={onSelect}
           searchText={subCategorySearchText}
           visible={suggestionsVisible}
+          onAddNew={() => {
+            router.back()
+            router.navigate('/settings/categories')
+          }}
         />
         <Padder />
         <Divider />

@@ -18,10 +18,12 @@ import {router} from 'expo-router'
 export default function CategorySuggestions({
   visible,
   onSelect,
+  onAddNew,
   searchText,
 }: {
   visible: boolean
   onSelect: (subCat: SubCategory) => void
+  onAddNew: () => void
   searchText: string
 }) {
   const {data, error, isLoading} = useQuery({
@@ -34,7 +36,9 @@ export default function CategorySuggestions({
   if (!visible) return null
 
   return (
-    <CategorySuggestionsScreen {...{isLoading, data, onSelect, searchText}} />
+    <CategorySuggestionsScreen
+      {...{isLoading, data, onSelect, searchText, onAddNew}}
+    />
   )
 }
 
@@ -42,11 +46,13 @@ function CategorySuggestionsScreen({
   isLoading,
   data,
   onSelect,
+  onAddNew,
   searchText,
 }: {
   isLoading: boolean
   data: SubCategory[] | undefined
   onSelect: (subCat: SubCategory) => void
+  onAddNew: () => void
   searchText: string
 }) {
   const [subCategories, setSubCategories] = useState<SubCategory[] | null>(null)
@@ -76,16 +82,7 @@ function CategorySuggestionsScreen({
             <ThemedText style={{fontWeight: 'bold'}}>{searchText}</ThemedText>'
           </ThemedText>
           <Padder h={0.5} />
-          <ThemedButton
-            title="+ Add new category"
-            onPress={() => {
-              router.back()
-              router.navigate({
-                pathname: '/settings/categories',
-                params: {from: '/add-new-entry'},
-              })
-            }}
-          />
+          <ThemedButton title="+ Add new category" onPress={onAddNew} />
         </ThemedView>
       ) : null}
       {isLoading ? (

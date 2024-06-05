@@ -15,6 +15,11 @@ export const TYPO = StyleSheet.create({
     lineHeight: 32,
     fontWeight: 'bold',
   },
+  title_compact: {
+    fontSize: 24,
+    lineHeight: 26,
+    fontWeight: 'bold',
+  },
   small: {
     fontSize: 11,
     lineHeight: 13,

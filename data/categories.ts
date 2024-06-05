@@ -32,10 +32,7 @@ export const createCategory = async (category: CategoryInput) => {
   const user = await getSupabaseUser()
   if (!user) return
 
-  const {data, error} = await supabase.from('categories').insert({
-    user_id: user.id,
-    ...category,
-  })
+  const {data, error} = await supabase.from('categories').insert(category)
 
   await new Promise(res => setTimeout(res, 1000))
 

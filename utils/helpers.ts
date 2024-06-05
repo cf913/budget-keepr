@@ -30,8 +30,9 @@ const formatter = new Intl.NumberFormat('en-US', {
   //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
 })
 
-export const toMoney = (cents: number) => {
-  return formatter.format(cents / 100)
+export const toMoney = (cents: number, round?: boolean) => {
+  const res = formatter.format(cents / 100)
+  return round ? res.slice(0, -3) : res
 }
 
 export const isLastItem = (arr: any[], index: number) => {
@@ -39,9 +40,14 @@ export const isLastItem = (arr: any[], index: number) => {
   return index === arr.length - 1
 }
 
-export const getWeekNumber = (date: Date) => {
+export const getWeekNumber = (date?: Date) => {
+  const actualDate = date || new Date()
   var d = new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+    Date.UTC(
+      actualDate.getFullYear(),
+      actualDate.getMonth(),
+      actualDate.getDate(),
+    ),
   )
   var dayNum = d.getUTCDay() || 7
   d.setUTCDate(d.getUTCDate() + 4 - dayNum)

@@ -38,6 +38,9 @@ importers:
       expo-apple-authentication:
         specifier: ~6.4.1
         version: 6.4.1(expo@51.0.9(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6)))
+      expo-blur:
+        specifier: ~13.0.2
+        version: 13.0.2(expo@51.0.9(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6)))
       expo-constants:
         specifier: ~16.0.2
         version: 16.0.2(expo@51.0.9(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6)))
@@ -2406,6 +2409,11 @@ packages:
 
   expo-asset@10.0.6:
     resolution: {integrity: sha512-waP73/ccn/HZNNcGM4/s3X3icKjSSbEQ9mwc6tX34oYNg+XE5WdwOuZ9wgVVFrU7wZMitq22lQXd2/O0db8bxg==}
+    peerDependencies:
+      expo: '*'
+
+  expo-blur@13.0.2:
+    resolution: {integrity: sha512-t2p7BChO3Reykued++QJRMZ/og6J3aXtSQ+bU31YcBeXhZLkHwjWEhiPKPnJka7J2/yTs4+jOCNDY0kCZmcE3w==}
     peerDependencies:
       expo: '*'
 
@@ -8261,6 +8269,10 @@ snapshots:
       md5-file: 3.2.3
     transitivePeerDependencies:
       - supports-color
+
+  expo-blur@13.0.2(expo@51.0.9(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6))):
+    dependencies:
+      expo: 51.0.9(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6))
 
   expo-constants@16.0.2(expo@51.0.9(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6))):
     dependencies:

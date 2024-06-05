@@ -7,6 +7,10 @@ import {toMoney} from '@/utils/helpers'
 import {PADDING} from '@/constants/Styles'
 import ListItemSkeleton from './Lists/ListItemSkeleton'
 import dayjs from 'dayjs'
+import {ThemedText} from './ThemedText'
+import {ThemedView} from './ThemedView'
+import {BlurView} from 'expo-blur'
+import {Colors} from '@/constants/Colors'
 
 export interface Category {
   id: string
@@ -58,6 +62,23 @@ export default function RecentEntries({counter}: {counter: number}) {
     </List>
   ) : (
     <List style={{marginBottom: PADDING, zIndex: 2}}>
+      <BlurView
+        intensity={50}
+        style={{
+          paddingLeft: PADDING / 2 + 5,
+          paddingVertical: 3,
+        }}
+      >
+        <ThemedText
+          style={{
+            opacity: 0.4,
+            fontWeight: 'bold',
+            fontSize: 12,
+          }}
+        >
+          Recent entries
+        </ThemedText>
+      </BlurView>
       {entries.map((entry: Entry, i: number) => {
         return (
           <ListItem

@@ -3,20 +3,37 @@ import {ThemedText} from '../ThemedText'
 import {ThemedView} from '../ThemedView'
 import {PADDING, RADIUS, STYLES, TYPO} from '@/constants/Styles'
 import {StyleSheet} from 'react-native'
+import Padder from '../Layout/Padder'
+import {Loader} from '../Loader'
 
-export default function Card({title, value}: {title?: string; value: string}) {
+export default function Card({
+  title,
+  value,
+  loading,
+}: {
+  title?: string
+  value: string
+  loading?: boolean
+}) {
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   const textColor = useThemeColor({}, 'text')
-  const tintColor = useThemeColor({}, 'tint')
+  const tintColor = useThemeColor({}, 'mid')
 
   return (
     <ThemedView style={[styles.card, {backgroundColor}]}>
-      <ThemedText style={[styles.title, {color: tintColor}]}>
-        {title}
-      </ThemedText>
-      <ThemedText style={[styles.value, {color: textColor}]}>
-        {value}
-      </ThemedText>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <ThemedText style={[styles.title, {color: tintColor}]}>
+            {title}
+          </ThemedText>
+          <Padder h={0.3} />
+          <ThemedText style={[styles.value, {color: textColor}]}>
+            {value}
+          </ThemedText>
+        </>
+      )}
     </ThemedView>
   )
 }
@@ -29,9 +46,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: PADDING,
+    minWidth: '40%',
   },
   title: {
     ...TYPO.small,
+    fontWeight: 'bold',
+    // textTransform: 'uppercase',
+    // letterSpacing: 2,
   },
   value: {
     ...TYPO.card_value,

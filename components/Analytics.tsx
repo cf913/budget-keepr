@@ -1,6 +1,11 @@
 import {useQuery} from '@tanstack/react-query'
 import {ThemedText} from './ThemedText'
-import {getAllTimeSpend, getAvgDailySpend} from '@/data/analytics'
+import {
+  getAllTimeSpend,
+  getAvgDailySpend,
+  getCurrentWeekSpend,
+  getTodaySpend,
+} from '@/data/analytics'
 import {toMoney} from '@/utils/helpers'
 import {ThemedView} from './ThemedView'
 import {useEffect} from 'react'
@@ -12,43 +17,62 @@ import Card from './Cards/Card'
 
 export default function Analytics({counter}: {counter: number}) {
   const backgroundColor = useThemeColor({}, 'bg_secondary')
-  const {
-    data: allTimeSpend,
-    error: errorAllTime,
-    refetch: refetchAllTime,
-  } = useQuery({
+  const allTimeData = useQuery({
     queryKey: ['getAllTimeSpend'],
     queryFn: getAllTimeSpend,
-    staleTime: 1000,
   })
 
-  const {
-    data: avgDailySpend,
-    error: errorAvgDaily,
-    refetch: refetchAvgDailySpend,
-  } = useQuery({
+  const avgDailyData = useQuery({
     queryKey: ['getAvgDailySpend'],
     queryFn: getAvgDailySpend,
-    staleTime: 1000,
+  })
+
+  const currentWeekData = useQuery({
+    queryKey: ['getCurrentWeekSpend'],
+    queryFn: getCurrentWeekSpend,
+  })
+
+  const todayData = useQuery({
+    queryKey: ['getTodaySpend'],
+    queryFn: getTodaySpend,
   })
 
   useEffect(() => {
-    allTimeSpend && refetchAllTime()
-    avgDailySpend && refetchAvgDailySpend()
+    allTimeData.data && allTimeData.refetch()
+    avgDailyData.data && avgDailyData.refetch()
   }, [counter])
 
   const dailySpend =
-    allTimeSpend / dayjs().diff(new Date(avgDailySpend?.created_at), 'day')
+    allTimeData.data /
+    dayjs().diff(new Date(avgDailyData.data?.created_at), 'day')
 
   return (
     <ThemedView style={styles.container}>
       {/* <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
-      <Card title={'All Time Spend'} value={toMoney(allTimeSpend)} />
-      <Card title={'Average Daily'} value={toMoney(dailySpend)} />
+      <Card
+        loading={allTimeData.isLoading}
+        title={'All Time'}
+        value={toMoney(allTimeData.data, true)}
+      />
+      <Card
+        loading={avgDailyData.isLoading}
+        title={'Avg. Daily'}
+        value={toMoney(dailySpend, true)}
+      />
+      <Card
+        loading={currentWeekData.isLoading}
+        title={'This Week'}
+        value={toMoney(currentWeekData.data, true)}
+      />
+      <Card
+        loading={todayData.isLoading}
+        title={'Today'}
+        value={toMoney(todayData.data, true)}
+      />
       {/* </ThemedView>
       <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
-      <Card title={'All Time Spend'} value={toMoney(allTimeSpend)} />
-      <Card title={'Average Daily'} value={toMoney(dailySpend)} />
+      {/* <Card title={'All Time Spend'} value={toMoney(allTimeSpend)} />
+      <Card title={'Average Daily'} value={toMoney(dailySpend)} /> */}
       {/* </ThemedView> */}
     </ThemedView>
   )

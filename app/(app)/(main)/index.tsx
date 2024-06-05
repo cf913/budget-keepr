@@ -1,6 +1,5 @@
 import {Image, StyleSheet, Platform, Pressable} from 'react-native'
 
-import {ThemedText} from '@/components/ThemedText'
 import {Link, Redirect, router} from 'expo-router'
 import {useLocalSettings} from '@/stores/localSettings'
 import Page from '@/components/Layout/Page'
@@ -8,17 +7,14 @@ import Content from '@/components/Layout/Content'
 import RecentEntries from '@/components/RecentEntries'
 import Padder from '@/components/Layout/Padder'
 import React, {useState} from 'react'
-import {ThemedView} from '@/components/ThemedView'
 import {ThemedButton} from '@/components/Buttons/ThemedButton'
-import AddNewEntry from '@/components/Modal/AddNewEntry'
-import Spacer from '@/components/Layout/Spacer'
 import Analytics from '@/components/Analytics'
+import {Divider} from '@/components/Divider'
 
 export default function HomeScreen() {
   const {defaultBudget} = useLocalSettings()
   const [refreshing, setRefreshing] = useState(false)
   const [counter, setCounter] = useState(0)
-  const [isModalVisible, setIsModalVisible] = useState(false)
 
   if (!defaultBudget) return <Redirect href="select-budget-onboarding" />
 
@@ -44,14 +40,16 @@ export default function HomeScreen() {
     >
       <Content>
         {/* ANALYTICS */}
+        <Padder />
         <Analytics {...{counter}} />
+        <Padder />
         <Padder />
         {/* /////// RECENT ENTRIES ///////// */}
         <RecentEntries {...{counter}} />
 
-        <ThemedText style={{}}>- TODO: Delete entries</ThemedText>
+        {/* <ThemedText style={{}}>- TODO: Delete entries</ThemedText>
         <ThemedText style={{}}>- TODO: Edit entries</ThemedText>
-        <ThemedText style={{}}>- TODO: Create New Budget</ThemedText>
+        <ThemedText style={{}}>- TODO: Create New Budget</ThemedText> */}
       </Content>
       {/* <Spacer /> */}
       {/* <Content floating>

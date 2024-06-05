@@ -2,6 +2,7 @@ import {ReactNode} from 'react'
 import {ThemedView} from '../ThemedView'
 import {StyleSheet, ViewStyle} from 'react-native'
 import {PADDING, RADIUS, STYLES} from '@/constants/Styles'
+import {useThemeColor} from '@/hooks/useThemeColor'
 
 export default function List({
   children,
@@ -10,9 +11,14 @@ export default function List({
   children: ReactNode
   style?: ViewStyle
 }) {
+  const backgroundColor = useThemeColor({}, 'bg_secondary')
   return (
-    <ThemedView style={[STYLES.shadow, styles.shadow_container, style]}>
-      <ThemedView style={styles.container}>{children}</ThemedView>
+    <ThemedView
+      style={[STYLES.shadow, styles.shadow_container, {backgroundColor}, style]}
+    >
+      <ThemedView style={[styles.container, {backgroundColor}]}>
+        {children}
+      </ThemedView>
     </ThemedView>
   )
 }

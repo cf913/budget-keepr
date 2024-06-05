@@ -5,8 +5,13 @@ import {toMoney} from '@/utils/helpers'
 import {ThemedView} from './ThemedView'
 import {useEffect} from 'react'
 import dayjs from 'dayjs'
+import {StyleSheet} from 'react-native'
+import {PADDING, STYLES} from '@/constants/Styles'
+import {useThemeColor} from '@/hooks/useThemeColor'
+import Card from './Cards/Card'
 
 export default function Analytics({counter}: {counter: number}) {
+  const backgroundColor = useThemeColor({}, 'bg_secondary')
   const {
     data: allTimeSpend,
     error: errorAllTime,
@@ -36,10 +41,25 @@ export default function Analytics({counter}: {counter: number}) {
     allTimeSpend / dayjs().diff(new Date(avgDailySpend?.created_at), 'day')
 
   return (
-    <ThemedView>
-      <ThemedText>{counter}</ThemedText>
-      <ThemedText>All Time Spend: {toMoney(allTimeSpend)}</ThemedText>
-      <ThemedText>Average Daily Spend: {toMoney(dailySpend)}</ThemedText>
+    <ThemedView style={styles.container}>
+      {/* <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
+      <Card title={'All Time Spend'} value={toMoney(allTimeSpend)} />
+      <Card title={'Average Daily'} value={toMoney(dailySpend)} />
+      {/* </ThemedView>
+      <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
+      <Card title={'All Time Spend'} value={toMoney(allTimeSpend)} />
+      <Card title={'Average Daily'} value={toMoney(dailySpend)} />
+      {/* </ThemedView> */}
     </ThemedView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    gap: PADDING,
+    flexGrow: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+  },
+})

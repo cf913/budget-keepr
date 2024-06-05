@@ -10,6 +10,10 @@ export const HEIGHT = {
 }
 
 export const TYPO = StyleSheet.create({
+  card_value: {
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
   title: {
     fontSize: 30,
     lineHeight: 32,

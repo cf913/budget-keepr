@@ -45,29 +45,13 @@ export default function HomeScreen() {
       <Content>
         {/* ANALYTICS */}
         <Analytics {...{counter}} />
+        <Padder />
         {/* /////// RECENT ENTRIES ///////// */}
         <RecentEntries {...{counter}} />
 
-        <ThemedText
-          style={{
-            textDecorationLine: 'line-through',
-            textDecorationStyle: 'solid',
-          }}
-        >
-          - DONE: Header + link to Settings page
-        </ThemedText>
-        <ThemedText style={{}}>- WIP: Show last 5 entries</ThemedText>
-        <ThemedText style={{}}>- TODO: Add New entries</ThemedText>
         <ThemedText style={{}}>- TODO: Delete entries</ThemedText>
         <ThemedText style={{}}>- TODO: Edit entries</ThemedText>
         <ThemedText style={{}}>- TODO: Create New Budget</ThemedText>
-        <ThemedText style={{}}>- TODO: show total for this week</ThemedText>
-        <ThemedText style={{}}>
-          - TODO: show daily average spend on current_budget
-        </ThemedText>
-        <ThemedText style={{}}>
-          - TODO: Show big fat ADD_ENTRY button down bottom
-        </ThemedText>
       </Content>
       {/* <Spacer /> */}
       {/* <Content floating>

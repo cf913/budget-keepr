@@ -44,7 +44,7 @@ export const getEntries = async (budgetId: string) => {
     .limit(5)
 
   /// DEV
-  logRes('getEntries', data, error)
+  // logRes('getEntries', data, error)
 
   return data
 }

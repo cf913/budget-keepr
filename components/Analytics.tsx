@@ -20,21 +20,25 @@ export default function Analytics({counter}: {counter: number}) {
   const allTimeData = useQuery({
     queryKey: ['getAllTimeSpend'],
     queryFn: getAllTimeSpend,
+    staleTime: 1000,
   })
 
   const avgDailyData = useQuery({
     queryKey: ['getAvgDailySpend'],
     queryFn: getAvgDailySpend,
+    staleTime: 1000,
   })
 
   const currentWeekData = useQuery({
     queryKey: ['getCurrentWeekSpend'],
     queryFn: getCurrentWeekSpend,
+    staleTime: 1000,
   })
 
   const todayData = useQuery({
     queryKey: ['getTodaySpend'],
     queryFn: getTodaySpend,
+    staleTime: 1000,
   })
 
   useEffect(() => {
@@ -45,6 +49,9 @@ export default function Analytics({counter}: {counter: number}) {
   const dailySpend =
     allTimeData.data /
     dayjs().diff(new Date(avgDailyData.data?.created_at), 'day')
+
+  console.log('allTimeData', allTimeData)
+  console.log('dailySpend', dailySpend)
 
   return (
     <ThemedView style={styles.container}>

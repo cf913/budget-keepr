@@ -10,7 +10,7 @@ export const getAllTimeSpend = async () => {
   const {data, error} = await supabase
     .from('entries')
     .select('amount.sum()')
-    .eq('user_id', user.id)
+    // .eq('user_id', user.id)
     .single()
 
   if (error) throw new Error(error.message)
@@ -25,7 +25,7 @@ export const getAvgDailySpend = async () => {
   const {data, error} = await supabase
     .from('entries')
     .select('created_at')
-    .eq('user_id', user.id)
+    // .eq('user_id', user.id)
     .order('created_at', {ascending: true})
     .limit(1)
     .single()
@@ -46,7 +46,7 @@ export const getCurrentWeekSpend = async () => {
   const {data, error} = await supabase
     .from('entries')
     .select('amount.sum()')
-    .eq('user_id', user.id)
+    // .eq('user_id', user.id)
     .eq('week', currentWeek)
     .single()
 
@@ -69,7 +69,7 @@ export const getTodaySpend = async () => {
   const {data, error} = await supabase
     .from('entries')
     .select('amount.sum()')
-    .eq('user_id', user.id)
+    // .eq('user_id', user.id)
     .lte('created_at', end)
     .gte('created_at', start)
     .single()

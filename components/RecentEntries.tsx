@@ -43,7 +43,7 @@ export default function RecentEntries({counter}: {counter: number}) {
       if (!defaultBudget) return
       const nextData = await getEntries(defaultBudget?.id)
 
-      console.log('nextData', nextData)
+      // console.log('nextData', nextData)
       setEntries(nextData)
 
       setLoading(false)
@@ -84,7 +84,7 @@ export default function RecentEntries({counter}: {counter: number}) {
           <ListItem
             key={entry.id}
             lastItem={i === entries.length - 1}
-            title={entry.sub_categories.name}
+            title={entry.sub_categories?.name}
             description={dayjs(entry.created_at).format('HH:mm - ddd D MMM')}
             category={entry.categories}
             // description={entry.categories.name}

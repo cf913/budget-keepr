@@ -6,6 +6,7 @@ import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import {ThemedView} from '@/components/ThemedView'
 import {PADDING} from '@/constants/Styles'
+import {VERSION} from '@/constants/config'
 import {supabase} from '@/lib/supabase'
 import {useLocalSettings} from '@/stores/localSettings'
 
@@ -28,7 +29,7 @@ export default function Settings() {
         <Padder />
         <List>
           <ListItem title="Jeez.. when will then stop" description="Note: 0" />
-          <ListItem title="Ah finally.." lastItem />
+          <ListItem title="Version" description={VERSION} lastItem />
         </List>
       </Content>
       {/* ///////////////////////// */}

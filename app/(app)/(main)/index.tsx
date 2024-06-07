@@ -43,7 +43,7 @@ export default function HomeScreen() {
         <Padder />
         <Analytics {...{counter}} />
         <Padder />
-        <Padder />
+        {/* <Padder /> */}
         {/* /////// RECENT ENTRIES ///////// */}
         <RecentEntries {...{counter}} />
 

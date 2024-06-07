@@ -97,7 +97,10 @@ export default function Page({
           flex: 1,
           flexGrow: 1,
         }}
-        contentContainerStyle={{flex: 1, flexGrow: 1}}
+        contentContainerStyle={{
+          flex: 1,
+          flexGrow: 1,
+        }}
       >
         <ThemedView style={[{}, styles.header]}>
           {title ? (
@@ -171,5 +174,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
 })

@@ -24,9 +24,11 @@ export const getBudgets = async () => {
   return data
 }
 
-export const getEntries = async (budgetId: string) => {
+export const getEntries = async (budgetId?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
+
+  if (!budgetId) return
 
   const {data, error} = await supabase
     .from('entries')

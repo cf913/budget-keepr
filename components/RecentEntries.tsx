@@ -11,6 +11,20 @@ import {ThemedText} from './ThemedText'
 import {ThemedView} from './ThemedView'
 import {BlurView} from 'expo-blur'
 import {Colors} from '@/constants/Colors'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
+import {
+  GestureDetector,
+  GestureHandlerRootView,
+  RectButton,
+} from 'react-native-gesture-handler'
+import {Animated} from 'react-native'
+import {Feather} from '@expo/vector-icons'
+import {useMutation, useQuery} from '@tanstack/react-query'
+import {deleteEntry} from '@/data/entries'
+import {queryClient} from '@/lib/tanstack'
+import {AnalyticsQueryKeys} from './Analytics'
+import {useTheme} from '@react-navigation/native'
+import {useThemeColor} from '@/hooks/useThemeColor'
 
 export interface Category {
   id: string
@@ -33,31 +47,53 @@ export interface Entry {
 
 export default function RecentEntries({counter}: {counter: number}) {
   const {defaultBudget} = useLocalSettings()
-  const [entries, setEntries] = useState<any>([])
+  // const [entries, setEntries] = useState<any>([])
   const [loading, setLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
+  // const [refreshing, setRefreshing] = useState(false)
+  const textColor = useThemeColor({}, 'mid')
+
+  const {
+    data: entries = [],
+    error,
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useQuery({
+    queryKey: ['entries'],
+    queryFn: () => getEntries(defaultBudget?.id),
+  })
 
   useEffect(() => {
-    const load = async () => {
-      setRefreshing(true)
-      if (!defaultBudget) return
-      const nextData = await getEntries(defaultBudget?.id)
-
-      // console.log('nextData', nextData)
-      setEntries(nextData)
-
-      setLoading(false)
-      // await new Promise((res, rej) => setTimeout(res, 2000))
-      setRefreshing(false)
-    }
-
-    load()
+    refetch()
   }, [defaultBudget, counter])
 
-  return refreshing ? (
+  const mutation = useMutation({
+    mutationFn: (entryId: string) => deleteEntry(entryId),
+    // onMutate(variables) {
+
+    // },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['entries', ...AnalyticsQueryKeys],
+      })
+    },
+    onError: error => {
+      console.log('error', error.message)
+      alert('Oops. ' + error.message)
+    },
+  })
+
+  if (error) alert(error.message)
+
+  return isLoading || isRefetching ? (
     <List style={{marginBottom: PADDING, zIndex: 2}}>
-      {[...Array(entries.length || 5).keys()].map((v: number, i: number) => {
-        return <ListItemSkeleton key={v} lastItem={i === entries.length - 1} />
+      {[...Array(entries?.length || 5).keys()].map((v: number, i: number) => {
+        return (
+          <ListItemSkeleton
+            key={v}
+            lastItem={i === (entries || []).length - 1}
+          />
+        )
       })}
     </List>
   ) : (
@@ -71,25 +107,49 @@ export default function RecentEntries({counter}: {counter: number}) {
       >
         <ThemedText
           style={{
-            opacity: 0.4,
             fontWeight: 'bold',
             fontSize: 12,
+            color: textColor,
           }}
         >
           Recent entries
         </ThemedText>
       </BlurView>
-      {entries.map((entry: Entry, i: number) => {
+      {(entries || []).map((entry: Entry, i: number) => {
         return (
-          <ListItem
+          <Swipeable
             key={entry.id}
-            lastItem={i === entries.length - 1}
-            title={entry.sub_categories?.name}
-            description={dayjs(entry.created_at).format('HH:mm - ddd D MMM')}
-            category={entry.categories}
-            // description={entry.categories.name}
-            right={toMoney(entry.amount)}
-          />
+            renderRightActions={() => (
+              <RectButton
+                style={[
+                  {},
+                  // styles.leftAction
+                  {width: 50, justifyContent: 'center', alignItems: 'center'},
+                ]}
+                onPress={() => mutation.mutate(entry.id)}
+              >
+                <Animated.Text
+                  style={[
+                    // styles.actionText,
+                    {
+                      // transform: [{translateX: trans}],
+                    },
+                  ]}
+                >
+                  <Feather name="trash-2" size={24} color={'red'} />
+                </Animated.Text>
+              </RectButton>
+            )}
+          >
+            <ListItem
+              lastItem={i === (entries || []).length - 1}
+              title={entry.sub_categories?.name}
+              description={dayjs(entry.created_at).format('HH:mm - ddd D MMM')}
+              category={entry.categories}
+              // description={entry.categories.name}
+              right={toMoney(entry.amount)}
+            />
+          </Swipeable>
         )
       })}
     </List>

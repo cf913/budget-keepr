@@ -15,6 +15,13 @@ import {PADDING, STYLES} from '@/constants/Styles'
 import {useThemeColor} from '@/hooks/useThemeColor'
 import Card from './Cards/Card'
 
+export const AnalyticsQueryKeys = [
+  'getAllTimeSpend',
+  'getAvgDailySpend',
+  'getCurrentWeekSpend',
+  'getTodaySpend',
+]
+
 export default function Analytics({counter}: {counter: number}) {
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   const allTimeData = useQuery({
@@ -44,6 +51,8 @@ export default function Analytics({counter}: {counter: number}) {
   useEffect(() => {
     allTimeData.data && allTimeData.refetch()
     avgDailyData.data && avgDailyData.refetch()
+    currentWeekData.data && currentWeekData.refetch()
+    todayData.data && todayData.refetch()
   }, [counter])
 
   const dailySpend =
@@ -87,7 +96,7 @@ export default function Analytics({counter}: {counter: number}) {
 
 const styles = StyleSheet.create({
   container: {
-    gap: PADDING,
+    gap: PADDING / 2,
     flexGrow: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',

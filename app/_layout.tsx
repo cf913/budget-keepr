@@ -11,6 +11,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context'
 import {LocalSettingsProvider} from '@/stores/localSettings'
 import {QueryClientProvider} from '@tanstack/react-query'
 import {queryClient} from '@/lib/tanstack'
+import {GestureHandlerRootView} from 'react-native-gesture-handler'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -32,16 +33,20 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <SessionProvider>
-          <LocalSettingsProvider>
-            <QueryClientProvider client={queryClient}>
-              <Slot />
-            </QueryClientProvider>
-          </LocalSettingsProvider>
-        </SessionProvider>
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <SessionProvider>
+            <LocalSettingsProvider>
+              <QueryClientProvider client={queryClient}>
+                <Slot />
+              </QueryClientProvider>
+            </LocalSettingsProvider>
+          </SessionProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   )
 }

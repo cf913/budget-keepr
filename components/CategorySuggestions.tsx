@@ -74,7 +74,7 @@ function CategorySuggestionsScreen({
 
   return (
     <ThemedView>
-      {!subCategories?.length ? (
+      {!subCategories?.length && searchText ? (
         <ThemedView>
           <Padder h={0.5} />
           <ThemedText>

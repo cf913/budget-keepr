@@ -76,6 +76,7 @@ export default function RecentEntries({counter}: {counter: number}) {
       queryClient.invalidateQueries({
         queryKey: ['entries', ...AnalyticsQueryKeys],
       })
+      refetch()
     },
     onError: error => {
       console.log('error', error.message)
@@ -119,12 +120,18 @@ export default function RecentEntries({counter}: {counter: number}) {
         return (
           <Swipeable
             key={entry.id}
+            containerStyle={{backgroundColor: 'red'}}
             renderRightActions={() => (
               <RectButton
                 style={[
                   {},
                   // styles.leftAction
-                  {width: 50, justifyContent: 'center', alignItems: 'center'},
+                  {
+                    width: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'red',
+                  },
                 ]}
                 onPress={() => mutation.mutate(entry.id)}
               >
@@ -136,7 +143,7 @@ export default function RecentEntries({counter}: {counter: number}) {
                     },
                   ]}
                 >
-                  <Feather name="trash-2" size={24} color={'red'} />
+                  <Feather name="trash-2" size={24} color={'white'} />
                 </Animated.Text>
               </RectButton>
             )}

@@ -1,19 +1,15 @@
+import {getSubCategories} from '@/data/sub_categories'
+import {useQuery} from '@tanstack/react-query'
+import Fuse from 'fuse.js'
 import {useEffect, useState} from 'react'
+import {ThemedButton} from './Buttons/ThemedButton'
+import Padder from './Layout/Padder'
+import List from './Lists/List'
+import ListItemWithMatch from './Lists/ListItemWithMatch'
 import {Loader} from './Loader'
 import {SubCategory} from './RecentEntries'
 import {ThemedText} from './ThemedText'
 import {ThemedView} from './ThemedView'
-import {useLocalSettings} from '@/stores/localSettings'
-import ListItem from './Lists/ListItem'
-import Padder from './Layout/Padder'
-import {Divider} from './Divider'
-import List from './Lists/List'
-import {getSubCategories, searchSubCategories} from '@/data/sub_categories'
-import {useQuery} from '@tanstack/react-query'
-import Fuse from 'fuse.js'
-import ListItemWithMatch from './Lists/ListItemWithMatch'
-import {ThemedButton} from './Buttons/ThemedButton'
-import {router} from 'expo-router'
 
 export default function CategorySuggestions({
   visible,
@@ -70,7 +66,7 @@ function CategorySuggestionsScreen({
 
     const result = fuse.search(searchText)
     setSubCategories(result.map(({item, ...rest}) => ({...item, ...rest})))
-  }, [searchText])
+  }, [data, searchText])
 
   return (
     <ThemedView>

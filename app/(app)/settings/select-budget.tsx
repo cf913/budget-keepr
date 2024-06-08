@@ -7,7 +7,7 @@ import {useEffect, useState} from 'react'
 import {Pressable} from 'react-native'
 
 export default function SelectBudget() {
-  const {setDefaultBudget, defaultBudget} = useLocalSettings()
+  const {setDefaultBudget} = useLocalSettings()
   const [budgets, setBudgets] = useState<any>([])
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function SelectBudget() {
   return (
     <Page withHeader>
       <ThemedText>TODO: Select Budget Screen</ThemedText>
-      {budgets.map(budget => {
+      {budgets.map((budget: Budget) => {
         return (
           <Pressable key={budget.id} onPress={() => onSelectBudget(budget)}>
             <ThemedText>{budget.name}</ThemedText>

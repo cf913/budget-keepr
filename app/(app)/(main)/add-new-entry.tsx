@@ -1,34 +1,33 @@
-import {StyleSheet, TextInput, Keyboard} from 'react-native'
-import {AnimatedView, ThemedView} from '@/components/ThemedView'
-import React, {useRef, useState} from 'react'
-import {ThemedText} from '@/components/ThemedText'
-import Page from '@/components/Layout/Page'
-import ThemedInput from '@/components/Inputs/ThemedInput'
 import {ThemedButton} from '@/components/Buttons/ThemedButton'
+import CategorySuggestions from '@/components/CategorySuggestions'
 import {Divider} from '@/components/Divider'
+import ThemedInput from '@/components/Inputs/ThemedInput'
 import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
-import {router} from 'expo-router'
-import {SubCategory} from '@/components/RecentEntries'
+import Page from '@/components/Layout/Page'
 import Spacer from '@/components/Layout/Spacer'
-import {useSafeAreaInsets} from 'react-native-safe-area-context'
-import CategorySuggestions from '@/components/CategorySuggestions'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
-import dayjs from 'dayjs'
-import {getWeekNumber, toMoney} from '@/utils/helpers'
-import {useLocalSettings} from '@/stores/localSettings'
+import {SubCategory} from '@/components/RecentEntries'
+import {ThemedText} from '@/components/ThemedText'
+import {AnimatedView, ThemedView} from '@/components/ThemedView'
+import {TYPO} from '@/constants/Styles'
 import {createEntry} from '@/data/mutations'
+import {useLocalSettings} from '@/stores/localSettings'
+import {getWeekNumber, toMoney} from '@/utils/helpers'
+import dayjs from 'dayjs'
+import {router} from 'expo-router'
+import React, {useRef, useState} from 'react'
+import {Keyboard, TextInput} from 'react-native'
 import {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withTiming,
 } from 'react-native-reanimated'
-import {TYPO} from '@/constants/Styles'
-import {Picker} from '@react-native-picker/picker'
+import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
-export default function AddNewEntry({}: {}) {
+export default function AddNewEntry() {
   const translateValue = useSharedValue(48 + 8)
   const opacityValue = useSharedValue(1)
   const {defaultBudget} = useLocalSettings()
@@ -39,7 +38,6 @@ export default function AddNewEntry({}: {}) {
   const [subCategory, setSubCategory] = useState<SubCategory | null>(null)
   const [subCategorySearchText, setSubCategorySearchText] = useState<string>('')
   const subCategoryInput = useRef<TextInput>(null)
-  const [selectedLanguage, setSelectedLanguage] = useState()
 
   const handleSave = async () => {
     if (!amount)
@@ -51,7 +49,7 @@ export default function AddNewEntry({}: {}) {
     // insert query
     console.log('setSaving')
     const now = new Date()
-    const {data, error}: any = await createEntry({
+    const {error}: any = await createEntry({
       amount: Math.round(+amount * 100),
       sub_category_id: subCategory.id,
       category_id: subCategory.categories?.id,
@@ -73,9 +71,6 @@ export default function AddNewEntry({}: {}) {
     // else navigate back to main screen
     setSaving(false)
     return router.replace('/(main)')
-  }
-  const handleBack = () => {
-    router.back()
   }
 
   const onSelect = (sub_cat: SubCategory) => {
@@ -209,10 +204,3 @@ export default function AddNewEntry({}: {}) {
     </Page>
   )
 }
-
-const styles = StyleSheet.create({
-  title: {
-    color: '#fff',
-    fontSize: 16,
-  },
-})

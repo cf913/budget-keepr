@@ -1,6 +1,4 @@
-import {Image, StyleSheet, Platform, Pressable} from 'react-native'
-
-import {Link, Redirect, router} from 'expo-router'
+import {Redirect, router} from 'expo-router'
 import {useLocalSettings} from '@/stores/localSettings'
 import Page from '@/components/Layout/Page'
 import Content from '@/components/Layout/Content'
@@ -9,11 +7,9 @@ import Padder from '@/components/Layout/Padder'
 import React, {useState} from 'react'
 import {ThemedButton} from '@/components/Buttons/ThemedButton'
 import Analytics from '@/components/Analytics'
-import {Divider} from '@/components/Divider'
 
 export default function HomeScreen() {
   const {defaultBudget} = useLocalSettings()
-  const [refreshing, setRefreshing] = useState(false)
   const [counter, setCounter] = useState(0)
 
   if (!defaultBudget) return <Redirect href="select-budget-onboarding" />
@@ -27,7 +23,7 @@ export default function HomeScreen() {
       scroll
       title={defaultBudget.name}
       withSettings
-      refreshing={refreshing}
+      refreshing={false}
       onRefresh={onRefresh}
       footer={
         <ThemedButton
@@ -45,7 +41,7 @@ export default function HomeScreen() {
         <Padder />
         {/* <Padder /> */}
         {/* /////// RECENT ENTRIES ///////// */}
-        <RecentEntries {...{counter}} />
+        <RecentEntries {...{counter, setCounter}} />
 
         {/* <ThemedText style={{}}>- TODO: Delete entries</ThemedText>
         <ThemedText style={{}}>- TODO: Edit entries</ThemedText>
@@ -63,22 +59,3 @@ export default function HomeScreen() {
     </Page>
   )
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    // flexDirection: 'row',
-    // alignItems: 'center',
-    // gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-})

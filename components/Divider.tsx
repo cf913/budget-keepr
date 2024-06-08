@@ -1,6 +1,5 @@
-import {ViewStyle, useColorScheme} from 'react-native'
+import {ViewStyle} from 'react-native'
 import {ThemedView} from './ThemedView'
-import {Colors} from '@/constants/Colors'
 import {useThemeColor} from '@/hooks/useThemeColor'
 
 export function Divider() {

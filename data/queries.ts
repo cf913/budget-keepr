@@ -48,5 +48,7 @@ export const getEntries = async (budgetId?: string) => {
   /// DEV
   // logRes('getEntries', data, error)
 
+  if (error) throw new Error(error.message)
+
   return data
 }

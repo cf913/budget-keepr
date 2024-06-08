@@ -1,13 +1,7 @@
 import {Loader} from '@/components/Loader'
-import {
-  getData,
-  getDataMany,
-  getDataManyObj,
-  storeData,
-  storeDataObj,
-} from '@/utils/async-storage'
+import {getDataManyObj, storeDataObj} from '@/utils/async-storage'
 import {SplashScreen} from 'expo-router'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 
 export interface Budget {
   id: string
@@ -40,12 +34,15 @@ export function LocalSettingsProvider(props: React.PropsWithChildren) {
   const [defaultBudget, setStateDefaultBudget] = useState<Budget | null>(null)
   const [loadingSettings, setLoadingSettings] = useState(true)
 
-  const KEYS: any = {
-    DEFAULT_BUDGET: {
-      key: 'DEFAULT_BUDGET',
-      setter: setStateDefaultBudget,
-    },
-  }
+  const KEYS: any = useMemo(
+    () => ({
+      DEFAULT_BUDGET: {
+        key: 'DEFAULT_BUDGET',
+        setter: setStateDefaultBudget,
+      },
+    }),
+    [setStateDefaultBudget],
+  )
 
   useEffect(() => {
     const load = async () => {
@@ -63,7 +60,7 @@ export function LocalSettingsProvider(props: React.PropsWithChildren) {
     }
 
     load()
-  }, [])
+  }, [KEYS])
 
   const setDefaultBudget = async (budget: Budget | null) => {
     setStateDefaultBudget(budget ?? null)

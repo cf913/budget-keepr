@@ -1,4 +1,4 @@
-import {PADDING, STYLES} from '@/constants/Styles'
+import {PADDING} from '@/constants/Styles'
 import {ThemedView} from '@/components/ThemedView'
 import {ReactNode} from 'react'
 import {ViewStyle} from 'react-native'

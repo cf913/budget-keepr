@@ -11,7 +11,7 @@ import {getCategories} from '@/data/categories'
 import {useSession} from '@/stores/session'
 import {isLastItem} from '@/utils/helpers'
 import {useQuery} from '@tanstack/react-query'
-import {router, useLocalSearchParams} from 'expo-router'
+import {router} from 'expo-router'
 import {useState} from 'react'
 
 export default function Categories() {

@@ -1,5 +1,4 @@
 import {useQuery} from '@tanstack/react-query'
-import {ThemedText} from './ThemedText'
 import {
   getAllTimeSpend,
   getAvgDailySpend,
@@ -8,11 +7,9 @@ import {
 } from '@/data/analytics'
 import {toMoney} from '@/utils/helpers'
 import {ThemedView} from './ThemedView'
-import {useEffect} from 'react'
 import dayjs from 'dayjs'
 import {StyleSheet} from 'react-native'
-import {PADDING, STYLES} from '@/constants/Styles'
-import {useThemeColor} from '@/hooks/useThemeColor'
+import {PADDING} from '@/constants/Styles'
 import Card from './Cards/Card'
 
 export const AnalyticsQueryKeys = [
@@ -23,44 +20,41 @@ export const AnalyticsQueryKeys = [
 ]
 
 export default function Analytics({counter}: {counter: number}) {
-  const backgroundColor = useThemeColor({}, 'bg_secondary')
+  console.log('counter', counter)
+
   const allTimeData = useQuery({
-    queryKey: ['getAllTimeSpend'],
+    queryKey: ['getAllTimeSpend', counter],
     queryFn: getAllTimeSpend,
-    staleTime: 1000,
   })
 
   const avgDailyData = useQuery({
-    queryKey: ['getAvgDailySpend'],
+    queryKey: ['getAvgDailySpend', counter],
     queryFn: getAvgDailySpend,
-    staleTime: 1000,
   })
 
   const currentWeekData = useQuery({
-    queryKey: ['getCurrentWeekSpend'],
+    queryKey: ['getCurrentWeekSpend', counter],
     queryFn: getCurrentWeekSpend,
-    staleTime: 1000,
   })
 
   const todayData = useQuery({
-    queryKey: ['getTodaySpend'],
+    queryKey: ['getTodaySpend', counter],
     queryFn: getTodaySpend,
-    staleTime: 1000,
   })
 
-  useEffect(() => {
-    allTimeData.data && allTimeData.refetch()
-    avgDailyData.data && avgDailyData.refetch()
-    currentWeekData.data && currentWeekData.refetch()
-    todayData.data && todayData.refetch()
-  }, [counter])
+  // useEffect(() => {
+  //   allTimeData.data && allTimeData.refetch()
+  //   avgDailyData.data && avgDailyData.refetch()
+  //   currentWeekData.data && currentWeekData.refetch()
+  //   todayData.data && todayData.refetch()
+  // }, [counter])
 
   const dailySpend =
     allTimeData.data /
     dayjs().diff(new Date(avgDailyData.data?.created_at), 'day')
 
-  console.log('allTimeData', allTimeData)
-  console.log('dailySpend', dailySpend)
+  // console.log('allTimeData', allTimeData)
+  // console.log('dailySpend', dailySpend)
 
   return (
     <ThemedView style={styles.container}>

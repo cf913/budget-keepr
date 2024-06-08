@@ -1,11 +1,8 @@
-import {Feather} from '@expo/vector-icons'
 import {useThemeColor} from '@/hooks/useThemeColor'
 import {ThemedText} from '../ThemedText'
 import {ThemedView} from '../ThemedView'
-import {Pressable, StyleSheet} from 'react-native'
-import {HEIGHT, PADDING, RADIUS, TYPO} from '@/constants/Styles'
-import {Link} from 'expo-router'
-import {ReactNode} from 'react'
+import {StyleSheet} from 'react-native'
+import {HEIGHT, PADDING, TYPO} from '@/constants/Styles'
 import FadeInView from '../FadeInView'
 
 export default function ListItemSkeleton({
@@ -17,7 +14,6 @@ export default function ListItemSkeleton({
   const borderColor = useThemeColor({}, 'bg')
   const chevronColor = useThemeColor({}, 'mid')
   const rightColor = useThemeColor({}, 'tint')
-  const textColor = useThemeColor({}, 'text')
 
   return (
     <ThemedView
@@ -26,7 +22,7 @@ export default function ListItemSkeleton({
         {backgroundColor, borderColor, borderBottomWidth: +!lastItem},
       ]}
     >
-      <FadeInView style={[{}, styles.left]}>
+      <FadeInView style={styles.left}>
         <ThemedText
           style={[
             {
@@ -58,7 +54,7 @@ export default function ListItemSkeleton({
         </ThemedText>
       </FadeInView>
       <ThemedView style={[{borderRadius: 5, overflow: 'hidden'}, styles.right]}>
-        <FadeInView>
+        <FadeInView style={{}}>
           <ThemedText
             style={{
               borderRadius: 5,

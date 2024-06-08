@@ -4,7 +4,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {
   Pressable,
   RefreshControl,
-  RefreshControlProps,
   ScrollView,
   ScrollViewProps,
   StyleSheet,

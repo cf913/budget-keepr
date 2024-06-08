@@ -4,13 +4,17 @@ import {Session} from '@supabase/supabase-js'
 export const getSupabaseUser = async () => {
   try {
     const {
-      data: {user},
+      data: {session},
       error,
-    } = await supabase.auth.getUser()
+    } = await supabase.auth.getSession()
+
     if (error) {
       alert('unable to getUser: ' + error.message)
       return
     }
+
+    const user = session?.user
+
     if (!user) {
       alert('getUser: User not found')
       return

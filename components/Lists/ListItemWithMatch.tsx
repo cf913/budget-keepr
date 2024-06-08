@@ -3,7 +3,7 @@ import {useThemeColor} from '@/hooks/useThemeColor'
 import {ThemedText} from '../ThemedText'
 import {ThemedView} from '../ThemedView'
 import {Pressable, StyleSheet} from 'react-native'
-import {HEIGHT, PADDING, RADIUS, TYPO} from '@/constants/Styles'
+import {HEIGHT, PADDING, TYPO} from '@/constants/Styles'
 import {Link} from 'expo-router'
 import {ReactNode, useMemo} from 'react'
 import FadeInView from '../FadeInView'
@@ -83,7 +83,7 @@ export default function ListItemWithMatch({
         {suf}
       </ThemedText>
     )
-  }, [item])
+  }, [item, rightColor])
 
   return (
     <Wrapper href={href} onSelectItem={onSelectItem}>

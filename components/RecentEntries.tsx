@@ -1,6 +1,6 @@
 import {useLocalSettings} from '@/stores/localSettings'
 import List from './Lists/List'
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import ListItem from './Lists/ListItem'
 import {getEntries} from '@/data/queries'
 import {toMoney} from '@/utils/helpers'
@@ -8,22 +8,15 @@ import {PADDING} from '@/constants/Styles'
 import ListItemSkeleton from './Lists/ListItemSkeleton'
 import dayjs from 'dayjs'
 import {ThemedText} from './ThemedText'
-import {ThemedView} from './ThemedView'
 import {BlurView} from 'expo-blur'
-import {Colors} from '@/constants/Colors'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
-import {
-  GestureDetector,
-  GestureHandlerRootView,
-  RectButton,
-} from 'react-native-gesture-handler'
+import {RectButton} from 'react-native-gesture-handler'
 import {Animated} from 'react-native'
 import {Feather} from '@expo/vector-icons'
 import {useMutation, useQuery} from '@tanstack/react-query'
 import {deleteEntry} from '@/data/entries'
 import {queryClient} from '@/lib/tanstack'
 import {AnalyticsQueryKeys} from './Analytics'
-import {useTheme} from '@react-navigation/native'
 import {useThemeColor} from '@/hooks/useThemeColor'
 
 export interface Category {
@@ -45,11 +38,14 @@ export interface Entry {
   sub_categories: SubCategory
 }
 
-export default function RecentEntries({counter}: {counter: number}) {
+export default function RecentEntries({
+  counter,
+  setCounter,
+}: {
+  counter: number
+  setCounter: (value: number) => void
+}) {
   const {defaultBudget} = useLocalSettings()
-  // const [entries, setEntries] = useState<any>([])
-  const [loading, setLoading] = useState(true)
-  // const [refreshing, setRefreshing] = useState(false)
   const textColor = useThemeColor({}, 'mid')
 
   const {
@@ -65,7 +61,7 @@ export default function RecentEntries({counter}: {counter: number}) {
 
   useEffect(() => {
     refetch()
-  }, [defaultBudget, counter])
+  }, [refetch, counter])
 
   const mutation = useMutation({
     mutationFn: (entryId: string) => deleteEntry(entryId),
@@ -76,6 +72,7 @@ export default function RecentEntries({counter}: {counter: number}) {
       queryClient.invalidateQueries({
         queryKey: ['entries', ...AnalyticsQueryKeys],
       })
+      setCounter(counter + 1)
       refetch()
     },
     onError: error => {

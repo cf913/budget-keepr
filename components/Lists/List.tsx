@@ -1,7 +1,7 @@
 import {ReactNode} from 'react'
 import {ThemedView} from '../ThemedView'
 import {StyleSheet, ViewStyle} from 'react-native'
-import {PADDING, RADIUS, STYLES} from '@/constants/Styles'
+import {RADIUS, STYLES} from '@/constants/Styles'
 import {useThemeColor} from '@/hooks/useThemeColor'
 
 export default function List({

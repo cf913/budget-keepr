@@ -10,7 +10,6 @@ export default function SelectBudget() {
   const {setDefaultBudget} = useLocalSettings()
 
   const [budgets, setBudgets] = useState<any>([])
-  const {defaultBudget} = useLocalSettings()
 
   useEffect(() => {
     const load = async () => {
@@ -28,7 +27,7 @@ export default function SelectBudget() {
 
   return (
     <Page withHeader>
-      {budgets.map(budget => {
+      {budgets.map((budget: Budget) => {
         return (
           <Pressable key={budget.id} onPress={() => onSelectBudget(budget)}>
             <ThemedText>{budget.name}</ThemedText>

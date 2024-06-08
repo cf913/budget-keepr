@@ -4,7 +4,6 @@ import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import Spacer from '@/components/Layout/Spacer'
-import {ThemedText} from '@/components/ThemedText'
 import {ThemedView} from '@/components/ThemedView'
 import {HEIGHT, PADDING} from '@/constants/Styles'
 import {createCategory} from '@/data/categories'
@@ -17,7 +16,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 export default function CategoryCreate() {
   const insets = useSafeAreaInsets()
-  const [saving, setSaving] = useState(false)
   const [name, setName] = useState('')
 
   const mutation = useMutation({
@@ -25,7 +23,6 @@ export default function CategoryCreate() {
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ['categories']})
       router.back()
-      setSaving(false)
     },
     onError: error => {
       console.log('error', error.message)
@@ -35,7 +32,6 @@ export default function CategoryCreate() {
 
   const handleSave = async () => {
     console.log('SAVING')
-    setSaving(true)
     mutation.mutate({name})
   }
 

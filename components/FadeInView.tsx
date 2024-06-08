@@ -1,5 +1,5 @@
 import React, {useRef, useEffect} from 'react'
-import {Animated, Text, View} from 'react-native'
+import {Animated} from 'react-native'
 import type {PropsWithChildren} from 'react'
 import type {ViewStyle} from 'react-native'
 

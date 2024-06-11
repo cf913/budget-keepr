@@ -36,6 +36,7 @@ export interface SubCategoryInput {
   id?: string
   name: string
   parent_id: string
+  budget_id: string
 }
 
 export const createSubCategory = async (sub_category: SubCategoryInput) => {

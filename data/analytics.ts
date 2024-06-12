@@ -3,13 +3,15 @@ import {getSupabaseUser} from './api'
 import {getWeekNumber} from '@/utils/helpers'
 import dayjs from 'dayjs'
 
-export const getAllTimeSpend = async () => {
+export const getAllTimeSpend = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
 
-  const {data, error} = await supabase
-    .from('entries')
-    .select('amount.sum()')
+  let query = supabase.from('entries').select('amount.sum()')
+
+  if (budget_id) query = query.eq('budget_id', budget_id)
+
+  const {data, error} = await query
     // .eq('user_id', user.id)
     .single()
 
@@ -18,31 +20,33 @@ export const getAllTimeSpend = async () => {
   return data.sum
 }
 
-export const getThisYearSpend = async () => {
+export const getThisYearSpend = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
 
   const yearNumber = new Date().getFullYear()
 
-  const {data, error} = await supabase
-    .from('entries')
-    .select('amount.sum()')
-    .eq('year', yearNumber)
-    .single()
+  let query = supabase.from('entries').select('amount.sum()')
+
+  if (budget_id) query = query.eq('budget_id', budget_id)
+
+  const {data, error} = await query.eq('year', yearNumber).single()
 
   if (error) throw new Error(error.message)
 
   return data.sum
 }
 
-export const getAvgDailySpend = async () => {
+export const getAvgDailySpend = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
 
-  const {data, error} = await supabase
-    .from('entries')
-    .select('created_at')
-    // .eq('user_id', user.id)
+  let query = supabase.from('entries').select('created_at')
+  // .eq('user_id', user.id)
+
+  if (budget_id) query = query.eq('budget_id', budget_id)
+
+  const {data, error} = await query
     .order('created_at', {ascending: true})
     .limit(1)
     .single()
@@ -54,25 +58,24 @@ export const getAvgDailySpend = async () => {
   return data
 }
 
-export const getCurrentWeekSpend = async () => {
+export const getCurrentWeekSpend = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
 
   const currentWeek = getWeekNumber()
 
-  const {data, error} = await supabase
-    .from('entries')
-    .select('amount.sum()')
-    // .eq('user_id', user.id)
-    .eq('week', currentWeek)
-    .single()
+  let query = supabase.from('entries').select('amount.sum()')
+
+  if (budget_id) query = query.eq('budget_id', budget_id)
+
+  const {data, error} = await query.eq('week', currentWeek).single()
 
   if (error) throw new Error(error.message)
 
   return data.sum
 }
 
-export const getTodaySpend = async () => {
+export const getTodaySpend = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
 
@@ -83,10 +86,12 @@ export const getTodaySpend = async () => {
     now.endOf('d').toISOString(),
   ]
 
-  const {data, error} = await supabase
-    .from('entries')
-    .select('amount.sum()')
-    // .eq('user_id', user.id)
+  let query = supabase.from('entries').select('amount.sum()')
+  // .eq('user_id', user.id)
+
+  if (budget_id) query = query.eq('budget_id', budget_id)
+
+  const {data, error} = await query
     .lte('created_at', end)
     .gte('created_at', start)
     .single()

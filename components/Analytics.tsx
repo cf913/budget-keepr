@@ -12,6 +12,7 @@ import dayjs from 'dayjs'
 import {StyleSheet} from 'react-native'
 import {PADDING} from '@/constants/Styles'
 import Card from './Cards/Card'
+import {useLocalSettings} from '@/stores/localSettings'
 
 export const AnalyticsQueryKeys = [
   'getAllTimeSpend',
@@ -21,7 +22,7 @@ export const AnalyticsQueryKeys = [
 ]
 
 export default function Analytics({counter}: {counter: number}) {
-  console.log('counter', counter)
+  const {defaultBudget} = useLocalSettings()
 
   // ALL TIME
   // const allTimeData = useQuery({
@@ -32,22 +33,22 @@ export default function Analytics({counter}: {counter: number}) {
   // THIS YEAR
   const allTimeData = useQuery({
     queryKey: ['getAllTimeSpend', counter],
-    queryFn: getThisYearSpend,
+    queryFn: () => getThisYearSpend(defaultBudget.id),
   })
 
   const avgDailyData = useQuery({
     queryKey: ['getAvgDailySpend', counter],
-    queryFn: getAvgDailySpend,
+    queryFn: () => getAvgDailySpend(defaultBudget.id),
   })
 
   const currentWeekData = useQuery({
     queryKey: ['getCurrentWeekSpend', counter],
-    queryFn: getCurrentWeekSpend,
+    queryFn: () => getCurrentWeekSpend(defaultBudget.id),
   })
 
   const todayData = useQuery({
     queryKey: ['getTodaySpend', counter],
-    queryFn: getTodaySpend,
+    queryFn: () => getTodaySpend(defaultBudget.id),
   })
 
   // useEffect(() => {

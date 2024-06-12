@@ -34,8 +34,6 @@ export const createCategory = async (category: CategoryInput) => {
 
   const {data, error} = await supabase.from('categories').insert(category)
 
-  await new Promise(res => setTimeout(res, 1000))
-
   if (error) throw error
 
   return data

@@ -43,11 +43,14 @@ export const createSubCategory = async (sub_category: SubCategoryInput) => {
   const user = await getSupabaseUser()
   if (!user) return
 
+  await new Promise(res => setTimeout(res, 2000))
+  throw new Error('Throwing on purpose')
+
   const {data, error} = await supabase
     .from('sub_categories')
     .insert({user_id: user.id, ...sub_category})
 
-  await new Promise(res => setTimeout(res, 1000))
+  // await new Promise(res => setTimeout(res, 1000))
 
   if (error) throw error
 

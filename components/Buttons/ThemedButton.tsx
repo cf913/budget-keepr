@@ -5,6 +5,8 @@ import {ThemedText} from '../ThemedText'
 import {HEIGHT, RADIUS} from '@/constants/Styles'
 import {Feather} from '@expo/vector-icons'
 import {Loader} from '../Loader'
+import {AnimatedView} from '../ThemedView'
+import {FadeIn, FadeInDown, FadeOut, FadeOutUp} from 'react-native-reanimated'
 
 export type ThemedViewProps = ViewProps & {
   round?: boolean
@@ -53,7 +55,9 @@ export function ThemedButton({
         <Feather name="plus" size={ROUND_WIDTH / 2} color={textColor} />
       ) : (
         // TEXT
-        <ThemedText style={styles.text}>{title}</ThemedText>
+        <AnimatedView exiting={FadeOut} entering={FadeIn}>
+          <ThemedText style={styles.text}>{title}</ThemedText>
+        </AnimatedView>
       )}
     </Pressable>
   )

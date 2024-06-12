@@ -1,5 +1,12 @@
 import {ActivityIndicator, ViewStyle} from 'react-native'
-import {ThemedView} from './ThemedView'
+import {AnimatedView, ThemedView} from './ThemedView'
+import {
+  FadeIn,
+  FadeInDown,
+  FadeInUp,
+  FadeOut,
+  FadeOutDown,
+} from 'react-native-reanimated'
 
 export function Loader({size = 'large'}: {size?: number | 'large' | 'small'}) {
   const styles: ViewStyle = {
@@ -10,8 +17,8 @@ export function Loader({size = 'large'}: {size?: number | 'large' | 'small'}) {
   }
 
   return (
-    <ThemedView style={styles}>
+    <AnimatedView style={styles} entering={FadeIn} exiting={FadeOut}>
       <ActivityIndicator size={size} />
-    </ThemedView>
+    </AnimatedView>
   )
 }

@@ -1,10 +1,11 @@
 import {useThemeColor} from '@/hooks/useThemeColor'
 import {ThemedText} from '../ThemedText'
-import {ThemedView} from '../ThemedView'
+import {AnimatedView, ThemedView} from '../ThemedView'
 import {PADDING, RADIUS, STYLES, TYPO} from '@/constants/Styles'
 import {StyleSheet} from 'react-native'
 import Padder from '../Layout/Padder'
 import {Loader} from '../Loader'
+import {FlipInXUp, FlipOutXDown, FlipOutXUp} from 'react-native-reanimated'
 
 export default function Card({
   title,
@@ -21,18 +22,18 @@ export default function Card({
 
   return (
     <ThemedView style={[styles.card, {backgroundColor}]}>
+      <ThemedText style={[styles.title, {color: tintColor}]}>
+        {title}
+      </ThemedText>
+      <Padder h={0.3} />
       {loading ? (
-        <Loader />
+        <Loader size="small" />
       ) : (
-        <>
-          <ThemedText style={[styles.title, {color: tintColor}]}>
-            {title}
-          </ThemedText>
-          <Padder h={0.3} />
+        <AnimatedView entering={FlipInXUp} exiting={FlipOutXDown}>
           <ThemedText style={[styles.value, {color: textColor}]}>
             {value}
           </ThemedText>
-        </>
+        </AnimatedView>
       )}
     </ThemedView>
   )

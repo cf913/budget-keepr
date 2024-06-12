@@ -1,7 +1,7 @@
 import {Feather} from '@expo/vector-icons'
 import {useThemeColor} from '@/hooks/useThemeColor'
 import {ThemedText} from '../ThemedText'
-import {ThemedView} from '../ThemedView'
+import {AnimatedView, ThemedView} from '../ThemedView'
 import {Pressable, StyleSheet} from 'react-native'
 import {HEIGHT, PADDING, TYPO} from '@/constants/Styles'
 import {Link} from 'expo-router'
@@ -9,6 +9,7 @@ import {ReactNode} from 'react'
 import FadeInView from '../FadeInView'
 import {Category} from '../RecentEntries'
 import {ExpoRouter} from '@/.expo/types/router'
+import {FadeIn, FadeInRight} from 'react-native-reanimated'
 
 const Wrapper = ({
   href,
@@ -85,7 +86,7 @@ export default function ListItem({
             </ThemedText>
           ) : null}
         </ThemedView>
-        <FadeInView style={styles.right}>
+        <AnimatedView entering={FadeIn} style={styles.right}>
           {href ? (
             <Feather
               name="chevron-right"
@@ -97,7 +98,7 @@ export default function ListItem({
           {right ? (
             <ThemedText style={{color: rightColor}}>{right}</ThemedText>
           ) : null}
-        </FadeInView>
+        </AnimatedView>
       </ThemedView>
       {!+lastItem ? (
         <ThemedView

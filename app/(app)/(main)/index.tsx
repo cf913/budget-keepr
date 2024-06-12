@@ -7,6 +7,7 @@ import Padder from '@/components/Layout/Padder'
 import React, {useState} from 'react'
 import {ThemedButton} from '@/components/Buttons/ThemedButton'
 import Analytics from '@/components/Analytics'
+import {VERSION} from '@/constants/config'
 
 export default function HomeScreen() {
   const {defaultBudget} = useLocalSettings()
@@ -42,6 +43,14 @@ export default function HomeScreen() {
         {/* <Padder /> */}
         {/* /////// RECENT ENTRIES ///////// */}
         <RecentEntries {...{counter, setCounter}} />
+        <Padder />
+        {/* <ThemedButton
+          title="Sentry"
+          onPress={() => {
+            // await new Promise(r => setTimeout(r, 1000))
+            throw new Error('Hello Sentry from ' + VERSION)
+          }}
+        /> */}
 
         {/* <ThemedText style={{}}>- TODO: Delete entries</ThemedText>
         <ThemedText style={{}}>- TODO: Edit entries</ThemedText>

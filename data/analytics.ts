@@ -18,6 +18,23 @@ export const getAllTimeSpend = async () => {
   return data.sum
 }
 
+export const getThisYearSpend = async () => {
+  const user = await getSupabaseUser()
+  if (!user) return
+
+  const yearNumber = new Date().getFullYear()
+
+  const {data, error} = await supabase
+    .from('entries')
+    .select('amount.sum()')
+    .eq('year', yearNumber)
+    .single()
+
+  if (error) throw new Error(error.message)
+
+  return data.sum
+}
+
 export const getAvgDailySpend = async () => {
   const user = await getSupabaseUser()
   if (!user) return

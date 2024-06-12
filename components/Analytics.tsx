@@ -51,7 +51,7 @@ export default function Analytics({counter}: {counter: number}) {
 
   const dailySpend =
     allTimeData.data /
-    dayjs().diff(new Date(avgDailyData.data?.created_at), 'day')
+    (dayjs().diff(new Date(avgDailyData.data?.created_at), 'day') || 1)
 
   // console.log('allTimeData', allTimeData)
   // console.log('dailySpend', dailySpend)

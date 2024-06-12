@@ -9,6 +9,7 @@ import {PADDING} from '@/constants/Styles'
 import {VERSION} from '@/constants/config'
 import {supabase} from '@/lib/supabase'
 import {useLocalSettings} from '@/stores/localSettings'
+import * as Application from 'expo-application'
 
 export default function Settings() {
   const {defaultBudget} = useLocalSettings()
@@ -23,13 +24,15 @@ export default function Settings() {
             title="Default Budget"
             description={defaultBudget?.name}
           />
-          <ListItem title="Categories" href="/settings/categories" />
-          <ListItem title="Another one" description="with a desc" lastItem />
+          <ListItem title="Categories" href="/settings/categories" lastItem />
         </List>
         <Padder />
         <List>
-          <ListItem title="Jeez.. when will then stop" description="Note: 0" />
-          <ListItem title="Version" description={VERSION} lastItem />
+          <ListItem
+            title={`${Application.nativeApplicationVersion}`}
+            description={`${VERSION}`}
+            lastItem
+          />
         </List>
       </Content>
       {/* ///////////////////////// */}

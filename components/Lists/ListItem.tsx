@@ -44,7 +44,7 @@ export default function ListItem({
 }: {
   item?: any
   onSelect?: (item: any) => void
-  href?: ExpoRouter.Href
+  href?: string | ExpoRouter.Href
   title: string
   description?: string | null
   category?: Category

@@ -3,6 +3,7 @@ import {
   getAllTimeSpend,
   getAvgDailySpend,
   getCurrentWeekSpend,
+  getThisYearSpend,
   getTodaySpend,
 } from '@/data/analytics'
 import {toMoney} from '@/utils/helpers'
@@ -22,9 +23,16 @@ export const AnalyticsQueryKeys = [
 export default function Analytics({counter}: {counter: number}) {
   console.log('counter', counter)
 
+  // ALL TIME
+  // const allTimeData = useQuery({
+  //   queryKey: ['getAllTimeSpend', counter],
+  //   queryFn: getAllTimeSpend,
+  // })
+
+  // THIS YEAR
   const allTimeData = useQuery({
     queryKey: ['getAllTimeSpend', counter],
-    queryFn: getAllTimeSpend,
+    queryFn: getThisYearSpend,
   })
 
   const avgDailyData = useQuery({
@@ -61,7 +69,7 @@ export default function Analytics({counter}: {counter: number}) {
       {/* <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
       <Card
         loading={allTimeData.isLoading}
-        title={'All Time'}
+        title={'This Year'}
         value={toMoney(allTimeData.data, true)}
       />
       <Card

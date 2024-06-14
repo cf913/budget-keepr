@@ -37,6 +37,23 @@ export const getThisYearSpend = async (budget_id?: string) => {
   return data.sum
 }
 
+export const getCurrentMonthSpend = async (budget_id?: string) => {
+  const user = await getSupabaseUser()
+  if (!user) return
+
+  const monthNumber = new Date().getMonth()
+
+  let query = supabase.from('entries').select('amount.sum()')
+
+  if (budget_id) query = query.eq('budget_id', budget_id)
+
+  const {data, error} = await query.eq('month', monthNumber).single()
+
+  if (error) throw new Error(error.message)
+
+  return data.sum
+}
+
 export const getAvgDailySpend = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
@@ -56,6 +73,23 @@ export const getAvgDailySpend = async (budget_id?: string) => {
   if (error) throw new Error(error.message)
 
   return data
+}
+
+export const getLastWeekSpend = async (budget_id?: string) => {
+  const user = await getSupabaseUser()
+  if (!user) return
+
+  const currentWeek = getWeekNumber() - 1
+
+  let query = supabase.from('entries').select('amount.sum()')
+
+  if (budget_id) query = query.eq('budget_id', budget_id)
+
+  const {data, error} = await query.eq('week', currentWeek).single()
+
+  if (error) throw new Error(error.message)
+
+  return data.sum
 }
 
 export const getCurrentWeekSpend = async (budget_id?: string) => {

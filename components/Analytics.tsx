@@ -2,9 +2,11 @@ import {useQuery} from '@tanstack/react-query'
 import {
   getAllTimeSpend,
   getAvgDailySpend,
+  getCurrentMonthSpend,
   getCurrentWeekSpend,
   getThisYearSpend,
   getTodaySpend,
+  getLastWeekSpend,
 } from '@/data/analytics'
 import {toMoney} from '@/utils/helpers'
 import {ThemedView} from './ThemedView'
@@ -19,6 +21,8 @@ export const AnalyticsQueryKeys = [
   'getAvgDailySpend',
   'getCurrentWeekSpend',
   'getTodaySpend',
+  'getCurrentMonthSpend',
+  'getLastWeekSpend',
 ]
 
 export default function Analytics({counter}: {counter: number}) {
@@ -33,37 +37,37 @@ export default function Analytics({counter}: {counter: number}) {
   // THIS YEAR
   const allTimeData = useQuery({
     queryKey: ['getAllTimeSpend', counter],
-    queryFn: () => getThisYearSpend(defaultBudget.id),
+    queryFn: () => getThisYearSpend(defaultBudget?.id),
   })
 
   const avgDailyData = useQuery({
     queryKey: ['getAvgDailySpend', counter],
-    queryFn: () => getAvgDailySpend(defaultBudget.id),
+    queryFn: () => getAvgDailySpend(defaultBudget?.id),
   })
 
   const currentWeekData = useQuery({
     queryKey: ['getCurrentWeekSpend', counter],
-    queryFn: () => getCurrentWeekSpend(defaultBudget.id),
+    queryFn: () => getCurrentWeekSpend(defaultBudget?.id),
+  })
+
+  const lastWeekData = useQuery({
+    queryKey: ['getLastWeekSpend', counter],
+    queryFn: () => getLastWeekSpend(defaultBudget?.id),
+  })
+
+  const currentMonthData = useQuery({
+    queryKey: ['getCurrentMonthSpend', counter],
+    queryFn: () => getCurrentMonthSpend(defaultBudget?.id),
   })
 
   const todayData = useQuery({
     queryKey: ['getTodaySpend', counter],
-    queryFn: () => getTodaySpend(defaultBudget.id),
+    queryFn: () => getTodaySpend(defaultBudget?.id),
   })
-
-  // useEffect(() => {
-  //   allTimeData.data && allTimeData.refetch()
-  //   avgDailyData.data && avgDailyData.refetch()
-  //   currentWeekData.data && currentWeekData.refetch()
-  //   todayData.data && todayData.refetch()
-  // }, [counter])
 
   const dailySpend =
     allTimeData.data /
     (dayjs().diff(new Date(avgDailyData.data?.created_at), 'day') || 1)
-
-  // console.log('allTimeData', allTimeData)
-  // console.log('dailySpend', dailySpend)
 
   return (
     <ThemedView style={styles.container}>
@@ -73,10 +77,16 @@ export default function Analytics({counter}: {counter: number}) {
         title={'This Year'}
         value={toMoney(allTimeData.data, true)}
       />
+
       <Card
-        loading={avgDailyData.isLoading}
-        title={'Avg. Daily'}
-        value={toMoney(dailySpend, true)}
+        loading={currentMonthData.isLoading}
+        title={'This Month'}
+        value={toMoney(currentMonthData.data, true)}
+      />
+      <Card
+        loading={lastWeekData.isLoading}
+        title={'Last Week'}
+        value={toMoney(lastWeekData.data, true)}
       />
       <Card
         loading={currentWeekData.isLoading}
@@ -87,6 +97,11 @@ export default function Analytics({counter}: {counter: number}) {
         loading={todayData.isLoading}
         title={'Today'}
         value={toMoney(todayData.data, true)}
+      />
+      <Card
+        loading={avgDailyData.isLoading}
+        title={'Avg. Daily'}
+        value={toMoney(dailySpend, true)}
       />
       {/* </ThemedView>
       <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}

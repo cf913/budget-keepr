@@ -11,6 +11,7 @@ export const getCategories = async () => {
       `
         id,
         name,
+        color,
         sub_categories(
           id
         )

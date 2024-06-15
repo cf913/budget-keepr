@@ -35,7 +35,7 @@ export const getEntries = async (budgetId?: string) => {
     .select(
       `
       id,
-      categories(id, name),
+      categories(id, name, color),
       sub_categories(id, name),
       amount,
       created_at

@@ -60,8 +60,7 @@ export default function ListItem({
   const withCategory = category
     ? {
         borderStartWidth: 5,
-        borderStartColor:
-          title === 'Coles' ? 'red' : title === 'Aldi' ? 'blue' : 'gold',
+        borderStartColor: category.color,
       }
     : null
 

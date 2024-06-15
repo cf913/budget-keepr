@@ -73,6 +73,7 @@ export default function Categories() {
                   right={category.sub_categories?.length}
                   key={category.id}
                   lastItem={isLastItem(data, i)}
+                  category={category}
                 />
               )
             })}

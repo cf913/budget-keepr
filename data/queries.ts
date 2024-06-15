@@ -43,7 +43,7 @@ export const getEntries = async (budgetId?: string) => {
     )
     .eq('budget_id', budgetId)
     .order('created_at', {ascending: false})
-    .limit(5)
+    .limit(10)
 
   /// DEV
   // logRes('getEntries', data, error)

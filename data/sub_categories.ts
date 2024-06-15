@@ -17,7 +17,8 @@ export const getSubCategories = async (
       name,
       categories:parent_id(
       id,
-      name
+      name,
+      color
       )
       `,
     )

@@ -58,6 +58,7 @@ export default function Category() {
                   // }}
                   title={category.name}
                   key={category.id}
+                  category={category.categories}
                   lastItem={isLastItem(data, i)}
                 />
               )

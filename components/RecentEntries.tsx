@@ -4,13 +4,13 @@ import {useEffect} from 'react'
 import ListItem from './Lists/ListItem'
 import {getEntries} from '@/data/queries'
 import {toMoney} from '@/utils/helpers'
-import {PADDING} from '@/constants/Styles'
+import {HEIGHT, PADDING, STYLES} from '@/constants/Styles'
 import ListItemSkeleton from './Lists/ListItemSkeleton'
 import dayjs from 'dayjs'
 import {ThemedText} from './ThemedText'
 import {BlurView} from 'expo-blur'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
-import {RectButton} from 'react-native-gesture-handler'
+import {RectButton, ScrollView} from 'react-native-gesture-handler'
 import {Animated} from 'react-native'
 import {Feather} from '@expo/vector-icons'
 import {useMutation, useQuery} from '@tanstack/react-query'
@@ -49,6 +49,13 @@ export default function RecentEntries({
   const {defaultBudget} = useLocalSettings()
   const textColor = useThemeColor({}, 'mid')
 
+  const mult = (arr: any[]) => {
+    let newArr: any = []
+    for (let i = 0; i < 15; i++) {
+      newArr = newArr.concat(arr)
+    }
+    return newArr
+  }
   const {
     data: entries = [],
     error,
@@ -114,49 +121,53 @@ export default function RecentEntries({
           Recent entries
         </ThemedText>
       </BlurView>
-      {(entries || []).map((entry: Entry, i: number) => {
-        return (
-          <Swipeable
-            key={entry.id}
-            containerStyle={{backgroundColor: 'red'}}
-            renderRightActions={() => (
-              <RectButton
-                style={[
-                  {},
-                  // styles.leftAction
-                  {
-                    width: 50,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: 'red',
-                  },
-                ]}
-                onPress={() => mutation.mutate(entry.id)}
-              >
-                <Animated.Text
+      <ScrollView style={{maxHeight: 5 * HEIGHT.item}}>
+        {(entries || []).map((entry: Entry, i: number) => {
+          return (
+            <Swipeable
+              key={entry.id}
+              containerStyle={{backgroundColor: 'red'}}
+              renderRightActions={() => (
+                <RectButton
                   style={[
-                    // styles.actionText,
+                    {},
+                    // styles.leftAction
                     {
-                      // transform: [{translateX: trans}],
+                      width: 50,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'red',
                     },
                   ]}
+                  onPress={() => mutation.mutate(entry.id)}
                 >
-                  <Feather name="trash-2" size={24} color={'white'} />
-                </Animated.Text>
-              </RectButton>
-            )}
-          >
-            <ListItem
-              lastItem={i === (entries || []).length - 1}
-              title={entry.sub_categories?.name}
-              description={dayjs(entry.created_at).format('HH:mm - ddd D MMM')}
-              category={entry.categories}
-              // description={entry.categories.name}
-              right={toMoney(entry.amount)}
-            />
-          </Swipeable>
-        )
-      })}
+                  <Animated.Text
+                    style={[
+                      // styles.actionText,
+                      {
+                        // transform: [{translateX: trans}],
+                      },
+                    ]}
+                  >
+                    <Feather name="trash-2" size={24} color={'white'} />
+                  </Animated.Text>
+                </RectButton>
+              )}
+            >
+              <ListItem
+                lastItem={i === (entries || []).length - 1}
+                title={entry.sub_categories?.name}
+                description={dayjs(entry.created_at).format(
+                  'HH:mm - ddd D MMM',
+                )}
+                category={entry.categories}
+                // description={entry.categories.name}
+                right={toMoney(entry.amount)}
+              />
+            </Swipeable>
+          )
+        })}
+      </ScrollView>
     </List>
   )
 }

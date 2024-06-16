@@ -7,6 +7,7 @@ import {
   getThisYearSpend,
   getTodaySpend,
   getLastWeekSpend,
+  getWeeklyBreakdown,
 } from '@/data/analytics'
 import {toMoney} from '@/utils/helpers'
 import {ThemedView} from './ThemedView'
@@ -64,6 +65,13 @@ export default function Analytics({counter}: {counter: number}) {
     queryKey: ['getTodaySpend', counter],
     queryFn: () => getTodaySpend(defaultBudget?.id),
   })
+
+  const weeklyData = useQuery({
+    queryKey: ['getWeeklyBreakdown', counter],
+    queryFn: () => getWeeklyBreakdown(defaultBudget?.id),
+  })
+
+  console.log('weeklydata', weeklyData.data)
 
   const dailySpend =
     allTimeData.data /

@@ -19,7 +19,7 @@ export const getSupabaseUser = async () => {
       alert('getUser: User not found')
       return
     }
-    console.log('CURRENT USER ID', user.id)
+    // console.log('CURRENT USER ID', user.id)
     return user
   } catch (e) {
     throw e

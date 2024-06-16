@@ -134,3 +134,25 @@ export const getTodaySpend = async (budget_id?: string) => {
 
   return data.sum
 }
+
+export const getWeeklyBreakdown = async (budget_id?: string) => {
+  const user = await getSupabaseUser()
+  if (!user) return
+
+  const currentWeek = getWeekNumber()
+
+  let query = supabase
+    .from('entries')
+    .select('amount.sum(), categories(name, color))')
+
+  if (budget_id) query = query.eq('budget_id', budget_id)
+
+  const {data, error} = await query
+    .eq('week', currentWeek)
+    .order('sum', {ascending: false})
+  // .single()
+
+  if (error) throw new Error(error.message)
+
+  return data
+}

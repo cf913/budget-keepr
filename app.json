@@ -17,13 +17,14 @@
       "supportsTablet": true,
       "usesAppleSignIn": true,
       "bundleIdentifier": "com.budgetkeepr",
-      "buildNumber": "10"
+      "buildNumber": "11"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.budgetkeepr"
     },
     "web": {
       "bundler": "metro",
@@ -59,7 +60,10 @@
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/160e0efd-d9b3-4f6e-b454-6a41cf0e32fd"
+      "url": "https://u.expo.dev/160e0efd-d9b3-4f6e-b454-6a41cf0e32fd",
+      "requestHeaders": {
+        "expo-channel-name": "preview"
+      }
     }
   }
 }

@@ -17,6 +17,15 @@ import {PADDING} from '@/constants/Styles'
 import Card from './Cards/Card'
 import {useLocalSettings} from '@/stores/localSettings'
 
+import {
+  BarChart,
+  LineChart,
+  PieChart,
+  PopulationPyramid,
+} from 'react-native-gifted-charts'
+import {useMemo} from 'react'
+import CardVersus from './Cards/CardVersus'
+
 export const AnalyticsQueryKeys = [
   'getAllTimeSpend',
   'getAvgDailySpend',
@@ -24,6 +33,7 @@ export const AnalyticsQueryKeys = [
   'getTodaySpend',
   'getCurrentMonthSpend',
   'getLastWeekSpend',
+  'getWeeklyBreakdown',
 ]
 
 export default function Analytics({counter}: {counter: number}) {
@@ -66,13 +76,6 @@ export default function Analytics({counter}: {counter: number}) {
     queryFn: () => getTodaySpend(defaultBudget?.id),
   })
 
-  const weeklyData = useQuery({
-    queryKey: ['getWeeklyBreakdown', counter],
-    queryFn: () => getWeeklyBreakdown(defaultBudget?.id),
-  })
-
-  console.log('weeklydata', weeklyData.data)
-
   const dailySpend =
     allTimeData.data /
     (dayjs().diff(new Date(avgDailyData.data?.created_at), 'day') || 1)
@@ -85,7 +88,6 @@ export default function Analytics({counter}: {counter: number}) {
         title={'This Year'}
         value={toMoney(allTimeData.data, true)}
       />
-
       <Card
         loading={currentMonthData.isLoading}
         title={'This Month'}
@@ -111,11 +113,24 @@ export default function Analytics({counter}: {counter: number}) {
         title={'Avg. Daily'}
         value={toMoney(dailySpend, true)}
       />
+      <CardVersus counter={counter} />
       {/* </ThemedView>
       <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
       {/* <Card title={'All Time Spend'} value={toMoney(allTimeSpend)} />
       <Card title={'Average Daily'} value={toMoney(dailySpend)} /> */}
       {/* </ThemedView> */}
+      {/* <BarChart data={data} /> */}
+      {/* <LineChart data={data} />
+      <PieChart data={data} />
+      <PopulationPyramid
+        data={[
+          {left: 10, right: 12},
+          {left: 9, right: 8},
+        ]}
+      />
+      <BarChart data={data} horizontal />
+      <LineChart data={data} areaChart />
+      <PieChart data={data} donut /> */}
     </ThemedView>
   )
 }

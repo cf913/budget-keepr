@@ -147,9 +147,8 @@ export const getWeeklyBreakdown = async (budget_id?: string) => {
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const {data, error} = await query
-    .eq('week', currentWeek)
-    .order('sum', {ascending: false})
+  const {data, error} = await query.eq('week', currentWeek)
+  // .order('sum', {ascending: false})
   // .single()
 
   if (error) throw new Error(error.message)

@@ -97,7 +97,7 @@ export default function Page({
           flexGrow: 1,
         }}
         contentContainerStyle={{
-          flex: 1,
+          // flex: 1,
           flexGrow: 1,
         }}
       >

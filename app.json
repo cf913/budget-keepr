@@ -16,8 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn": true,
-      "bundleIdentifier": "com.budgetkeepr",
-      "buildNumber": "3"
+      "bundleIdentifier": "com.budgetkeepr"
     },
     "android": {
       "adaptiveIcon": {

@@ -11,7 +11,7 @@ import {ThemedText} from './ThemedText'
 import {BlurView} from 'expo-blur'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import {RectButton, ScrollView} from 'react-native-gesture-handler'
-import {Animated} from 'react-native'
+import {Alert, Animated} from 'react-native'
 import {Feather} from '@expo/vector-icons'
 import {useMutation, useQuery} from '@tanstack/react-query'
 import {deleteEntry} from '@/data/entries'
@@ -93,6 +93,21 @@ export default function RecentEntries({
 
   if (error) alert(error.message)
 
+  const onDelete = async (id: string) => {
+    Alert.alert('Confirm delete?', 'This action cannot be undone.', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        onPress: () => mutation.mutate(id),
+        style: 'destructive',
+      },
+    ])
+  }
+
   return isLoading || isRefetching ? (
     <List style={{marginBottom: PADDING, zIndex: 2}}>
       {[...Array(entries?.length || 5).keys()].map((v: number, i: number) => {
@@ -109,11 +124,11 @@ export default function RecentEntries({
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{
-          maxHeight: 5 * HEIGHT.item + PADDING / 2 + 16 + 4,
+          maxHeight: 5 * HEIGHT.item + PADDING / 2 + 20 + 4,
         }}
         contentContainerStyle={{}}
       >
-        <Padder style={{height: PADDING / 2 + 16}} />
+        <Padder style={{height: PADDING / 2 + 20}} />
         {(entries || []).map((entry: Entry, i: number) => {
           return (
             <Swipeable
@@ -131,7 +146,7 @@ export default function RecentEntries({
                       backgroundColor: 'red',
                     },
                   ]}
-                  onPress={() => mutation.mutate(entry.id)}
+                  onPress={() => onDelete(entry.id)}
                 >
                   <Animated.Text
                     style={[
@@ -161,7 +176,7 @@ export default function RecentEntries({
         })}
       </ScrollView>
       <BlurView
-        intensity={50}
+        // intensity={50}
         style={{
           paddingLeft: PADDING,
           paddingVertical: PADDING / 2,

@@ -4,7 +4,7 @@ import {useEffect} from 'react'
 import ListItem from './Lists/ListItem'
 import {getEntries} from '@/data/queries'
 import {toMoney} from '@/utils/helpers'
-import {HEIGHT, PADDING, STYLES} from '@/constants/Styles'
+import {HEIGHT, PADDING, STYLES, TYPO} from '@/constants/Styles'
 import ListItemSkeleton from './Lists/ListItemSkeleton'
 import dayjs from 'dayjs'
 import {ThemedText} from './ThemedText'
@@ -107,14 +107,14 @@ export default function RecentEntries({
       <BlurView
         intensity={50}
         style={{
-          paddingLeft: PADDING / 2 + 5,
-          paddingVertical: 3,
+          paddingLeft: PADDING,
+          paddingVertical: PADDING / 2,
         }}
       >
         <ThemedText
           style={{
+            ...TYPO.small,
             fontWeight: 'bold',
-            fontSize: 12,
             color: textColor,
           }}
         >

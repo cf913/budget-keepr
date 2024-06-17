@@ -7,6 +7,7 @@ import Padder from '@/components/Layout/Padder'
 import React, {useState} from 'react'
 import {ThemedButton} from '@/components/Buttons/ThemedButton'
 import Analytics from '@/components/Analytics'
+import {Divider} from '@/components/Divider'
 
 export default function HomeScreen() {
   const {defaultBudget} = useLocalSettings()
@@ -39,7 +40,9 @@ export default function HomeScreen() {
         <Padder />
         <Analytics {...{counter}} />
         <Padder />
-        {/* <Padder /> */}
+        <Padder />
+        <Divider />
+        <Padder />
         {/* /////// RECENT ENTRIES ///////// */}
         <RecentEntries {...{counter, setCounter}} />
         <Padder />

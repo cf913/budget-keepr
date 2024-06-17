@@ -44,7 +44,7 @@ export default function CardVersus({counter}: {counter: number}) {
       {!data?.length ? (
         <Fragment>
           <ThemedText style={[styles.title, {color: tintColor}]}>
-            No entries found this week. Congrats! 🎉
+            0 entries found this week. Congrats! 🎉
           </ThemedText>
           <Padder h={0.3} />
         </Fragment>

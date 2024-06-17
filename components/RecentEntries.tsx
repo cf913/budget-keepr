@@ -18,6 +18,8 @@ import {deleteEntry} from '@/data/entries'
 import {queryClient} from '@/lib/tanstack'
 import {AnalyticsQueryKeys} from './Analytics'
 import {useThemeColor} from '@/hooks/useThemeColor'
+import {ThemedView} from './ThemedView'
+import Padder from './Layout/Padder'
 
 export interface Category {
   id: string
@@ -103,25 +105,15 @@ export default function RecentEntries({
       })}
     </List>
   ) : (
-    <List style={{marginBottom: PADDING, zIndex: 2}}>
-      <BlurView
-        intensity={50}
+    <List style={{marginBottom: PADDING, zIndex: 2, position: 'relative'}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
-          paddingLeft: PADDING,
-          paddingVertical: PADDING / 2,
+          maxHeight: 5 * HEIGHT.item + PADDING / 2 + 16 + 4,
         }}
+        contentContainerStyle={{}}
       >
-        <ThemedText
-          style={{
-            ...TYPO.small,
-            fontWeight: 'bold',
-            color: textColor,
-          }}
-        >
-          Recent entries
-        </ThemedText>
-      </BlurView>
-      <ScrollView style={{maxHeight: 5 * HEIGHT.item}}>
+        <Padder style={{height: PADDING / 2 + 16}} />
         {(entries || []).map((entry: Entry, i: number) => {
           return (
             <Swipeable
@@ -168,6 +160,27 @@ export default function RecentEntries({
           )
         })}
       </ScrollView>
+      <BlurView
+        intensity={50}
+        style={{
+          paddingLeft: PADDING,
+          paddingVertical: PADDING / 2,
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <ThemedText
+          style={{
+            ...TYPO.small,
+            fontWeight: 'bold',
+            color: textColor,
+          }}
+        >
+          Recent entries
+        </ThemedText>
+      </BlurView>
     </List>
   )
 }

@@ -1,2 +1,3 @@
 export const DEV_SHOW_BOX = false
-export const VERSION = 'v2'
+// npm run eas:update:preview '1.0.7-0v2'
+export const VERSION = 'v3'

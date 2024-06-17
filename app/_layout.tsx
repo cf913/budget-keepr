@@ -23,9 +23,9 @@ const routingInstrumentation = new Sentry.ReactNavigationInstrumentation()
 Sentry.init({
   dsn: 'https://0e4a09904690ab71879056856f657591@o4507417582764032.ingest.us.sentry.io/4507417584664576',
 
-  debug: true,
+  debug: __DEV__,
   // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-  // enableSpotlight: __DEV__,
+  enableSpotlight: __DEV__,
   integrations: [
     new Sentry.ReactNativeTracing({
       // Pass instrumentation to be used as `routingInstrumentation`

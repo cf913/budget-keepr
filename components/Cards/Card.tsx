@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: PADDING,
+    paddingVertical: PADDING / 1.5,
     minWidth: '40%',
   },
   title: {

@@ -17,13 +17,6 @@ import {PADDING} from '@/constants/Styles'
 import Card from './Cards/Card'
 import {useLocalSettings} from '@/stores/localSettings'
 
-import {
-  BarChart,
-  LineChart,
-  PieChart,
-  PopulationPyramid,
-} from 'react-native-gifted-charts'
-import {useMemo} from 'react'
 import CardVersus from './Cards/CardVersus'
 
 export const AnalyticsQueryKeys = [

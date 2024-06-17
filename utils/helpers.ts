@@ -54,3 +54,11 @@ export const getWeekNumber = (date?: Date) => {
   var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1))
   return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7)
 }
+
+export const sortByKey = (array: any[], key: string) => {
+  return array.sort((a, b) => {
+    var x = a[key]
+    var y = b[key]
+    return x < y ? 1 : x > y ? -1 : 0
+  })
+}

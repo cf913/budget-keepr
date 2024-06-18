@@ -40,6 +40,7 @@ export default function ListItem({
   description,
   category,
   lastItem = false,
+  checked = false,
   right,
 }: {
   item?: any
@@ -49,6 +50,7 @@ export default function ListItem({
   description?: string | null
   category?: Category
   lastItem?: boolean
+  checked?: boolean
   right?: string | number
 }) {
   const backgroundColor = useThemeColor({}, 'bg_secondary')
@@ -90,6 +92,14 @@ export default function ListItem({
               name="chevron-right"
               size={24}
               color={chevronColor}
+              style={{paddingLeft: PADDING / 4}}
+            />
+          ) : null}
+          {checked ? (
+            <Feather
+              name="check"
+              size={24}
+              color={rightColor}
               style={{paddingLeft: PADDING / 4}}
             />
           ) : null}

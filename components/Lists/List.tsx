@@ -1,8 +1,9 @@
 import {ReactNode} from 'react'
-import {ThemedView} from '../ThemedView'
+import {AnimatedView, ThemedView} from '../ThemedView'
 import {StyleSheet, ViewStyle} from 'react-native'
 import {RADIUS, STYLES} from '@/constants/Styles'
 import {useThemeColor} from '@/hooks/useThemeColor'
+import {FadeIn, FadeInDown} from 'react-native-reanimated'
 
 export default function List({
   children,
@@ -13,13 +14,14 @@ export default function List({
 }) {
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   return (
-    <ThemedView
+    <AnimatedView
+      entering={FadeIn}
       style={[STYLES.shadow, styles.shadow_container, {backgroundColor}, style]}
     >
       <ThemedView style={[styles.container, {backgroundColor}]}>
         {children}
       </ThemedView>
-    </ThemedView>
+    </AnimatedView>
   )
 }
 

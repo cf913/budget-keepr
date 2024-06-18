@@ -30,6 +30,7 @@ Sentry.init({
     new Sentry.ReactNativeTracing({
       // Pass instrumentation to be used as `routingInstrumentation`
       routingInstrumentation,
+
       enableNativeFramesTracking: !isRunningInExpoGo(),
       // ...
     }),

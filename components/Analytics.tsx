@@ -1,13 +1,11 @@
 import {useQuery} from '@tanstack/react-query'
 import {
-  getAllTimeSpend,
   getAvgDailySpend,
   getCurrentMonthSpend,
   getCurrentWeekSpend,
   getThisYearSpend,
   getTodaySpend,
   getLastWeekSpend,
-  getWeeklyBreakdown,
 } from '@/data/analytics'
 import {toMoney} from '@/utils/helpers'
 import {ThemedView} from './ThemedView'
@@ -82,6 +80,11 @@ export default function Analytics({counter}: {counter: number}) {
         value={toMoney(allTimeData.data, true)}
       />
       <Card
+        loading={avgDailyData.isLoading}
+        title={'All Time Daily Avg.'}
+        value={toMoney(dailySpend, true)}
+      />
+      <Card
         loading={currentMonthData.isLoading}
         title={'This Month'}
         value={toMoney(currentMonthData.data, true)}
@@ -100,11 +103,6 @@ export default function Analytics({counter}: {counter: number}) {
         loading={todayData.isLoading}
         title={'Today'}
         value={toMoney(todayData.data, true)}
-      />
-      <Card
-        loading={avgDailyData.isLoading}
-        title={'Avg. Daily'}
-        value={toMoney(dailySpend, true)}
       />
       <CardVersus counter={counter} />
       {/* </ThemedView>

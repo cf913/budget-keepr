@@ -9,6 +9,8 @@ import {ThemedButton} from '@/components/Buttons/ThemedButton'
 import Analytics from '@/components/Analytics'
 import {Divider} from '@/components/Divider'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
+import {ThemedView} from '@/components/ThemedView'
+import {PADDING} from '@/constants/Styles'
 
 export default function HomeScreen() {
   const {defaultBudget} = useLocalSettings()
@@ -37,7 +39,7 @@ export default function HomeScreen() {
         ></ThemedButton>
       }
     >
-      <Content>
+      <Content style={{flex: 1}}>
         {/* ANALYTICS */}
         <Padder />
         <Analytics {...{counter}} />
@@ -46,9 +48,18 @@ export default function HomeScreen() {
         <Divider />
         <Padder />
         {/* /////// RECENT ENTRIES ///////// */}
-        <RecentEntries {...{counter, setCounter}} />
+        <ThemedView
+          style={{
+            flexGrow: 1,
+            width: '100%',
+            backgroundColor: 'transparent',
+            height: 0, // INVESTIGATE WHY THIS IS REQUIRED
+          }}
+        >
+          <RecentEntries {...{counter, setCounter}} />
+        </ThemedView>
         <Padder />
-        <Padder style={{height: insets.bottom}} />
+        <Padder style={{height: insets.bottom ? insets.bottom : PADDING}} />
         {/* <Padder />
         <Padder />
         <Padder />

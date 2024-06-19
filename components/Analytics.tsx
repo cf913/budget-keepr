@@ -129,7 +129,6 @@ export default function Analytics({counter}: {counter: number}) {
 const styles = StyleSheet.create({
   container: {
     gap: PADDING / 2,
-    flexGrow: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',

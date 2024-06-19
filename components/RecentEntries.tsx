@@ -123,17 +123,19 @@ export default function RecentEntries({
   ) : (
     <List
       style={{
-        marginBottom: PADDING,
+        // marginBottom: PADDING,
         zIndex: 2,
         position: 'relative',
       }}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{
-          maxHeight: height * 0.5,
-          // flex: 1,
-        }}
+        style={
+          {
+            // maxHeight: height * 0.5,
+            // flex: 1,
+          }
+        }
         contentContainerStyle={
           {
             // flex: 1,

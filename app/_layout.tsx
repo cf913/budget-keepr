@@ -25,7 +25,7 @@ Sentry.init({
 
   debug: __DEV__,
   // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-  enableSpotlight: __DEV__,
+  // enableSpotlight: __DEV__,
   integrations: [
     new Sentry.ReactNativeTracing({
       // Pass instrumentation to be used as `routingInstrumentation`

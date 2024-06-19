@@ -18,6 +18,7 @@ import {Feather} from '@expo/vector-icons'
 import {useThemeColor} from '@/hooks/useThemeColor'
 import {router} from 'expo-router'
 import Content from './Content'
+import Padder from './Padder'
 
 const Wrapper = ({
   scroll,
@@ -92,15 +93,14 @@ export default function Page({
         scroll={scroll}
         refreshControl={refreshControl}
         style={{
-          paddingTop: withHeader ? headerHeight : insets.top,
-          flex: 1,
+          // paddingTop: withHeader ? headerHeight : insets.top,
           flexGrow: 1,
         }}
         contentContainerStyle={{
-          // flex: 1,
           flexGrow: 1,
         }}
       >
+        <Padder style={{height: withHeader ? headerHeight : insets.top}} />
         <ThemedView style={[{}, styles.header]}>
           {title ? (
             <ThemedView style={styles.title_container}>
@@ -142,7 +142,10 @@ export default function Page({
       {footer ? (
         <Content
           floating
-          style={{paddingBottom: insets.bottom, backgroundColor: 'transparent'}}
+          style={{
+            paddingBottom: insets.bottom || PADDING,
+            backgroundColor: 'transparent',
+          }}
         >
           {footer}
         </Content>

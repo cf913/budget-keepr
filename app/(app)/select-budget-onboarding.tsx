@@ -8,7 +8,7 @@ import {getBudgets} from '@/data/queries'
 import {Budget, useLocalSettings} from '@/stores/localSettings'
 import {isLastItem} from '@/utils/helpers'
 import {useQuery} from '@tanstack/react-query'
-import {router} from 'expo-router'
+import {Stack, router} from 'expo-router'
 
 export default function SelectBudget() {
   const {defaultBudget, setDefaultBudget} = useLocalSettings()
@@ -20,11 +20,12 @@ export default function SelectBudget() {
 
   const onSelectBudget = async (budget: Budget) => {
     await setDefaultBudget(budget)
-    router.back()
+    router.replace('/(main)')
   }
 
   return (
     <Page title="Select Budget">
+      <Stack.Screen options={{headerShown: false}} />
       <Content>
         {isLoading ? <Loader /> : null}
         {data ? (

@@ -8,9 +8,11 @@ import React, {useState} from 'react'
 import {ThemedButton} from '@/components/Buttons/ThemedButton'
 import Analytics from '@/components/Analytics'
 import {Divider} from '@/components/Divider'
+import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 export default function HomeScreen() {
   const {defaultBudget} = useLocalSettings()
+  const insets = useSafeAreaInsets()
   const [counter, setCounter] = useState(0)
 
   if (!defaultBudget) return <Redirect href="select-budget-onboarding" />
@@ -46,6 +48,11 @@ export default function HomeScreen() {
         {/* /////// RECENT ENTRIES ///////// */}
         <RecentEntries {...{counter, setCounter}} />
         <Padder />
+        <Padder style={{height: insets.bottom}} />
+        {/* <Padder />
+        <Padder />
+        <Padder />
+        <Padder /> */}
         {/* <ThemedButton
           title="Sentry"
           onPress={() => {

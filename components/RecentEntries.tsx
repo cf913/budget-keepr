@@ -11,7 +11,7 @@ import {ThemedText} from './ThemedText'
 import {BlurView} from 'expo-blur'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import {RectButton, ScrollView} from 'react-native-gesture-handler'
-import {Alert, Animated} from 'react-native'
+import {Alert, Animated, useWindowDimensions} from 'react-native'
 import {Feather} from '@expo/vector-icons'
 import {useMutation, useQuery} from '@tanstack/react-query'
 import {deleteEntry} from '@/data/entries'
@@ -50,6 +50,7 @@ export default function RecentEntries({
 }) {
   const {defaultBudget} = useLocalSettings()
   const textColor = useThemeColor({}, 'mid')
+  const {height} = useWindowDimensions()
 
   const mult = (arr: any[]) => {
     let newArr: any = []
@@ -120,13 +121,24 @@ export default function RecentEntries({
       })}
     </List>
   ) : (
-    <List style={{marginBottom: PADDING, zIndex: 2, position: 'relative'}}>
+    <List
+      style={{
+        marginBottom: PADDING,
+        zIndex: 2,
+        position: 'relative',
+      }}
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{
-          maxHeight: 5 * HEIGHT.item + PADDING / 2 + 20 + 4,
+          maxHeight: height * 0.5,
+          // flex: 1,
         }}
-        contentContainerStyle={{}}
+        contentContainerStyle={
+          {
+            // flex: 1,
+          }
+        }
       >
         <Padder style={{height: PADDING / 2 + 20}} />
         {(entries || []).map((entry: Entry, i: number) => {

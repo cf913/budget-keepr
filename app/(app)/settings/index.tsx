@@ -15,11 +15,13 @@ import {Alert} from 'react-native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 export default function Settings() {
-  const {defaultBudget} = useLocalSettings()
+  const {defaultBudget, resetState} = useLocalSettings()
   const insets = useSafeAreaInsets()
 
   const signOut = async () => {
     await supabase.auth.signOut()
+    // clean up localSettings
+    resetState()
   }
 
   const onSignOut = async () => {
@@ -63,11 +65,7 @@ export default function Settings() {
           paddingBottom: insets.bottom,
         }}
       >
-        <ThemedButton
-          title="Sign Out"
-          // onPress={() => supabase.auth.signOut()}
-          onPress={onSignOut}
-        ></ThemedButton>
+        <ThemedButton title="Sign Out" onPress={onSignOut}></ThemedButton>
       </ThemedView>
     </Page>
   )

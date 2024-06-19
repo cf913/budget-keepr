@@ -12,10 +12,12 @@ const LocalSettingsContext = React.createContext<{
   defaultBudget: Budget | null
   setDefaultBudget: (budget: Budget | null) => Promise<void>
   loadingSettings: boolean
+  resetState: () => Promise<void>
 }>({
   defaultBudget: null,
   setDefaultBudget: async () => {},
   loadingSettings: true,
+  resetState: async () => {},
 })
 
 export function useLocalSettings() {
@@ -68,12 +70,19 @@ export function LocalSettingsProvider(props: React.PropsWithChildren) {
     return
   }
 
+  const resetState = async () => {
+    setStateDefaultBudget(null)
+    await storeDataObj(KEYS.DEFAULT_BUDGET.key, null)
+    return
+  }
+
   return (
     <LocalSettingsContext.Provider
       value={{
         defaultBudget,
         setDefaultBudget,
         loadingSettings,
+        resetState,
       }}
     >
       {loadingSettings ? <Loader /> : props.children}

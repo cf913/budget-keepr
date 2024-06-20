@@ -67,16 +67,20 @@ export default function Analytics({ counter }: { counter: number }) {
     queryFn: () => getTodaySpend(defaultBudget?.id),
   })
 
+  const diffRaw = dayjs()
+    .endOf('day')
+    .diff(dayjs(avgDailyData.data?.created_at).startOf('day'), 'day', true)
+
   // number of full days since the first transaction
   // including day of first transaction and today
-  const diff = Math.round(
-    dayjs().diff(
-      dayjs(avgDailyData.data?.created_at).startOf('day'),
-      'day',
-      true,
-    ),
-  )
+  const diff = Math.ceil(diffRaw)
 
+  console.log('TODAY', dayjs().format('YYYY-MM-DD'))
+  console.log(
+    'Start',
+    dayjs(avgDailyData.data?.created_at).startOf('day').format('YYYY-MM-DD'),
+  )
+  console.log('diffRaw', diffRaw)
   console.log('diff', diff)
   const dailySpend = allTimeData.data / (diff || 1)
 

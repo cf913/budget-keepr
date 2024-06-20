@@ -8,6 +8,7 @@ import {ThemedView} from '@/components/ThemedView'
 import {HEIGHT, PADDING} from '@/constants/Styles'
 import {createCategory} from '@/data/categories'
 import {queryClient} from '@/lib/tanstack'
+import {useLocalSettings} from '@/stores/localSettings'
 import {useMutation} from '@tanstack/react-query'
 import {router} from 'expo-router'
 import {useState} from 'react'
@@ -15,6 +16,7 @@ import {KeyboardAvoidingView} from 'react-native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 export default function CategoryCreate() {
+  const {defaultBudget} = useLocalSettings()
   const insets = useSafeAreaInsets()
   const [name, setName] = useState('')
 
@@ -31,8 +33,11 @@ export default function CategoryCreate() {
   })
 
   const handleSave = async () => {
-    console.log('SAVING')
-    mutation.mutate({name})
+    if (!defaultBudget) {
+      alert('No default budget set')
+      return
+    }
+    mutation.mutate({name, budget_id: defaultBudget.id})
   }
 
   return (

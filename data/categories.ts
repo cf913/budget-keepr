@@ -1,9 +1,11 @@
 import {supabase} from '@/lib/supabase'
 import {getSupabaseUser} from './api'
 
-export const getCategories = async () => {
+export const getCategories = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
+
+  if (!budget_id) throw new Error('No budget_id provided')
 
   const {data, error} = await supabase
     .from('categories')
@@ -17,6 +19,7 @@ export const getCategories = async () => {
         )
       `,
     )
+    .eq('budget_id', budget_id)
     .order('name', {ascending: true})
 
   if (error) throw error
@@ -27,6 +30,7 @@ export const getCategories = async () => {
 export interface CategoryInput {
   id?: string
   name: string
+  budget_id: string
 }
 
 export const createCategory = async (category: CategoryInput) => {

@@ -5,6 +5,7 @@ import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import {Loader} from '@/components/Loader'
 import {ThemedText} from '@/components/ThemedText'
+import {getCategory} from '@/data/categories'
 import {getSubCategories} from '@/data/sub_categories'
 import {isLastItem} from '@/utils/helpers'
 import {useQuery} from '@tanstack/react-query'
@@ -12,23 +13,24 @@ import {router, useLocalSearchParams} from 'expo-router'
 import {useState} from 'react'
 
 export default function Category() {
-  const {id} = useLocalSearchParams<{id?: string}>()
+  const {id} = useLocalSearchParams<{id: string}>()
 
   const [refreshing, setRefreshing] = useState(false)
+
+  const dataCategory = useQuery({
+    queryKey: ['category', id],
+    queryFn: () => getCategory(id),
+  })
 
   const {data, error, refetch, isLoading} = useQuery({
     queryKey: ['sub_categories', id],
     queryFn: () => getSubCategories(id),
   })
 
-  const firstItem = data?.[0]?.categories?.name
-
-  console.log('firstItem', firstItem)
-
   return (
     <Page
       scroll
-      title={firstItem ? firstItem : ''}
+      title={dataCategory?.data?.name || ''}
       back
       refreshing={refreshing}
       onRefresh={async () => {
@@ -58,7 +60,7 @@ export default function Category() {
                   // }}
                   title={category.name}
                   key={category.id}
-                  category={category.categories}
+                  category={dataCategory?.data}
                   lastItem={isLastItem(data, i)}
                 />
               )

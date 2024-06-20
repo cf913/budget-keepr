@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import {
   getAvgDailySpend,
   getCurrentMonthSpend,
@@ -7,13 +7,13 @@ import {
   getTodaySpend,
   getLastWeekSpend,
 } from '@/data/analytics'
-import {toMoney} from '@/utils/helpers'
-import {ThemedView} from './ThemedView'
+import { toMoney } from '@/utils/helpers'
+import { ThemedView } from './ThemedView'
 import dayjs from 'dayjs'
-import {StyleSheet} from 'react-native'
-import {PADDING} from '@/constants/Styles'
+import { StyleSheet } from 'react-native'
+import { PADDING } from '@/constants/Styles'
 import Card from './Cards/Card'
-import {useLocalSettings} from '@/stores/localSettings'
+import { useLocalSettings } from '@/stores/localSettings'
 
 import CardVersus from './Cards/CardVersus'
 
@@ -27,8 +27,8 @@ export const AnalyticsQueryKeys = [
   'getWeeklyBreakdown',
 ]
 
-export default function Analytics({counter}: {counter: number}) {
-  const {defaultBudget} = useLocalSettings()
+export default function Analytics({ counter }: { counter: number }) {
+  const { defaultBudget } = useLocalSettings()
 
   // ALL TIME
   // const allTimeData = useQuery({
@@ -67,9 +67,18 @@ export default function Analytics({counter}: {counter: number}) {
     queryFn: () => getTodaySpend(defaultBudget?.id),
   })
 
-  const dailySpend =
-    allTimeData.data /
-    (dayjs().diff(new Date(avgDailyData.data?.created_at), 'day') || 1)
+  // number of full days since the first transaction
+  // including day of first transaction and today
+  const diff = Math.round(
+    dayjs().diff(
+      dayjs(avgDailyData.data?.created_at).startOf('day'),
+      'day',
+      true,
+    ),
+  )
+
+  console.log('diff', diff)
+  const dailySpend = allTimeData.data / (diff || 1)
 
   return (
     <ThemedView style={styles.container}>

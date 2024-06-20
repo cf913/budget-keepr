@@ -1,25 +1,24 @@
-import { useLocalSettings } from '@/stores/localSettings'
-import List from './Lists/List'
-import { useEffect } from 'react'
-import ListItem from './Lists/ListItem'
-import { getEntries } from '@/data/queries'
-import { toMoney } from '@/utils/helpers'
 import { HEIGHT, PADDING, STYLES, TYPO } from '@/constants/Styles'
-import ListItemSkeleton from './Lists/ListItemSkeleton'
-import dayjs from 'dayjs'
-import { ThemedText } from './ThemedText'
-import { BlurView } from 'expo-blur'
-import Swipeable from 'react-native-gesture-handler/Swipeable'
-import { RectButton, ScrollView } from 'react-native-gesture-handler'
-import { Alert, Animated, useWindowDimensions } from 'react-native'
+import { deleteEntry } from '@/data/entries'
+import { getEntries } from '@/data/queries'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { queryClient } from '@/lib/tanstack'
+import { useLocalSettings } from '@/stores/localSettings'
+import { toMoney } from '@/utils/helpers'
 import { Feather } from '@expo/vector-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { deleteEntry } from '@/data/entries'
-import { queryClient } from '@/lib/tanstack'
+import dayjs from 'dayjs'
+import { BlurView } from 'expo-blur'
+import { useEffect } from 'react'
+import { Alert, Animated, useWindowDimensions } from 'react-native'
+import { RectButton, ScrollView } from 'react-native-gesture-handler'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { AnalyticsQueryKeys } from './Analytics'
-import { useThemeColor } from '@/hooks/useThemeColor'
-import { ThemedView } from './ThemedView'
 import Padder from './Layout/Padder'
+import List from './Lists/List'
+import ListItem from './Lists/ListItem'
+import ListItemSkeleton from './Lists/ListItemSkeleton'
+import { ThemedText } from './ThemedText'
 
 export interface Category {
   id: string
@@ -38,7 +37,7 @@ export interface Entry {
   amount: number
   created_at: string
   category: Category
-  sub_categories: SubCategory
+  sub_category: SubCategory
 }
 
 export default function RecentEntries({
@@ -50,15 +49,7 @@ export default function RecentEntries({
 }) {
   const { defaultBudget } = useLocalSettings()
   const textColor = useThemeColor({}, 'mid')
-  const { height } = useWindowDimensions()
 
-  const mult = (arr: any[]) => {
-    let newArr: any = []
-    for (let i = 0; i < 15; i++) {
-      newArr = newArr.concat(arr)
-    }
-    return newArr
-  }
   const {
     data: entries = [],
     error,
@@ -177,7 +168,7 @@ export default function RecentEntries({
             >
               <ListItem
                 lastItem={i === (entries || []).length - 1}
-                title={entry.sub_categories?.name}
+                title={entry.sub_category?.name}
                 description={dayjs(entry.created_at).format(
                   'HH:mm - ddd D MMM',
                 )}

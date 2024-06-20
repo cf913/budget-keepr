@@ -1,6 +1,7 @@
-import {ThemedButton} from '@/components/Buttons/ThemedButton'
+import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import CategorySuggestions from '@/components/CategorySuggestions'
-import {Divider} from '@/components/Divider'
+import { Divider } from '@/components/Divider'
+import ThemedCheckbox from '@/components/Inputs/ThemedCheckbox'
 import ThemedInput from '@/components/Inputs/ThemedInput'
 import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
@@ -8,35 +9,37 @@ import Page from '@/components/Layout/Page'
 import Spacer from '@/components/Layout/Spacer'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
-import {SubCategory} from '@/components/RecentEntries'
-import {ThemedText} from '@/components/ThemedText'
-import {AnimatedView, ThemedView} from '@/components/ThemedView'
-import {TYPO} from '@/constants/Styles'
-import {createEntry} from '@/data/mutations'
-import {useLocalSettings} from '@/stores/localSettings'
-import {getWeekNumber, toMoney} from '@/utils/helpers'
+import { SubCategory } from '@/components/RecentEntries'
+import { ThemedText } from '@/components/ThemedText'
+import { AnimatedView, ThemedView } from '@/components/ThemedView'
+import { PADDING, TYPO } from '@/constants/Styles'
+import { createEntry } from '@/data/mutations'
+import { useLocalSettings } from '@/stores/localSettings'
+import { getWeekNumber, toMoney } from '@/utils/helpers'
 import dayjs from 'dayjs'
-import {router} from 'expo-router'
-import React, {useRef, useState} from 'react'
-import {Keyboard, TextInput} from 'react-native'
+import Checkbox from 'expo-checkbox'
+import { router } from 'expo-router'
+import React, { useRef, useState } from 'react'
+import { Keyboard, TextInput } from 'react-native'
 import {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withTiming,
 } from 'react-native-reanimated'
-import {useSafeAreaInsets} from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function AddNewEntry() {
   const translateValue = useSharedValue(48 + 8)
   const opacityValue = useSharedValue(1)
-  const {defaultBudget} = useLocalSettings()
+  const { defaultBudget } = useLocalSettings()
   const insets = useSafeAreaInsets()
   const [suggestionsVisible, setSuggestionsVisible] = useState(false)
   const [saving, setSaving] = useState(false)
   const [amount, setAmount] = useState<string>('')
   const [subCategory, setSubCategory] = useState<SubCategory | null>(null)
   const [subCategorySearchText, setSubCategorySearchText] = useState<string>('')
+  const [isRecurring, setRecurring] = useState(false)
   const subCategoryInput = useRef<TextInput>(null)
 
   const handleSave = async () => {
@@ -49,10 +52,10 @@ export default function AddNewEntry() {
     // insert query
     console.log('setSaving')
     const now = new Date()
-    const {error}: any = await createEntry({
+    const { error }: any = await createEntry({
       amount: Math.round(+amount * 100),
       sub_category_id: subCategory.id,
-      category_id: subCategory.categories?.id,
+      category_id: subCategory.category?.id,
       budget_id: defaultBudget?.id,
       year: now.getFullYear(),
       month: now.getMonth(),
@@ -96,14 +99,7 @@ export default function AddNewEntry() {
         paddingBottom: insets.bottom,
       }}
     >
-      {/* <KeyboardAvoidingView
-        behavior="padding"
-        style={{flex: 1}}
-        keyboardVerticalOffset={HEIGHT.item + PADDING}
-      > */}
-      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <> */}
-      <Content style={{zIndex: 2}}>
+      <Content style={{ zIndex: 2 }}>
         {/* AMOUNT */}
         <AnimatedView style={[animatedStyles]}>
           <ThemedInput
@@ -127,15 +123,15 @@ export default function AddNewEntry() {
           onChangeText={setSubCategorySearchText}
           returnKeyType="search"
           onInputFocus={() => {
-            opacityValue.value = withTiming(0, {duration: 200})
-            translateValue.value = withTiming(0, {duration: 500})
+            opacityValue.value = withTiming(0, { duration: 200 })
+            translateValue.value = withTiming(0, { duration: 500 })
             setSuggestionsVisible(true)
           }}
           onInputBlur={() => {
-            opacityValue.value = withTiming(1, {duration: 500})
+            opacityValue.value = withTiming(1, { duration: 500 })
             translateValue.value = withDelay(
               100,
-              withTiming(48 + 8, {duration: 200}),
+              withTiming(48 + 8, { duration: 200 }),
             )
             setSuggestionsVisible(false)
           }}
@@ -151,6 +147,19 @@ export default function AddNewEntry() {
           }}
         />
         <Padder />
+        {subCategory ? (
+          <ThemedView style={{ flexDirection: 'row' }}>
+            <ThemedCheckbox
+              // style={styles.checkbox}
+              // style={{ margin: 8, backgroundColor: 'red', borderRadius: 20 }}
+              // label="Recurring?"
+              checked={isRecurring}
+              onChange={() => setRecurring(prev => !prev)}
+            />
+            <Padder style={{ width: PADDING / 2 }} />
+            <ThemedText>Recurring?</ThemedText>
+          </ThemedView>
+        ) : null}
         <Divider />
         <Padder />
         <Padder />
@@ -172,14 +181,14 @@ export default function AddNewEntry() {
                 lastItem
                 title={subCategory.name}
                 description={dayjs().format('HH:mm - ddd D MMM')}
-                category={subCategory.categories}
+                category={subCategory.category}
                 // description={entry.categories.name}
                 right={toMoney(+amount * 100)}
               />
             </List>
             <Padder h={0.5} />
             <ThemedText
-              style={{opacity: 0.3, ...TYPO.small, textAlign: 'justify'}}
+              style={{ opacity: 0.3, ...TYPO.small, textAlign: 'justify' }}
             >
               Please make sure the values above look correct. The DELETE entries
               feature has not been implemented yet. A mistake here will follow
@@ -193,7 +202,7 @@ export default function AddNewEntry() {
       {/* // FLOATING BUTTON */}
       <Spacer />
       <Content>
-        <ThemedView style={{alignItems: 'center'}}>
+        <ThemedView style={{ alignItems: 'center' }}>
           <Padder />
           <ThemedButton onPress={handleSave} title="Save" loading={saving} />
         </ThemedView>

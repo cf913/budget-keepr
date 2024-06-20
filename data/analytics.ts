@@ -1,6 +1,6 @@
-import {supabase} from '@/lib/supabase'
-import {getSupabaseUser} from './api'
-import {getWeekNumber} from '@/utils/helpers'
+import { supabase } from '@/lib/supabase'
+import { getSupabaseUser } from './api'
+import { getWeekNumber } from '@/utils/helpers'
 import dayjs from 'dayjs'
 
 export const getAllTimeSpend = async (budget_id?: string) => {
@@ -11,7 +11,7 @@ export const getAllTimeSpend = async (budget_id?: string) => {
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const {data, error} = await query
+  const { data, error } = await query
     // .eq('user_id', user.id)
     .single()
 
@@ -30,7 +30,7 @@ export const getThisYearSpend = async (budget_id?: string) => {
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const {data, error} = await query.eq('year', yearNumber).single()
+  const { data, error } = await query.eq('year', yearNumber).single()
 
   if (error) throw new Error(error.message)
 
@@ -47,7 +47,7 @@ export const getCurrentMonthSpend = async (budget_id?: string) => {
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const {data, error} = await query.eq('month', monthNumber).single()
+  const { data, error } = await query.eq('month', monthNumber).single()
 
   if (error) throw new Error(error.message)
 
@@ -63,8 +63,8 @@ export const getAvgDailySpend = async (budget_id?: string) => {
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const {data, error} = await query
-    .order('created_at', {ascending: true})
+  const { data, error } = await query
+    .order('created_at', { ascending: true })
     .limit(1)
     .single()
 
@@ -85,7 +85,7 @@ export const getLastWeekSpend = async (budget_id?: string) => {
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const {data, error} = await query.eq('week', currentWeek).single()
+  const { data, error } = await query.eq('week', currentWeek).single()
 
   if (error) throw new Error(error.message)
 
@@ -102,7 +102,7 @@ export const getCurrentWeekSpend = async (budget_id?: string) => {
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const {data, error} = await query.eq('week', currentWeek).single()
+  const { data, error } = await query.eq('week', currentWeek).single()
 
   if (error) throw new Error(error.message)
 
@@ -125,7 +125,7 @@ export const getTodaySpend = async (budget_id?: string) => {
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const {data, error} = await query
+  const { data, error } = await query
     .lte('created_at', end)
     .gte('created_at', start)
     .single()
@@ -143,11 +143,11 @@ export const getWeeklyBreakdown = async (budget_id?: string) => {
 
   let query = supabase
     .from('entries')
-    .select('amount.sum(), categories(name, color))')
+    .select('amount.sum(), category:category_id(name, color))')
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const {data, error} = await query.eq('week', currentWeek)
+  const { data, error } = await query.eq('week', currentWeek)
   // .order('sum', {ascending: false})
   // .single()
 

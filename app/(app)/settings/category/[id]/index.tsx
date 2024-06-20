@@ -1,19 +1,21 @@
-import {ThemedButton} from '@/components/Buttons/ThemedButton'
+import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import Content from '@/components/Layout/Content'
 import Page from '@/components/Layout/Page'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
-import {Loader} from '@/components/Loader'
-import {ThemedText} from '@/components/ThemedText'
-import {getCategory} from '@/data/categories'
-import {getSubCategories} from '@/data/sub_categories'
-import {isLastItem} from '@/utils/helpers'
-import {useQuery} from '@tanstack/react-query'
-import {router, useLocalSearchParams} from 'expo-router'
-import {useState} from 'react'
+import { Loader } from '@/components/Loader'
+import { ThemedText } from '@/components/ThemedText'
+import { getCategory } from '@/data/categories'
+import { getSubCategories } from '@/data/sub_categories'
+import { useLocalSettings } from '@/stores/localSettings'
+import { isLastItem } from '@/utils/helpers'
+import { useQuery } from '@tanstack/react-query'
+import { router, useLocalSearchParams } from 'expo-router'
+import { useState } from 'react'
 
 export default function Category() {
-  const {id} = useLocalSearchParams<{id: string}>()
+  const { id } = useLocalSearchParams<{ id: string }>()
+  const { defaultBudget } = useLocalSettings()
 
   const [refreshing, setRefreshing] = useState(false)
 
@@ -22,9 +24,10 @@ export default function Category() {
     queryFn: () => getCategory(id),
   })
 
-  const {data, error, refetch, isLoading} = useQuery({
+  const { data, error, refetch, isLoading } = useQuery({
     queryKey: ['sub_categories', id],
-    queryFn: () => getSubCategories(id),
+    queryFn: () =>
+      getSubCategories({ categoryId: id, budget_id: defaultBudget?.id }),
   })
 
   return (
@@ -43,7 +46,7 @@ export default function Category() {
           round
           onPress={() => router.push(`/settings/category/${id}/create`)}
           title=""
-          style={{zIndex: 99}}
+          style={{ zIndex: 99 }}
         ></ThemedButton>
       }
     >

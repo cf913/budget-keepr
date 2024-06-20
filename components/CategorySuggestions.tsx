@@ -1,15 +1,16 @@
-import {getSubCategories} from '@/data/sub_categories'
-import {useQuery} from '@tanstack/react-query'
+import { getSubCategories } from '@/data/sub_categories'
+import { useQuery } from '@tanstack/react-query'
 import Fuse from 'fuse.js'
-import {useEffect, useState} from 'react'
-import {ThemedButton} from './Buttons/ThemedButton'
+import { useEffect, useState } from 'react'
+import { ThemedButton } from './Buttons/ThemedButton'
 import Padder from './Layout/Padder'
 import List from './Lists/List'
 import ListItemWithMatch from './Lists/ListItemWithMatch'
-import {Loader} from './Loader'
-import {SubCategory} from './RecentEntries'
-import {ThemedText} from './ThemedText'
-import {ThemedView} from './ThemedView'
+import { Loader } from './Loader'
+import { SubCategory } from './RecentEntries'
+import { ThemedText } from './ThemedText'
+import { ThemedView } from './ThemedView'
+import { useLocalSettings } from '@/stores/localSettings'
 
 export default function CategorySuggestions({
   visible,
@@ -22,9 +23,10 @@ export default function CategorySuggestions({
   onAddNew: () => void
   searchText: string
 }) {
-  const {data, error, isLoading} = useQuery({
+  const { defaultBudget } = useLocalSettings()
+  const { data, error, isLoading } = useQuery({
     queryKey: ['sub_categories'],
-    queryFn: () => getSubCategories(),
+    queryFn: () => getSubCategories({ budget_id: defaultBudget?.id }),
   })
 
   if (error) return <ThemedText>Error: {error.message} </ThemedText>
@@ -33,7 +35,7 @@ export default function CategorySuggestions({
 
   return (
     <CategorySuggestionsScreen
-      {...{isLoading, data, onSelect, searchText, onAddNew}}
+      {...{ isLoading, data, onSelect, searchText, onAddNew }}
     />
   )
 }
@@ -65,7 +67,7 @@ function CategorySuggestionsScreen({
     const fuse = new Fuse(data, options)
 
     const result = fuse.search(searchText)
-    setSubCategories(result.map(({item, ...rest}) => ({...item, ...rest})))
+    setSubCategories(result.map(({ item, ...rest }) => ({ ...item, ...rest })))
   }, [data, searchText])
 
   return (
@@ -75,7 +77,8 @@ function CategorySuggestionsScreen({
           <Padder h={0.5} />
           <ThemedText>
             No results found for '
-            <ThemedText style={{fontWeight: 'bold'}}>{searchText}</ThemedText>'
+            <ThemedText style={{ fontWeight: 'bold' }}>{searchText}</ThemedText>
+            '
           </ThemedText>
           <Padder h={0.5} />
           <ThemedButton title="+ Add new category" onPress={onAddNew} />
@@ -93,7 +96,7 @@ function CategorySuggestionsScreen({
                 lastItem={i === (subCategories || []).length - 1}
                 title={subCat.name}
                 key={subCat.id}
-                description={subCat.categories?.name}
+                description={subCat.category?.name}
               />
             )
           })}

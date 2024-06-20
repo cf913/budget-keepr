@@ -1,19 +1,19 @@
-import {useThemeColor} from '@/hooks/useThemeColor'
-import {ThemedText} from '../ThemedText'
-import {AnimatedView, ThemedView} from '../ThemedView'
-import {PADDING, RADIUS, STYLES, TYPO} from '@/constants/Styles'
-import {StyleSheet} from 'react-native'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { ThemedText } from '../ThemedText'
+import { AnimatedView, ThemedView } from '../ThemedView'
+import { PADDING, RADIUS, STYLES, TYPO } from '@/constants/Styles'
+import { StyleSheet } from 'react-native'
 import Padder from '../Layout/Padder'
-import {Loader} from '../Loader'
-import {FlipInXUp, FlipOutXDown, FlipOutXUp} from 'react-native-reanimated'
-import {useQuery} from '@tanstack/react-query'
-import {getWeeklyBreakdown} from '@/data/analytics'
-import {useLocalSettings} from '@/stores/localSettings'
-import {Fragment, useMemo} from 'react'
-import {sortByKey, toMoney} from '@/utils/helpers'
+import { Loader } from '../Loader'
+import { FlipInXUp, FlipOutXDown, FlipOutXUp } from 'react-native-reanimated'
+import { useQuery } from '@tanstack/react-query'
+import { getWeeklyBreakdown } from '@/data/analytics'
+import { useLocalSettings } from '@/stores/localSettings'
+import { Fragment, useMemo } from 'react'
+import { sortByKey, toMoney } from '@/utils/helpers'
 
-export default function CardVersus({counter}: {counter: number}) {
-  const {defaultBudget} = useLocalSettings()
+export default function CardVersus({ counter }: { counter: number }) {
+  const { defaultBudget } = useLocalSettings()
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   const textColor = useThemeColor({}, 'text')
   const tintColor = useThemeColor({}, 'mid')
@@ -29,8 +29,8 @@ export default function CardVersus({counter}: {counter: number}) {
     const arr: any[] =
       weeklyData.data?.map((item: any) => ({
         value: item.sum,
-        label: item.categories.name,
-        frontColor: item.categories.color,
+        label: item.category.name,
+        frontColor: item.category.color,
       })) || []
 
     const total = arr.reduce((acc, next) => acc + next.value, 0)
@@ -39,11 +39,11 @@ export default function CardVersus({counter}: {counter: number}) {
   }, [weeklyData.data])
 
   return (
-    <ThemedView style={[styles.card, {backgroundColor}]}>
+    <ThemedView style={[styles.card, { backgroundColor }]}>
       {/* EMPTY STATE */}
       {!data?.length ? (
         <Fragment>
-          <ThemedText style={[styles.title, {color: tintColor}]}>
+          <ThemedText style={[styles.title, { color: tintColor }]}>
             0 entries found this week. Congrats! 🎉
           </ThemedText>
           <Padder h={0.3} />
@@ -53,7 +53,7 @@ export default function CardVersus({counter}: {counter: number}) {
       {data && data.length
         ? data.map((item: any) => (
             <ThemedView key={item.label} style={styles.inner}>
-              <ThemedText style={[styles.title, {color: item.frontColor}]}>
+              <ThemedText style={[styles.title, { color: item.frontColor }]}>
                 {item.label}
               </ThemedText>
               <Padder h={0.3} />
@@ -63,9 +63,9 @@ export default function CardVersus({counter}: {counter: number}) {
                 <AnimatedView
                   entering={FlipInXUp}
                   exiting={FlipOutXDown}
-                  style={{alignItems: 'center'}}
+                  style={{ alignItems: 'center' }}
                 >
-                  <ThemedText style={[styles.value, {color: textColor}]}>
+                  <ThemedText style={[styles.value, { color: textColor }]}>
                     {toMoney(item.value, true)}
                   </ThemedText>
                   <ThemedText

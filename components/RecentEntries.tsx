@@ -1,24 +1,24 @@
-import {useLocalSettings} from '@/stores/localSettings'
+import { useLocalSettings } from '@/stores/localSettings'
 import List from './Lists/List'
-import {useEffect} from 'react'
+import { useEffect } from 'react'
 import ListItem from './Lists/ListItem'
-import {getEntries} from '@/data/queries'
-import {toMoney} from '@/utils/helpers'
-import {HEIGHT, PADDING, STYLES, TYPO} from '@/constants/Styles'
+import { getEntries } from '@/data/queries'
+import { toMoney } from '@/utils/helpers'
+import { HEIGHT, PADDING, STYLES, TYPO } from '@/constants/Styles'
 import ListItemSkeleton from './Lists/ListItemSkeleton'
 import dayjs from 'dayjs'
-import {ThemedText} from './ThemedText'
-import {BlurView} from 'expo-blur'
+import { ThemedText } from './ThemedText'
+import { BlurView } from 'expo-blur'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
-import {RectButton, ScrollView} from 'react-native-gesture-handler'
-import {Alert, Animated, useWindowDimensions} from 'react-native'
-import {Feather} from '@expo/vector-icons'
-import {useMutation, useQuery} from '@tanstack/react-query'
-import {deleteEntry} from '@/data/entries'
-import {queryClient} from '@/lib/tanstack'
-import {AnalyticsQueryKeys} from './Analytics'
-import {useThemeColor} from '@/hooks/useThemeColor'
-import {ThemedView} from './ThemedView'
+import { RectButton, ScrollView } from 'react-native-gesture-handler'
+import { Alert, Animated, useWindowDimensions } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { deleteEntry } from '@/data/entries'
+import { queryClient } from '@/lib/tanstack'
+import { AnalyticsQueryKeys } from './Analytics'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { ThemedView } from './ThemedView'
 import Padder from './Layout/Padder'
 
 export interface Category {
@@ -30,14 +30,14 @@ export interface Category {
 export interface SubCategory {
   id: string
   name: string
-  categories?: Category
+  category: Category
 }
 
 export interface Entry {
   id: string
   amount: number
   created_at: string
-  categories: Category
+  category: Category
   sub_categories: SubCategory
 }
 
@@ -48,9 +48,9 @@ export default function RecentEntries({
   counter: number
   setCounter: (value: number) => void
 }) {
-  const {defaultBudget} = useLocalSettings()
+  const { defaultBudget } = useLocalSettings()
   const textColor = useThemeColor({}, 'mid')
-  const {height} = useWindowDimensions()
+  const { height } = useWindowDimensions()
 
   const mult = (arr: any[]) => {
     let newArr: any = []
@@ -110,7 +110,7 @@ export default function RecentEntries({
   }
 
   return isLoading || isRefetching ? (
-    <List style={{marginBottom: PADDING, zIndex: 2}}>
+    <List style={{ marginBottom: PADDING, zIndex: 2 }}>
       {[...Array(entries?.length || 5).keys()].map((v: number, i: number) => {
         return (
           <ListItemSkeleton
@@ -142,12 +142,12 @@ export default function RecentEntries({
           }
         }
       >
-        <Padder style={{height: PADDING / 2 + 20}} />
+        <Padder style={{ height: PADDING / 2 + 20 }} />
         {(entries || []).map((entry: Entry, i: number) => {
           return (
             <Swipeable
               key={entry.id}
-              containerStyle={{backgroundColor: 'red'}}
+              containerStyle={{ backgroundColor: 'red' }}
               renderRightActions={() => (
                 <RectButton
                   style={[
@@ -181,7 +181,7 @@ export default function RecentEntries({
                 description={dayjs(entry.created_at).format(
                   'HH:mm - ddd D MMM',
                 )}
-                category={entry.categories}
+                category={entry.category}
                 // description={entry.categories.name}
                 right={toMoney(entry.amount)}
               />

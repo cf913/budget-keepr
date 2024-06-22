@@ -1,23 +1,18 @@
 import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import CategorySuggestions from '@/components/CategorySuggestions'
 import { Divider } from '@/components/Divider'
-import ThemedCheckbox from '@/components/Inputs/ThemedCheckbox'
+import EntryPreview from '@/components/EntryPreview'
 import ThemedInput from '@/components/Inputs/ThemedInput'
 import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import Spacer from '@/components/Layout/Spacer'
-import List from '@/components/Lists/List'
-import ListItem from '@/components/Lists/ListItem'
 import { SubCategory } from '@/components/RecentEntries'
-import { ThemedText } from '@/components/ThemedText'
+import RecurringInputs from '@/components/RecurringInputs'
 import { AnimatedView, ThemedView } from '@/components/ThemedView'
-import { PADDING, TYPO } from '@/constants/Styles'
 import { createEntry } from '@/data/mutations'
 import { useLocalSettings } from '@/stores/localSettings'
-import { getWeekNumber, toMoney } from '@/utils/helpers'
-import dayjs from 'dayjs'
-import Checkbox from 'expo-checkbox'
+import { getWeekNumber } from '@/utils/helpers'
 import { router } from 'expo-router'
 import React, { useRef, useState } from 'react'
 import { Keyboard, TextInput } from 'react-native'
@@ -30,7 +25,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function AddNewEntry() {
-  const translateValue = useSharedValue(48 + 8)
+  const translateValue = useSharedValue(48 + 8) // 48 is the height of the input and 8 is the padding
   const opacityValue = useSharedValue(1)
   const { defaultBudget } = useLocalSettings()
   const insets = useSafeAreaInsets()
@@ -39,7 +34,7 @@ export default function AddNewEntry() {
   const [amount, setAmount] = useState<string>('')
   const [subCategory, setSubCategory] = useState<SubCategory | null>(null)
   const [subCategorySearchText, setSubCategorySearchText] = useState<string>('')
-  const [isRecurring, setRecurring] = useState(false)
+  const [isRecurring, setRecurring] = useState<boolean>(false)
   const subCategoryInput = useRef<TextInput>(null)
 
   const handleSave = async () => {
@@ -64,6 +59,7 @@ export default function AddNewEntry() {
     })
 
     console.log(getWeekNumber(new Date()))
+
     console.log('after createEntry')
 
     // if error reset loading and show error message
@@ -115,6 +111,7 @@ export default function AddNewEntry() {
             blurOnSubmit={false}
           />
         </AnimatedView>
+
         {/* CATEGORY */}
         <ThemedInput
           ref={subCategoryInput}
@@ -147,57 +144,12 @@ export default function AddNewEntry() {
           }}
         />
         <Padder />
-        {subCategory ? (
-          <ThemedView style={{ flexDirection: 'row' }}>
-            <ThemedCheckbox
-              // style={styles.checkbox}
-              // style={{ margin: 8, backgroundColor: 'red', borderRadius: 20 }}
-              // label="Recurring?"
-              checked={isRecurring}
-              onChange={() => setRecurring(prev => !prev)}
-            />
-            <Padder style={{ width: PADDING / 2 }} />
-            <ThemedText>Recurring?</ThemedText>
-          </ThemedView>
-        ) : null}
+        <RecurringInputs isRecurring={isRecurring} setRecurring={setRecurring} />
+        <Padder />
         <Divider />
         <Padder />
+        <EntryPreview subCategory={subCategory} amount={amount} />
         <Padder />
-        {subCategory ? (
-          <>
-            <ThemedText
-              style={{
-                // fontWeight: 'bold',
-                textAlign: 'center',
-                letterSpacing: 3,
-                ...TYPO.small,
-              }}
-            >
-              PREVIEW
-            </ThemedText>
-            <Padder />
-            <List>
-              <ListItem
-                lastItem
-                title={subCategory.name}
-                description={dayjs().format('HH:mm - ddd D MMM')}
-                category={subCategory.category}
-                // description={entry.categories.name}
-                right={toMoney(+amount * 100)}
-              />
-            </List>
-            <Padder h={0.5} />
-            <ThemedText
-              style={{ opacity: 0.3, ...TYPO.small, textAlign: 'justify' }}
-            >
-              Please make sure the values above look correct. The DELETE entries
-              feature has not been implemented yet. A mistake here will follow
-              you forever and you might end up filled with regrets for not
-              having double checked your entry. Do the right thing. It only
-              takes a couple seconds. Sorry for the inconvenience.
-            </ThemedText>
-          </>
-        ) : null}
       </Content>
       {/* // FLOATING BUTTON */}
       <Spacer />

@@ -1,12 +1,12 @@
-import {StyleSheet, Pressable, type ViewProps} from 'react-native'
+import { Pressable, StyleSheet, type ViewProps } from 'react-native'
 
-import {useThemeColor} from '@/hooks/useThemeColor'
-import {ThemedText} from '../ThemedText'
-import {HEIGHT, RADIUS} from '@/constants/Styles'
-import {Feather} from '@expo/vector-icons'
-import {Loader} from '../Loader'
-import {AnimatedView} from '../ThemedView'
-import {FadeIn, FadeInDown, FadeOut, FadeOutUp} from 'react-native-reanimated'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { Feather } from '@expo/vector-icons'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
+import { Loader } from '../Loader'
+import { ThemedText } from '../ThemedText'
+import { AnimatedView } from '../ThemedView'
+import { HEIGHT, RADIUS } from '@/constants/Styles'
 
 export type ThemedViewProps = ViewProps & {
   round?: boolean
@@ -30,7 +30,7 @@ export function ThemedButton({
   ...otherProps
 }: ThemedViewProps) {
   const backgroundColor = useThemeColor(
-    {light: lightColor, dark: darkColor},
+    { light: lightColor, dark: darkColor },
     'bg_secondary',
   )
 
@@ -41,7 +41,7 @@ export function ThemedButton({
       onPress={onPress}
       disabled={loading}
       style={[
-        {backgroundColor},
+        { backgroundColor },
         round ? styles.round : styles.default_shape,
         style,
       ]}

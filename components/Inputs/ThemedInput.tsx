@@ -1,6 +1,6 @@
-import {useThemeColor} from '@/hooks/useThemeColor'
-import React, {forwardRef, useCallback} from 'react'
-import {StyleSheet, TextInput, TextInputProps, ViewStyle} from 'react-native'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import React, { forwardRef, useCallback } from 'react'
+import { StyleSheet, TextInput, TextInputProps, ViewStyle } from 'react-native'
 import Animated, {
   Easing,
   ReduceMotion,
@@ -34,7 +34,7 @@ const ThemedInput = forwardRef(
       onInputFocus?: () => void
       onInputBlur?: () => void
       value: string
-      onChangeText: any
+      onChangeText: (text: string) => void
       placeholder?: string
       style?: ViewStyle
       autofocus?: boolean

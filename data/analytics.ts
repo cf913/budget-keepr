@@ -6,17 +6,12 @@ import dayjs from 'dayjs'
 export const getAllTimeSpend = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
-
   let query = supabase.from('entries').select('amount.sum()')
-
   if (budget_id) query = query.eq('budget_id', budget_id)
-
   const { data, error } = await query
     // .eq('user_id', user.id)
     .single()
-
   if (error) throw new Error(error.message)
-
   return data.sum
 }
 

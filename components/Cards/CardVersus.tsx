@@ -5,7 +5,7 @@ import { PADDING, RADIUS, STYLES, TYPO } from '@/constants/Styles'
 import { StyleSheet } from 'react-native'
 import Padder from '../Layout/Padder'
 import { Loader } from '../Loader'
-import { FlipInXUp, FlipOutXDown, FlipOutXUp } from 'react-native-reanimated'
+import { FlipInXUp, FlipOutXDown, } from 'react-native-reanimated'
 import { useQuery } from '@tanstack/react-query'
 import { getWeeklyBreakdown } from '@/data/analytics'
 import { useLocalSettings } from '@/stores/localSettings'
@@ -52,41 +52,41 @@ export default function CardVersus({ counter }: { counter: number }) {
       {/* WITH DATA */}
       {data && data.length
         ? data.map((item: any) => (
-            <ThemedView key={item.label} style={styles.inner}>
-              <ThemedText style={[styles.title, { color: item.frontColor }]}>
-                {item.label}
-              </ThemedText>
-              <Padder h={0.3} />
-              {weeklyData.isLoading ? (
-                <Loader size="small" />
-              ) : (
-                <AnimatedView
-                  entering={FlipInXUp}
-                  exiting={FlipOutXDown}
-                  style={{ alignItems: 'center' }}
+          <ThemedView key={item.label} style={styles.inner}>
+            <ThemedText style={[styles.title, { color: item.frontColor }]}>
+              {item.label}
+            </ThemedText>
+            <Padder h={0.3} />
+            {weeklyData.isLoading ? (
+              <Loader size="small" />
+            ) : (
+              <AnimatedView
+                entering={FlipInXUp}
+                exiting={FlipOutXDown}
+                style={{ alignItems: 'center' }}
+              >
+                <ThemedText style={[styles.value, { color: textColor }]}>
+                  {toMoney(item.value, true)}
+                </ThemedText>
+                <ThemedText
+                  style={[
+                    {},
+                    {
+                      color: textColor,
+                      opacity: 0.4,
+                      fontFamily: 'Space Mono',
+                      fontSize: 14,
+                      lineHeight: 20,
+                    },
+                  ]}
                 >
-                  <ThemedText style={[styles.value, { color: textColor }]}>
-                    {toMoney(item.value, true)}
-                  </ThemedText>
-                  <ThemedText
-                    style={[
-                      {},
-                      {
-                        color: textColor,
-                        opacity: 0.4,
-                        fontFamily: 'Space Mono',
-                        fontSize: 14,
-                        lineHeight: 20,
-                      },
-                    ]}
-                  >
-                    {/* get percentage of value from total */}
-                    {((item.value / (total || 1)) * 100).toFixed(2)}%
-                  </ThemedText>
-                </AnimatedView>
-              )}
-            </ThemedView>
-          ))
+                  {/* get percentage of value from total */}
+                  {((item.value / (total || 1)) * 100).toFixed(2)}%
+                </ThemedText>
+              </AnimatedView>
+            )}
+          </ThemedView>
+        ))
         : null}
     </ThemedView>
   )

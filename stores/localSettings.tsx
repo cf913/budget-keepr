@@ -1,7 +1,7 @@
-import {Loader} from '@/components/Loader'
-import {getDataManyObj, storeDataObj} from '@/utils/async-storage'
-import {SplashScreen} from 'expo-router'
-import React, {useEffect, useMemo, useState} from 'react'
+import { Loader } from '@/components/Loader'
+import { getDataManyObj, storeDataObj } from '@/utils/async-storage'
+import { SplashScreen } from 'expo-router'
+import React, { useEffect, useMemo, useState } from 'react'
 
 export interface Budget {
   id: string
@@ -15,9 +15,9 @@ const LocalSettingsContext = React.createContext<{
   resetState: () => Promise<void>
 }>({
   defaultBudget: null,
-  setDefaultBudget: async () => {},
+  setDefaultBudget: async () => { },
   loadingSettings: true,
-  resetState: async () => {},
+  resetState: async () => { },
 })
 
 export function useLocalSettings() {

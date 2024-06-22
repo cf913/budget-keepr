@@ -8,7 +8,7 @@ import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import Spacer from '@/components/Layout/Spacer'
 import { SubCategory } from '@/components/RecentEntries'
-import RecurringInputs from '@/components/RecurringInputs'
+import RecurringInputs, { Frequency } from '@/components/RecurringInputs'
 import { AnimatedView, ThemedView } from '@/components/ThemedView'
 import { createEntry } from '@/data/mutations'
 import { useLocalSettings } from '@/stores/localSettings'
@@ -35,6 +35,7 @@ export default function AddNewEntry() {
   const [subCategory, setSubCategory] = useState<SubCategory | null>(null)
   const [subCategorySearchText, setSubCategorySearchText] = useState<string>('')
   const [isRecurring, setRecurring] = useState<boolean>(false)
+  const [frequency, setFrequency] = useState<Frequency>('daily')
   const subCategoryInput = useRef<TextInput>(null)
 
   const handleSave = async () => {
@@ -144,7 +145,14 @@ export default function AddNewEntry() {
           }}
         />
         <Padder />
-        <RecurringInputs isRecurring={isRecurring} setRecurring={setRecurring} />
+        <RecurringInputs
+          isRecurring={isRecurring}
+          setRecurring={setRecurring}
+          subCategory={subCategory}
+          amount={amount}
+          frequency={frequency}
+          setFrequency={setFrequency}
+        />
         <Padder />
         <Divider />
         <Padder />

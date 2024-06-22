@@ -3,6 +3,9 @@ import ThemedCheckbox from './Inputs/ThemedCheckbox'
 import Padder from './Layout/Padder'
 import { ThemedText } from './ThemedText'
 import { ThemedView } from './ThemedView'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { useState } from 'react'
+import { ThemedButton } from './Buttons/ThemedButton'
 
 export default function RecurringInputs({
   isRecurring,
@@ -11,15 +14,50 @@ export default function RecurringInputs({
   isRecurring: boolean
   setRecurring: (v: boolean) => void
 }) {
+  const [date, setDate] = useState<Date>(new Date())
+  const [mode, setMode] = useState<any>('date')
+  const [show, setShow] = useState(false)
+
+  const onChange = (event: any, selectedDate?: Date) => {
+    if (!selectedDate) return
+    setDate(selectedDate)
+  }
+
+  const showMode = (currentMode: string) => {
+    setShow(true)
+    setMode(currentMode)
+  }
+
+  const showDatePicker = () => {
+    showMode('date')
+  }
+
   return (
     // style={styles.checkbox}
-    <ThemedView style={{ flexDirection: 'row' }}>
-      <ThemedCheckbox
-        checked={isRecurring}
-        onChange={() => setRecurring(!isRecurring)}
-      />
-      <Padder style={{ width: PADDING / 2 }} />
-      <ThemedText>Recurring?</ThemedText>
+    <ThemedView>
+      <ThemedView style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <ThemedCheckbox
+          checked={isRecurring}
+          onChange={() => setRecurring(!isRecurring)}
+        />
+        <Padder style={{ width: PADDING / 2 }} />
+        <ThemedText>Recurring?</ThemedText>
+      </ThemedView>
+      <Padder />
+      <ThemedView style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <ThemedText>Frequency:</ThemedText>
+      </ThemedView>
+      <Padder />
+      <ThemedView style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <ThemedText>Start Date:</ThemedText>
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          onChange={onChange}
+        />
+      </ThemedView>
     </ThemedView>
   )
 }

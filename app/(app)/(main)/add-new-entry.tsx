@@ -1,14 +1,15 @@
 import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import CategorySuggestions from '@/components/CategorySuggestions'
 import { Divider } from '@/components/Divider'
-import EntryPreview from '@/components/EntryPreview'
 import ThemedInput from '@/components/Inputs/ThemedInput'
 import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import Spacer from '@/components/Layout/Spacer'
+import EntryPreview from '@/components/Preview/EntryPreview'
+import PreviewDisclaimer from '@/components/Preview/PreviewDisclaimer'
 import { SubCategory } from '@/components/RecentEntries'
-import RecurringInputs, { Frequency } from '@/components/RecurringInputs'
+import RecurringInputs from '@/components/RecurringInputs'
 import { AnimatedView, ThemedView } from '@/components/ThemedView'
 import { createEntry } from '@/data/mutations'
 import { useLocalSettings } from '@/stores/localSettings'
@@ -17,6 +18,8 @@ import { router } from 'expo-router'
 import React, { useRef, useState } from 'react'
 import { Keyboard, TextInput } from 'react-native'
 import {
+  FadeInUp,
+  FadeOutDown,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
@@ -35,7 +38,6 @@ export default function AddNewEntry() {
   const [subCategory, setSubCategory] = useState<SubCategory | null>(null)
   const [subCategorySearchText, setSubCategorySearchText] = useState<string>('')
   const [isRecurring, setRecurring] = useState<boolean>(false)
-  const [frequency, setFrequency] = useState<Frequency>('daily')
   const subCategoryInput = useRef<TextInput>(null)
 
   const handleSave = async () => {
@@ -88,7 +90,7 @@ export default function AddNewEntry() {
 
   return (
     <Page
-      back
+      down
       title="Add Entry"
       withHeader
       style={{
@@ -122,11 +124,11 @@ export default function AddNewEntry() {
           returnKeyType="search"
           onInputFocus={() => {
             opacityValue.value = withTiming(0, { duration: 200 })
-            translateValue.value = withTiming(0, { duration: 500 })
+            translateValue.value = withTiming(0, { duration: 300 })
             setSuggestionsVisible(true)
           }}
           onInputBlur={() => {
-            opacityValue.value = withTiming(1, { duration: 500 })
+            opacityValue.value = withTiming(1, { duration: 300 })
             translateValue.value = withDelay(
               100,
               withTiming(48 + 8, { duration: 200 }),
@@ -152,9 +154,13 @@ export default function AddNewEntry() {
           amount={amount}
         />
         <Padder />
-        <Divider />
-        <Padder />
-        <EntryPreview subCategory={subCategory} amount={amount} />
+        {!isRecurring && subCategory ? (
+          <AnimatedView entering={FadeInUp} exiting={FadeOutDown.duration(200)}>
+            <EntryPreview subCategory={subCategory} amount={amount} />
+            <Padder h={0.5} />
+            <PreviewDisclaimer />
+          </AnimatedView>
+        ) : null}
         <Padder />
       </Content>
       {/* // FLOATING BUTTON */}

@@ -1,24 +1,21 @@
-import { Pressable, StyleSheet } from 'react-native'
-import { Feather, Ionicons } from '@expo/vector-icons'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { AnimatedView } from '../ThemedView'
+import { Feather } from '@expo/vector-icons'
+import { Pressable, StyleSheet } from 'react-native'
 import {
-  BounceIn,
   ZoomIn,
-  ZoomInRotate,
-  ZoomOut,
+  ZoomOut
 } from 'react-native-reanimated'
+import { AnimatedView } from '../ThemedView'
 
 export default function ThemedCheckbox({
   checked = false,
-  onChange = () => {},
-  buttonStyle = {},
-  activeButtonStyle = {},
+  onChange = () => { },
   inactiveButtonStyle = {},
   activeIconProps = {},
   inactiveIconProps = {},
 }) {
   const iconProps = checked ? activeIconProps : inactiveIconProps
+  const textColor = useThemeColor({}, 'text')
   const tintColor = useThemeColor({}, 'tint')
   const midColor = useThemeColor({}, 'mid')
 
@@ -30,10 +27,11 @@ export default function ThemedCheckbox({
         checked ? { borderColor: tintColor } : inactiveButtonStyle,
       ]}
       onPress={onChange}
+      hitSlop={10}
     >
       {checked && (
         <AnimatedView entering={ZoomIn.duration(200)} exiting={ZoomOut}>
-          <Feather name="check" size={18} color="white" {...iconProps} />
+          <Feather name="check" size={18} color={textColor} {...iconProps} />
         </AnimatedView>
       )}
     </Pressable>

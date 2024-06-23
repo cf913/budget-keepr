@@ -70,6 +70,37 @@ export const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+export const getTimeStringFromFrequency = (frequency: Frequency) => {
+  let timeString: string = ''
+  switch (frequency) {
+    case 'daily':
+      timeString = 'Day'
+      break
+    case 'weekly':
+      timeString = 'Week'
+      break
+    case 'fortnightly':
+      timeString = 'Fortnight'
+      break
+    case 'monthly':
+      timeString = 'Month'
+      break
+    case 'quarterly':
+      timeString = 'Quarter'
+      break
+    case 'biannually':
+      timeString = 'Semester'
+      break
+    case 'yearly':
+      timeString = 'Year'
+      break
+    default:
+      break
+  }
+
+  return timeString
+}
+
 export const getDayJSFrequencyFromString: (
   frequency: Frequency,
 ) => [number, ManipulateType] = (frequency: Frequency) => {

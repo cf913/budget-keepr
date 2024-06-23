@@ -1,6 +1,6 @@
-import {ReactNode} from 'react'
-import {ThemedView} from '../ThemedView'
-import {useSafeAreaInsets} from 'react-native-safe-area-context'
+import { ReactNode } from 'react'
+import { ThemedView } from '../ThemedView'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
   Pressable,
   RefreshControl,
@@ -10,13 +10,13 @@ import {
   ViewProps,
   ViewStyle,
 } from 'react-native'
-import {ThemedText} from '../ThemedText'
-import {PADDING, TYPO} from '@/constants/Styles'
-import {useHeaderHeight} from '@react-navigation/elements'
+import { ThemedText } from '../ThemedText'
+import { PADDING, TYPO } from '@/constants/Styles'
+import { useHeaderHeight } from '@react-navigation/elements'
 import SettingsButton from '../Buttons/SettingsButton'
-import {Feather} from '@expo/vector-icons'
-import {useThemeColor} from '@/hooks/useThemeColor'
-import {router} from 'expo-router'
+import { Feather } from '@expo/vector-icons'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { router } from 'expo-router'
 import Content from './Content'
 import Padder from './Padder'
 
@@ -43,6 +43,7 @@ const Wrapper = ({
 export default function Page({
   scroll = false,
   back = false,
+  down = false,
   refreshing = false,
   onRefresh,
   withSettings = false,
@@ -55,6 +56,7 @@ export default function Page({
 }: {
   scroll?: boolean
   back?: boolean
+  down?: boolean
   refreshing?: boolean
   onRefresh?: () => void
   withSettings?: boolean
@@ -86,7 +88,7 @@ export default function Page({
           // paddingBottom: insets.bottom,
         },
         styles.container,
-        {...style},
+        { ...style },
       ]}
     >
       <Wrapper
@@ -100,22 +102,28 @@ export default function Page({
           flexGrow: 1,
         }}
       >
-        <Padder style={{height: withHeader ? headerHeight : insets.top}} />
+        <Padder style={{ height: withHeader ? headerHeight : insets.top }} />
         <ThemedView style={[{}, styles.header]}>
           {title ? (
             <ThemedView style={styles.title_container}>
-              {back ? (
+              {back || down ? (
                 <Pressable
                   onPress={() => router.back()}
                   hitSlop={30}
-                  style={{zIndex: 2}}
+                  style={{ zIndex: 2 }}
                 >
-                  <Feather
-                    name="chevron-left"
+                  {back ? <Feather
+                    name={'chevron-left'}
                     size={28}
                     color={colorText}
-                    style={{marginLeft: -10}}
-                  />
+                    style={{ marginLeft: -10 }}
+                  /> :
+
+                    <Feather
+                      name={'x'}
+                      size={24}
+                      color={colorText}
+                      style={{ marginLeft: -6, paddingRight: 2 }} />}
                 </Pressable>
               ) : null}
               <ThemedView>

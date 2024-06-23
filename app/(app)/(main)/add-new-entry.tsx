@@ -150,8 +150,6 @@ export default function AddNewEntry() {
           setRecurring={setRecurring}
           subCategory={subCategory}
           amount={amount}
-          frequency={frequency}
-          setFrequency={setFrequency}
         />
         <Padder />
         <Divider />

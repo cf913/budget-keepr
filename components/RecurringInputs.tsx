@@ -1,8 +1,15 @@
 import { PADDING, TYPO } from '@/constants/Styles'
-import { toMoney } from '@/utils/helpers'
+import { useTempStore } from '@/stores/tempStore'
+import {
+  capitalizeFirstLetter,
+  getDayJSFrequencyFromString,
+  toMoney,
+} from '@/utils/helpers'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { Link } from 'expo-router'
+import { useMemo, useState } from 'react'
+import { Pressable } from 'react-native'
 import ThemedCheckbox from './Inputs/ThemedCheckbox'
 import Padder from './Layout/Padder'
 import List from './Lists/List'
@@ -11,32 +18,43 @@ import { SubCategory } from './RecentEntries'
 import { ThemedText } from './ThemedText'
 import { ThemedView } from './ThemedView'
 
-export type Frequency = 'daily' | 'weekly' | 'monthly' | 'yearly'
+export type Frequency =
+  | 'daily'
+  | 'weekly'
+  | 'fortnightly'
+  | 'monthly'
+  | 'quarterly'
+  | 'biannually'
+  | 'yearly'
 
 export default function RecurringInputs({
   isRecurring,
   setRecurring,
   subCategory,
   amount,
-  frequency,
-  setFrequency,
 }: {
   isRecurring: boolean
   setRecurring: (v: boolean) => void
   subCategory: null | SubCategory
   amount: string
-  frequency: Frequency
-  setFrequency: (v: Frequency) => void
 }) {
   const [date, setDate] = useState<Date>(new Date())
+  const { selectedFrequency } = useTempStore()
 
   const onChange = (event: any, selectedDate?: Date) => {
     if (!selectedDate) return
     setDate(selectedDate)
   }
 
-  // TODO: frequency picker
-  // TODO: calculate next entry for preview
+  const nextEntry = useMemo(() => {
+    const [unit, frequencyString] =
+      getDayJSFrequencyFromString(selectedFrequency)
+    const nextDate = dayjs(date).add(unit, frequencyString)
+    console.log(nextDate)
+    return nextDate
+  }, [date, selectedFrequency])
+
+  console.log('nextEntry', nextEntry)
 
   return (
     <ThemedView>
@@ -51,12 +69,39 @@ export default function RecurringInputs({
       <Padder />
       {isRecurring ? (
         <>
-          <ThemedView style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <ThemedText>Frequency:</ThemedText>
+          <ThemedView
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <ThemedText>Frequency</ThemedText>
+            <Link href="/(main)/select-frequency" asChild>
+              <Pressable
+                style={{
+                  padding: PADDING / 4,
+                  paddingHorizontal: PADDING,
+                  borderWidth: 1,
+                  borderColor: '#ccc',
+                  borderRadius: 8,
+                }}
+              >
+                <ThemedText>
+                  {capitalizeFirstLetter(selectedFrequency)}
+                </ThemedText>
+              </Pressable>
+            </Link>
           </ThemedView>
           <Padder />
-          <ThemedView style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <ThemedText>Start Date:</ThemedText>
+          <ThemedView
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <ThemedText>Start Date</ThemedText>
             <DateTimePicker
               testID="dateTimePicker"
               value={date}
@@ -82,7 +127,7 @@ export default function RecurringInputs({
                 <ListItem
                   lastItem
                   title={subCategory.name}
-                  description={dayjs().format('HH:mm - ddd D MMM')}
+                  description={nextEntry.format('HH:mm - ddd D MMM')}
                   category={subCategory.category}
                   // description={entry.categories.name}
                   right={toMoney(+amount * 100)}

@@ -1,3 +1,6 @@
+import { Frequency } from '@/components/RecurringInputs'
+import { ManipulateType } from 'dayjs'
+
 //////////// HELPERS
 export const logRes = (funcName: string, data: any, error: any) => {
   if (data) {
@@ -61,4 +64,45 @@ export const sortByKey = (array: any[], key: string) => {
     var y = b[key]
     return x < y ? 1 : x > y ? -1 : 0
   })
+}
+
+export const capitalizeFirstLetter = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+export const getDayJSFrequencyFromString: (
+  frequency: Frequency,
+) => [number, ManipulateType] = (frequency: Frequency) => {
+  let unit: number = 1
+  let frequencyString: ManipulateType = 'day'
+  switch (frequency) {
+    case 'daily':
+      frequencyString = 'day'
+      break
+    case 'weekly':
+      frequencyString = 'week'
+      break
+    case 'fortnightly':
+      unit = 2
+      frequencyString = 'week'
+      break
+    case 'monthly':
+      frequencyString = 'month'
+      break
+    case 'quarterly':
+      unit = 3
+      frequencyString = 'month'
+      break
+    case 'biannually':
+      unit = 6
+      frequencyString = 'month'
+      break
+    case 'yearly':
+      frequencyString = 'year'
+      break
+    default:
+      break
+  }
+
+  return [unit, frequencyString]
 }

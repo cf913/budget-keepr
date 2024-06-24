@@ -23,8 +23,6 @@ export default function CardVersus({ counter }: { counter: number }) {
     queryFn: () => getWeeklyBreakdown(defaultBudget?.id),
   })
 
-  console.log('weeklydata', weeklyData.data)
-
   const [data, total] = useMemo(() => {
     const arr: any[] =
       weeklyData.data?.map((item: any) => ({

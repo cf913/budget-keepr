@@ -44,10 +44,8 @@ export default function AddNewEntry() {
       return alert('Nice try! Looks like you forgot to add an amount :)')
     if (!subCategory) return alert('Oops... please select a category.')
     // set loading on button
-    console.log('saving...')
     setSaving(true)
     // insert query
-    console.log('setSaving')
     const now = new Date()
     const { error }: any = await createEntry({
       amount: Math.round(+amount * 100),
@@ -59,10 +57,6 @@ export default function AddNewEntry() {
       week: getWeekNumber(now),
       day: now.getDay(),
     })
-
-    console.log(getWeekNumber(new Date()))
-
-    console.log('after createEntry')
 
     // if error reset loading and show error message
     if (error) {
@@ -77,7 +71,6 @@ export default function AddNewEntry() {
   const onSelect = (sub_cat: SubCategory) => {
     setSubCategorySearchText(sub_cat.name)
     setSubCategory(sub_cat)
-    console.log('the cat', sub_cat)
     Keyboard.dismiss()
     subCategoryInput.current?.blur()
   }

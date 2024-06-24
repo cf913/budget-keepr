@@ -1,10 +1,10 @@
-import {supabase} from '@/lib/supabase'
-import {Session} from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
+import { Session } from '@supabase/supabase-js'
 
 export const getSupabaseUser = async () => {
   try {
     const {
-      data: {session},
+      data: { session },
       error,
     } = await supabase.auth.getSession()
 
@@ -19,7 +19,6 @@ export const getSupabaseUser = async () => {
       alert('getUser: User not found')
       return
     }
-    // console.log('CURRENT USER ID', user.id)
     return user
   } catch (e) {
     throw e
@@ -32,9 +31,8 @@ export const isAdmin = (session?: Session | null) => {
   if (!session) return false
 
   return session.user?.id === ADMIN_ID
-  //  const user = await getSupabaseUser()
-  //  if (!user) return
-  // const me = await supabase.auth.g
-  //  console.log('USER', JSON.stringify(user, null, 2))
-  //  return user.is_admin
+//  const user = await getSupabaseUser()
+//  if (!user) return
+// const me = await supabase.auth.g
+//  return user.is_admin
 }

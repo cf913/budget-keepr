@@ -63,8 +63,6 @@ export const getAvgDailySpend = async (budget_id?: string) => {
     .limit(1)
     .single()
 
-  console.log('DATA', data)
-
   if (error) throw new Error(error.message)
 
   return data

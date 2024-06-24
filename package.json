@@ -10,6 +10,7 @@
     "eas:u:preview": "eas update --branch preview --message",
     "us": "node node_modules/@sentry/react-native/scripts/expo-upload-sourcemaps dist/",
     "android": "expo start --android",
+    "tmux-start": "expo start --ios",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",

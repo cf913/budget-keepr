@@ -11,7 +11,7 @@ import dayjs from 'dayjs'
 import { router } from 'expo-router'
 import { useMemo, useState } from 'react'
 import { Pressable } from 'react-native'
-import { FadeInUp, FadeOutDown, FadeOutUp } from 'react-native-reanimated'
+import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { ThemedButtonCompact } from './Buttons/ThemedButtonCompact'
 import ThemedCheckbox from './Inputs/ThemedCheckbox'
 import Padder from './Layout/Padder'
@@ -54,7 +54,6 @@ export default function RecurringInputs({
     const [unit, frequencyString] =
       getDayJSFrequencyFromString(selectedFrequency)
     const nextDate = dayjs(date).add(unit, frequencyString)
-    console.log(nextDate)
     return nextDate
   }, [date, selectedFrequency])
 

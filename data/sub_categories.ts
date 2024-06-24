@@ -13,9 +13,6 @@ export const getSubCategories = async ({
   const user = await getSupabaseUser()
   if (!user) throw new Error('Current user not found')
 
-  console.log('cateogriId', categoryId)
-  console.log('budget_id', budget_id)
-
   let query = supabase
     .from('sub_categories')
     .select(
@@ -37,8 +34,6 @@ export const getSubCategories = async ({
   const { data, error } = await query.returns<SubCategory[]>()
 
   if (error) throw error
-
-  console.log('getSubCategories', JSON.stringify(data, null, 2))
 
   return data
 }

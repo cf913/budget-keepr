@@ -1,6 +1,5 @@
 import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import CategorySuggestions from '@/components/CategorySuggestions'
-import { Divider } from '@/components/Divider'
 import ThemedInput from '@/components/Inputs/ThemedInput'
 import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'

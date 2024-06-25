@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native'
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
   withRepeat,
   withSequence,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from 'react-native-reanimated'
 
 import { ThemedText } from '@/components/ThemedText'

@@ -1,3 +1,4 @@
+import { AnalyticsQueryKeys } from '@/components/Analytics'
 import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import CategorySuggestions from '@/components/CategorySuggestions'
 import ThemedInput from '@/components/Inputs/ThemedInput'
@@ -11,8 +12,13 @@ import { SubCategory } from '@/components/RecentEntries'
 import RecurringInputs from '@/components/RecurringInputs'
 import { AnimatedView, ThemedView } from '@/components/ThemedView'
 import { createEntry } from '@/data/mutations'
+import { createRecurring } from '@/data/recurring'
+import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
-import { getWeekNumber } from '@/utils/helpers'
+import { useTempStore } from '@/stores/tempStore'
+import { getDayJSFrequencyFromString, getWeekNumber } from '@/utils/helpers'
+import { useMutation } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { router } from 'expo-router'
 import React, { useRef, useState } from 'react'
 import { Keyboard, TextInput } from 'react-native'
@@ -27,17 +33,77 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function AddNewEntry() {
+  // hooks
+  const subCategoryInput = useRef<TextInput>(null)
+  const insets = useSafeAreaInsets()
   const translateValue = useSharedValue(48 + 8) // 48 is the height of the input and 8 is the padding
   const opacityValue = useSharedValue(1)
+
+  // stores
   const { defaultBudget } = useLocalSettings()
-  const insets = useSafeAreaInsets()
+  const { selectedFrequency } = useTempStore()
+
+  // state
+  const [date, setDate] = useState<Date>(new Date())
   const [suggestionsVisible, setSuggestionsVisible] = useState(false)
   const [saving, setSaving] = useState(false)
   const [amount, setAmount] = useState<string>('')
   const [subCategory, setSubCategory] = useState<SubCategory | null>(null)
   const [subCategorySearchText, setSubCategorySearchText] = useState<string>('')
   const [isRecurring, setRecurring] = useState<boolean>(false)
-  const subCategoryInput = useRef<TextInput>(null)
+
+  // queries
+  // 2
+  const mutationRecurring = useMutation({
+    mutationFn: createRecurring,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['entries', ...AnalyticsQueryKeys],
+      })
+
+      setSaving(false)
+      return router.replace('/(main)')
+    },
+    onError: error => {
+      console.log('error', error.message)
+      alert('Oops. ' + error.message)
+    },
+  })
+
+  // 1
+  const mutationEntry = useMutation({
+    mutationFn: createEntry,
+    onSuccess: () => {
+
+      // if recurring entry then create recurring
+      if (isRecurring) {
+        const [unit, frequencyString] =
+          getDayJSFrequencyFromString(selectedFrequency)
+        const nextDate = dayjs(date).add(unit, frequencyString)
+
+        mutationRecurring.mutate({
+          budget_id: defaultBudget?.id!,
+          start_at: date.toISOString(),
+          next_at: nextDate.toISOString(),
+          sub_category_id: subCategory!.id,
+          amount: Math.round(+amount * 100),
+          frequency: selectedFrequency,
+          active: true,
+        })
+      } else { // carry on with normal entry
+        queryClient.invalidateQueries({
+          queryKey: ['entries', ...AnalyticsQueryKeys],
+        })
+        setSaving(false)
+        return router.replace('/(main)')
+      }
+
+    },
+    onError: error => {
+      console.log('error', error.message)
+      alert('Oops. ' + error.message)
+    },
+  })
 
   const handleSave = async () => {
     if (!amount)
@@ -46,8 +112,11 @@ export default function AddNewEntry() {
     // set loading on button
     setSaving(true)
     // insert query
+
+    // create entry
     const now = new Date()
-    const { error }: any = await createEntry({
+
+    mutationEntry.mutate({
       amount: Math.round(+amount * 100),
       sub_category_id: subCategory.id,
       category_id: subCategory.category?.id,
@@ -57,15 +126,6 @@ export default function AddNewEntry() {
       week: getWeekNumber(now),
       day: now.getDay(),
     })
-
-    // if error reset loading and show error message
-    if (error) {
-      setSaving(false)
-      alert(error.message)
-    }
-    // else navigate back to main screen
-    setSaving(false)
-    return router.replace('/(main)')
   }
 
   const onSelect = (sub_cat: SubCategory) => {
@@ -144,6 +204,8 @@ export default function AddNewEntry() {
           setRecurring={setRecurring}
           subCategory={subCategory}
           amount={amount}
+          date={date}
+          setDate={setDate}
         />
         <Padder />
         {!isRecurring && subCategory ? (

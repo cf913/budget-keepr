@@ -1,12 +1,10 @@
-import { Feather } from '@expo/vector-icons'
-import { ThemedText } from './ThemedText'
-import { ThemedView } from './ThemedView'
+import { TYPO } from '@/constants/Styles'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import { Feather } from '@expo/vector-icons'
 import { ThemedButton } from './Buttons/ThemedButton'
 import Padder from './Layout/Padder'
-import { TYPO } from '@/constants/Styles'
-import Spacer from './Layout/Spacer'
-
+import { ThemedText } from './ThemedText'
+import { ThemedView } from './ThemedView'
 export default function ErrorContainer({
   error,
   onRetry,

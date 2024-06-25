@@ -1,4 +1,4 @@
-import { HEIGHT, PADDING, STYLES, TYPO } from '@/constants/Styles'
+import { PADDING, TYPO } from '@/constants/Styles'
 import { deleteEntry } from '@/data/entries'
 import { getEntries } from '@/data/queries'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -9,8 +9,7 @@ import { Feather } from '@expo/vector-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { BlurView } from 'expo-blur'
-import { useEffect } from 'react'
-import { Alert, Animated, useWindowDimensions } from 'react-native'
+import { Alert, Animated } from 'react-native'
 import { RectButton, ScrollView } from 'react-native-gesture-handler'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { AnalyticsQueryKeys } from './Analytics'
@@ -19,6 +18,8 @@ import List from './Lists/List'
 import ListItem from './Lists/ListItem'
 import ListItemSkeleton from './Lists/ListItemSkeleton'
 import { ThemedText } from './ThemedText'
+
+import { useEffect } from 'react'
 
 export interface Category {
   id: string

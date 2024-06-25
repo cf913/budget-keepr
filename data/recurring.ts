@@ -1,8 +1,20 @@
 import { supabase } from '@/lib/supabase'
 import { logRes } from '@/utils/helpers'
 import { getSupabaseUser } from './api'
+import { Frequency } from '@/components/RecurringInputs'
 
-export const createEntry = async (entry: any) => {
+export type RecurringInput = {
+  id?: string
+  budget_id: string
+  start_at: string
+  next_at: string
+  sub_category_id: string
+  amount: number
+  frequency: Frequency
+  active: boolean
+}
+
+export const createRecurring = async (recurring: RecurringInput) => {
   // sleep for 2 seconds
   // await new Promise(resolve => setTimeout(resolve, 2000))
   // return { data: { success: true }, error: null }
@@ -11,12 +23,12 @@ export const createEntry = async (entry: any) => {
   if (!user) return
 
   let { data, error }: any = await supabase
-    .from('entries')
-    .insert({ ...entry, user_id: user.id })
+    .from('recurring')
+    .insert(recurring)
     .select()
 
   /// DEV
-  logRes('createEntry', data, error)
+  logRes('createRecurring', data, error)
 
   return { data, error }
 }

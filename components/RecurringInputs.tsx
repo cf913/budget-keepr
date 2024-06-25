@@ -32,17 +32,20 @@ export type Frequency =
   | 'yearly'
 
 export default function RecurringInputs({
+  date,
+  setDate,
   isRecurring,
   setRecurring,
   subCategory,
   amount,
 }: {
+  date: Date
+  setDate: (v: Date) => void
   isRecurring: boolean
   setRecurring: (v: boolean) => void
   subCategory: null | SubCategory
   amount: string
 }) {
-  const [date, setDate] = useState<Date>(new Date())
   const { selectedFrequency } = useTempStore()
 
   const onChange = (event: any, selectedDate?: Date) => {

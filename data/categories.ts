@@ -1,5 +1,5 @@
-import {supabase} from '@/lib/supabase'
-import {getSupabaseUser} from './api'
+import { supabase } from '@/lib/supabase'
+import { getSupabaseUser } from './api'
 
 export const getCategory = async (id?: string) => {
   const user = await getSupabaseUser()
@@ -7,7 +7,7 @@ export const getCategory = async (id?: string) => {
 
   if (!id) throw new Error('No id provided')
 
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('categories')
     .select(
       `
@@ -23,13 +23,14 @@ export const getCategory = async (id?: string) => {
 
   return data
 }
+
 export const getCategories = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
 
   if (!budget_id) throw new Error('No budget_id provided')
 
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('categories')
     .select(
       `
@@ -42,7 +43,7 @@ export const getCategories = async (budget_id?: string) => {
       `,
     )
     .eq('budget_id', budget_id)
-    .order('name', {ascending: true})
+    .order('name', { ascending: true })
 
   if (error) throw error
 
@@ -59,7 +60,7 @@ export const createCategory = async (category: CategoryInput) => {
   const user = await getSupabaseUser()
   if (!user) return
 
-  const {data, error} = await supabase.from('categories').insert(category)
+  const { data, error } = await supabase.from('categories').insert(category)
 
   if (error) throw error
 

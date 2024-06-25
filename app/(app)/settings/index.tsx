@@ -1,21 +1,21 @@
-import {ThemedButton} from '@/components/Buttons/ThemedButton'
+import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import Spacer from '@/components/Layout/Spacer'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
-import {ThemedView} from '@/components/ThemedView'
-import {PADDING} from '@/constants/Styles'
-import {VERSION} from '@/constants/config'
-import {supabase} from '@/lib/supabase'
-import {useLocalSettings} from '@/stores/localSettings'
+import { ThemedView } from '@/components/ThemedView'
+import { PADDING } from '@/constants/Styles'
+import { VERSION } from '@/constants/config'
+import { supabase } from '@/lib/supabase'
+import { useLocalSettings } from '@/stores/localSettings'
 import * as Application from 'expo-application'
-import {Alert} from 'react-native'
-import {useSafeAreaInsets} from 'react-native-safe-area-context'
+import { Alert } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Settings() {
-  const {defaultBudget, resetState} = useLocalSettings()
+  const { defaultBudget, resetState } = useLocalSettings()
   const insets = useSafeAreaInsets()
 
   const signOut = async () => {
@@ -31,7 +31,7 @@ export default function Settings() {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      {text: 'Sign Out', onPress: signOut, style: 'destructive'},
+      { text: 'Sign Out', onPress: signOut, style: 'destructive' },
     ])
   }
   return (
@@ -45,7 +45,8 @@ export default function Settings() {
             title="Default Budget"
             description={defaultBudget?.name}
           />
-          <ListItem title="Categories" href="/settings/categories" lastItem />
+          <ListItem title="Categories" href="/settings/categories" />
+          <ListItem title="Recurring" href="/settings/recurring" lastItem />
         </List>
         <Padder />
         <List>

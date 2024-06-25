@@ -74,7 +74,6 @@ export default function AddNewEntry() {
   const mutationEntry = useMutation({
     mutationFn: createEntry,
     onSuccess: () => {
-
       // if recurring entry then create recurring
       if (isRecurring) {
         const [unit, frequencyString] =
@@ -90,14 +89,14 @@ export default function AddNewEntry() {
           frequency: selectedFrequency,
           active: true,
         })
-      } else { // carry on with normal entry
+      } else {
+        // carry on with normal entry
         queryClient.invalidateQueries({
           queryKey: ['entries', ...AnalyticsQueryKeys],
         })
         setSaving(false)
         return router.replace('/(main)')
       }
-
     },
     onError: error => {
       console.log('error', error.message)

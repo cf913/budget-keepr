@@ -52,7 +52,7 @@ export default function Settings() {
         <List>
           <ListItem
             title={`${Application.nativeApplicationVersion}`}
-            description={`${VERSION}`}
+            description={`${VERSION}${__DEV__ ? ' ' + process.env.EXPO_PUBLIC_SUPABASE_URL : ''}`}
             lastItem
           />
         </List>

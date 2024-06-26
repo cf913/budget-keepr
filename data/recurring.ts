@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabase'
 import { logRes } from '@/utils/helpers'
 import { getSupabaseUser } from './api'
 import { Frequency } from '@/components/RecurringInputs'
-import { SubCategory } from '@/components/RecentEntries'
+import { Category, SubCategory } from '@/components/RecentEntries'
 
 export type RecurringInput = {
   id?: string
@@ -10,6 +10,7 @@ export type RecurringInput = {
   start_at: string
   next_at: string
   sub_category_id: string
+  category_id?: string
   amount: number
   frequency: Frequency
   active: boolean
@@ -21,6 +22,7 @@ export type Recurring = {
   start_at: string
   next_at: string
   sub_category: SubCategory
+  category: Category
   amount: number
   frequency: Frequency
   active: boolean
@@ -60,6 +62,10 @@ export const getRecurrings = async (budget_id?: string): Promise<Recurring[]> =>
         amount,
         frequency,
         sub_category:sub_category_id(
+          id,
+          name
+        )
+        category:category_id(
           id,
           name
         )

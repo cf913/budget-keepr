@@ -10,11 +10,24 @@
     "eas:u:preview": "eas update --branch preview --message",
     "us": "node node_modules/@sentry/react-native/scripts/expo-upload-sourcemaps dist/",
     "android": "expo start --android",
-    "tmux-start": "expo start --ios",
+    "tmux:start": "expo start --ios",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "supabase:start": "npx supabase start",
+    "supabase:stop": "npx supabase stop",
+    "supabase:status": "npx supabase status",
+    "supabase:restart": "npm run supabase:stop && npm run supabase:start",
+    "supabase:reset": "npx supabase db reset",
+    "supabase:link": "npx supabase link",
+    "supabase:generate-types": "npx supabase gen types typescript --local --schema public > types_db.ts",
+    "supabase:generate-migration": "npx supabase db diff | npx supabase migration new",
+    "supabase:generate-seed": "npx supabase db dump --data-only -f supabase/seed.sql",
+    "supabase:generate-roles": "npx supabase db dump --role-only -f supabase/roles.sql",
+    "supabase:push": "npx supabase db push",
+    "supabase:pull": "npx supabase db pull"
+
   },
   "jest": {
     "preset": "jest-expo"

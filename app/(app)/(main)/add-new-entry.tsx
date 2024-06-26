@@ -80,11 +80,17 @@ export default function AddNewEntry() {
           getDayJSFrequencyFromString(selectedFrequency)
         const nextDate = dayjs(date).add(unit, frequencyString)
 
+        if (!subCategory)
+          return alert(
+            'Oops... this should not have happened. Please select a category.',
+          )
+
         mutationRecurring.mutate({
           budget_id: defaultBudget?.id!,
           start_at: date.toISOString(),
           next_at: nextDate.toISOString(),
-          sub_category_id: subCategory!.id,
+          sub_category_id: subCategory.id,
+          category_id: subCategory.category?.id,
           amount: Math.round(+amount * 100),
           frequency: selectedFrequency,
           active: true,

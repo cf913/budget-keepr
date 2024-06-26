@@ -77,6 +77,10 @@ export default function Analytics({ counter }: { counter: number }) {
 
   const dailySpend = allTimeData.data / (diff || 1)
 
+  if (lastWeekData.error || currentWeekData.error || currentMonthData.error) {
+    alert(lastWeekData.error?.message || currentWeekData.error?.message || currentMonthData.error?.message)
+  }
+
   return (
     <ThemedView style={styles.container}>
       {/* <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}

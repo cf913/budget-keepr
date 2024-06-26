@@ -1,7 +1,21 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js";
+import { createClient } from "supabase-js";
+import dayjs from "https://esm.sh/dayjs";
+import utc from "https://esm.sh/dayjs/plugin/utc";
+import timezone from "https://esm.sh/dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+// brisbane timezone
+const TIMEZONE = "Australia/Brisbane";
 
 Deno.serve(async (req: Request) => {
   try {
+    console.log("^======= recurring service =======^");
+    const body = await req.json();
+
+    console.log("BODY", JSON.stringify(body, null, 2));
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_ANON_KEY") ?? "",
@@ -15,9 +29,10 @@ Deno.serve(async (req: Request) => {
     const { data, error } = await supabase.from("recurring").select("*");
 
     const today = new Date();
-    console.log("^======= recurring service =======^");
     console.log(data);
     console.log(`today: ${today.toISOString()}`);
+    const todayBrisbaneTime = dayjs(today).tz(TIMEZONE);
+    console.log(`todayBrisbaneTime: ${todayBrisbaneTime.format()}`);
 
     if (error) {
       console.log(error);

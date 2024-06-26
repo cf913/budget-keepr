@@ -1,14 +1,14 @@
-import {Feather} from '@expo/vector-icons'
-import {useThemeColor} from '@/hooks/useThemeColor'
-import {ThemedText} from '../ThemedText'
-import {AnimatedView, ThemedView} from '../ThemedView'
-import {Pressable, StyleSheet} from 'react-native'
-import {HEIGHT, PADDING, TYPO} from '@/constants/Styles'
-import {Link} from 'expo-router'
-import {ReactNode} from 'react'
-import {Category} from '../RecentEntries'
-import {ExpoRouter} from '@/.expo/types/router'
-import {FadeIn, FadeInRight} from 'react-native-reanimated'
+import { Feather } from '@expo/vector-icons'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { ThemedText } from '../ThemedText'
+import { AnimatedView, ThemedView } from '../ThemedView'
+import { Pressable, StyleSheet } from 'react-native'
+import { HEIGHT, PADDING, TYPO } from '@/constants/Styles'
+import { Link } from 'expo-router'
+import { ReactNode } from 'react'
+import { Category } from '../RecentEntries'
+import { ExpoRouter } from '@/.expo/types/router'
+import { FadeIn, FadeInRight } from 'react-native-reanimated'
 
 const Wrapper = ({
   href,
@@ -60,9 +60,9 @@ export default function ListItem({
 
   const withCategory = category
     ? {
-        borderStartWidth: 5,
-        borderStartColor: category.color,
-      }
+      borderStartWidth: 5,
+      borderStartColor: category.color,
+    }
     : null
 
   const onSelectItem = () => (onSelect ? onSelect(item) : null)
@@ -81,7 +81,7 @@ export default function ListItem({
         <ThemedView style={[{}, styles.left]}>
           <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
           {description ? (
-            <ThemedText style={[{}, styles.description]}>
+            <ThemedText style={[{}, styles.description]} numberOfLines={1} ellipsizeMode="tail">
               {description}
             </ThemedText>
           ) : null}
@@ -92,7 +92,7 @@ export default function ListItem({
               name="chevron-right"
               size={24}
               color={chevronColor}
-              style={{paddingLeft: PADDING / 4}}
+              style={{ paddingLeft: PADDING / 4 }}
             />
           ) : null}
           {checked ? (
@@ -100,17 +100,17 @@ export default function ListItem({
               name="check"
               size={24}
               color={rightColor}
-              style={{paddingLeft: PADDING / 4}}
+              style={{ paddingLeft: PADDING / 4 }}
             />
           ) : null}
           {right ? (
-            <ThemedText style={{color: rightColor}}>{right}</ThemedText>
+            <ThemedText style={{ color: rightColor }}>{right}</ThemedText>
           ) : null}
         </AnimatedView>
       </ThemedView>
       {!+lastItem ? (
         <ThemedView
-          style={{width: '100%', height: 1, backgroundColor: borderColor}}
+          style={{ width: '100%', height: 1, backgroundColor: borderColor }}
         ></ThemedView>
       ) : null}
     </Wrapper>

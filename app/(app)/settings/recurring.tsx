@@ -2,14 +2,13 @@ import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import List from '@/components/Lists/List'
-import ListItem from '@/components/Lists/ListItem'
+import ListItemRecurring from '@/components/Lists/ListItemRecurring'
 import { Loader } from '@/components/Loader'
 import { ThemedText } from '@/components/ThemedText'
 import { getRecurrings } from '@/data/recurring'
 import { useLocalSettings } from '@/stores/localSettings'
 import { isLastItem } from '@/utils/helpers'
 import { useQuery } from '@tanstack/react-query'
-import dayjs from 'dayjs'
 import { useState } from 'react'
 
 export default function Recurring() {
@@ -44,14 +43,12 @@ export default function Recurring() {
           <List>
             {(data || []).map((recurring, i) => {
               return (
-                <ListItem
-                  title={recurring.sub_category.name}
-                  right={recurring.active ? 'Active' : 'Inactive'}
+                <ListItemRecurring
                   key={recurring.id}
+                  recurring={recurring}
+                  onDelete={() => alert('DELETE')}
+                  onToggleActive={() => alert('TOGGLE ACTIVE')}
                   lastItem={isLastItem(data, i)}
-                  description={`Renews ${dayjs(recurring.next_at).format(
-                    'ddd D MMM YYYY'
-                  )}`}
                 />
               )
             })}

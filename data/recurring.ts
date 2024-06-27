@@ -20,6 +20,7 @@ export type Recurring = {
   id: string
   budget_id?: string
   start_at: string
+  created_at: string
   next_at: string
   sub_category: SubCategory
   category: Category
@@ -58,6 +59,7 @@ export const getRecurrings = async (budget_id?: string): Promise<Recurring[]> =>
       `
         id,
         next_at,
+        created_at,
         active,
         amount,
         frequency,

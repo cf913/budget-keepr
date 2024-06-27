@@ -1,10 +1,12 @@
 import { supabase } from '@/lib/supabase'
 import { logRes } from '@/utils/helpers'
 import { getSupabaseUser } from './api'
+import { Entry } from '@/components/RecentEntries'
 
 ////////////////////////////////////////
 
-export const getUser = async (): Promise<Profile | null> => {
+// TODO: add a return type
+export const getUser = async (): Promise<any | null> => {
   const user = await getSupabaseUser()
   if (!user) return null
   const { data, error } = await supabase.from('users').select('*').single()
@@ -44,6 +46,7 @@ export const getEntries = async (budgetId?: string) => {
     .eq('budget_id', budgetId)
     .order('created_at', { ascending: false })
     .limit(20)
+    .returns<Entry[]>()
 
   /// DEV
   // logRes('getEntries', data, error)

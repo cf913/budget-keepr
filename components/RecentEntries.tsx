@@ -49,7 +49,8 @@ export default function RecentEntries({
   setCounter: (value: number) => void
 }) {
   const { defaultBudget } = useLocalSettings()
-  const textColor = useThemeColor({}, 'mid')
+  const textColor = useThemeColor({}, 'text')
+  const bgColor = useThemeColor({}, 'bg_secondary')
 
   const {
     data: entries = [],
@@ -139,17 +140,15 @@ export default function RecentEntries({
           return (
             <Swipeable
               key={entry.id}
-              containerStyle={{ backgroundColor: 'red' }}
               renderRightActions={() => (
                 <RectButton
                   style={[
                     {},
-                    // styles.leftAction
                     {
-                      width: 50,
+                      width: 70,
                       justifyContent: 'center',
                       alignItems: 'center',
-                      backgroundColor: 'red',
+                      backgroundColor: bgColor,
                     },
                   ]}
                   onPress={() => onDelete(entry.id)}
@@ -162,7 +161,7 @@ export default function RecentEntries({
                       },
                     ]}
                   >
-                    <Feather name="trash-2" size={24} color={'white'} />
+                    <Feather name="trash-2" size={24} color={'red'} />
                   </Animated.Text>
                 </RectButton>
               )}

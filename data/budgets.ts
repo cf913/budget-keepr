@@ -1,5 +1,5 @@
-import {supabase} from '@/lib/supabase'
-import {getSupabaseUser} from './api'
+import { supabase } from '@/lib/supabase'
+import { getSupabaseUser } from './api'
 
 export const getBudgets = async () => {
   const user = await getSupabaseUser()
@@ -7,7 +7,7 @@ export const getBudgets = async () => {
 
   let query = supabase.from('budgets').select()
 
-  const {data, error} = await query
+  const { data, error } = await query
 
   if (error) throw new Error(error.message)
 

@@ -29,7 +29,4 @@ grant truncate on table "storage"."s3_multipart_uploads_parts" to "postgres";
 
 grant update on table "storage"."s3_multipart_uploads_parts" to "postgres";
 
-alter database some_db set session_preload_libraries = 'plan_filter';
-
-
 

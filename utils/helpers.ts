@@ -137,3 +137,10 @@ export const getDayJSFrequencyFromString: (
 
   return [unit, frequencyString]
 }
+
+// SQL months are 1-indexed
+// it is weird but it is what it is
+export const getSQLFriendlyMonth = (date?: Date) => {
+  const actualDate = date || new Date()
+  return actualDate.getMonth() + 1
+}

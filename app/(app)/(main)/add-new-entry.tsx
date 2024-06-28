@@ -16,7 +16,7 @@ import { createRecurring } from '@/data/recurring'
 import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { useTempStore } from '@/stores/tempStore'
-import { getDayJSFrequencyFromString, getWeekNumber } from '@/utils/helpers'
+import { getDayJSFrequencyFromString, getSQLFriendlyMonth, getWeekNumber } from '@/utils/helpers'
 import { useMutation } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { router } from 'expo-router'
@@ -127,7 +127,7 @@ export default function AddNewEntry() {
       category_id: subCategory.category?.id,
       budget_id: defaultBudget?.id,
       year: now.getFullYear(),
-      month: now.getMonth(),
+      month: getSQLFriendlyMonth(now),
       week: getWeekNumber(now),
       day: now.getDay(),
     })

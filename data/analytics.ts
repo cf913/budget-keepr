@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import { getSupabaseUser } from './api'
-import { getWeekNumber } from '@/utils/helpers'
+import { getSQLFriendlyMonth, getWeekNumber } from '@/utils/helpers'
 import dayjs from 'dayjs'
 
 export const getAllTimeSpend = async (budget_id?: string) => {
@@ -36,7 +36,7 @@ export const getCurrentMonthSpend = async (budget_id?: string) => {
   const user = await getSupabaseUser()
   if (!user) return
 
-  const monthNumber = new Date().getMonth()
+  const monthNumber = getSQLFriendlyMonth()
 
   let query = supabase.from('entries').select('amount.sum()')
 

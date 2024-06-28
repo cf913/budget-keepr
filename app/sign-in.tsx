@@ -37,7 +37,10 @@ export default function Auth() {
       password: password,
     })
 
-    if (error) Alert.alert(error.message)
+    if (error) {
+      Alert.alert(error.message)
+      throw error
+    }
     setLoading(false)
   }
 
@@ -116,6 +119,9 @@ export default function Auth() {
       <Padder />
       <ThemedText style={{ ...TYPO.small }}>
         {`${VERSION} ${process.env.EXPO_PUBLIC_SUPABASE_URL}`}
+      </ThemedText>
+      <ThemedText style={{ ...TYPO.small }}>
+        {`key ${process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY?.slice(-5)}`}
       </ThemedText>
     </ThemedView>
   )

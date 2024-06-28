@@ -27,7 +27,6 @@
     "supabase:generate-roles": "npx supabase db dump --role-only -f supabase/roles.sql",
     "supabase:push": "npx supabase db push",
     "supabase:pull": "npx supabase db pull"
-
   },
   "jest": {
     "preset": "jest-expo"
@@ -43,20 +42,20 @@
     "@supabase/supabase-js": "^2.43.4",
     "@tanstack/react-query": "^5.40.0",
     "dayjs": "^1.11.11",
-    "expo": "~51.0.14",
+    "expo": "~51.0.16",
     "expo-apple-authentication": "~6.4.1",
     "expo-application": "~5.9.1",
     "expo-blur": "~13.0.2",
     "expo-constants": "~16.0.2",
-    "expo-dev-client": "~4.0.18",
+    "expo-dev-client": "~4.0.19",
     "expo-font": "~12.0.7",
     "expo-linear-gradient": "~13.0.2",
     "expo-linking": "~6.3.1",
-    "expo-router": "~3.5.15",
+    "expo-router": "~3.5.17",
     "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.6",
-    "expo-updates": "~0.25.17",
+    "expo-updates": "~0.25.18",
     "expo-web-browser": "~13.0.3",
     "fuse.js": "^7.0.0",
     "promise": "^8.3.0",
@@ -82,7 +81,7 @@
     "@types/react-test-renderer": "^18.0.7",
     "eslint-config-expo": "^7.0.0",
     "jest": "^29.2.1",
-    "jest-expo": "~51.0.2",
+    "jest-expo": "~51.0.3",
     "react-test-renderer": "18.2.0",
     "typescript": "~5.3.3"
   },

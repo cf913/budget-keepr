@@ -1,21 +1,24 @@
-import React, {useState} from 'react'
+import { AppleSignInButton } from '@/components/AppleSignInButton'
+import { Divider } from '@/components/Divider'
+import Padder from '@/components/Layout/Padder'
+import { ThemedText } from '@/components/ThemedText'
+import { ThemedView } from '@/components/ThemedView'
+import { Colors } from '@/constants/Colors'
+import { TYPO } from '@/constants/Styles'
+import { VERSION } from '@/constants/config'
+import { supabase } from '@/lib/supabase'
+import { useSession } from '@/stores/session'
+import { Redirect } from 'expo-router'
+import React, { useState } from 'react'
 import {
+  ActivityIndicator,
   Alert,
-  StyleSheet,
   Button,
   TextInput as Input,
+  StyleSheet,
   useColorScheme,
-  ActivityIndicator,
 } from 'react-native'
-import {supabase} from '@/lib/supabase'
-import {Redirect} from 'expo-router'
-import {useSession} from '@/stores/session'
-import {AppleSignInButton} from '@/components/AppleSignInButton'
-import Padder from '@/components/Layout/Padder'
-import {Divider} from '@/components/Divider'
-import {Colors} from '@/constants/Colors'
-import {ThemedView} from '@/components/ThemedView'
-import {useSafeAreaInsets} from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Auth() {
   const insets = useSafeAreaInsets()
@@ -23,13 +26,13 @@ export default function Auth() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const {session} = useSession()
+  const { session } = useSession()
 
   if (session) return <Redirect href="/(main)" />
 
   async function signInWithEmail() {
     setLoading(true)
-    const {error} = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     })
@@ -41,7 +44,7 @@ export default function Auth() {
   async function signUpWithEmail() {
     setLoading(true)
     const {
-      data: {session},
+      data: { session },
       error,
     } = await supabase.auth.signUp({
       email: email,
@@ -55,11 +58,11 @@ export default function Auth() {
 
   const inputStyles = [
     styles.input,
-    {borderColor: Colors[theme].gray, color: Colors[theme].text},
+    { borderColor: Colors[theme].gray, color: Colors[theme].text },
   ]
 
   return (
-    <ThemedView style={[styles.container, {paddingTop: insets.top}]}>
+    <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
       <ThemedView style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           onChangeText={text => setEmail(text)}
@@ -108,8 +111,12 @@ export default function Auth() {
           <ActivityIndicator size="large" color={Colors[theme].gray} />
         </ThemedView>
       ) : (
-        <AppleSignInButton {...{setLoading}} />
+        <AppleSignInButton {...{ setLoading }} />
       )}
+      <Padder />
+      <ThemedText style={{ ...TYPO.small }}>
+        {`${VERSION} ${process.env.EXPO_PUBLIC_SUPABASE_URL}`}
+      </ThemedText>
     </ThemedView>
   )
 }

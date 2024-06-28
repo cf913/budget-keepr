@@ -1,5 +1,4 @@
--- select cron.schedule('recurring-service-cron', '0 17 * * *', 'SELECT calculate_recurrings()');
-drop function if exists calculate_recurrings;
+set check_function_bodies = off;
 
 CREATE OR REPLACE FUNCTION private.calculate_recurrings()
  RETURNS integer
@@ -59,3 +58,7 @@ AS $function$
     return number_of_results;
   end;
 $function$
+;
+
+
+

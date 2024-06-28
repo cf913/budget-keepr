@@ -42,6 +42,7 @@ export default function ListItem({
   lastItem = false,
   checked = false,
   right,
+  rightColorOverride,
 }: {
   item?: any
   onSelect?: (item: any) => void
@@ -52,11 +53,12 @@ export default function ListItem({
   lastItem?: boolean
   checked?: boolean
   right?: string | number
+  rightColorOverride?: string
 }) {
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   const borderColor = useThemeColor({}, 'mid2')
   const chevronColor = useThemeColor({}, 'mid')
-  const rightColor = useThemeColor({}, 'tint')
+  const rightColor = useThemeColor({ light: rightColorOverride, dark: rightColorOverride }, 'tint')
 
   const withCategory = category
     ? {

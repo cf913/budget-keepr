@@ -1,14 +1,14 @@
-import { Feather } from '@expo/vector-icons'
-import { useThemeColor } from '@/hooks/useThemeColor'
-import { ThemedText } from '../ThemedText'
-import { AnimatedView, ThemedView } from '../ThemedView'
-import { Pressable, StyleSheet } from 'react-native'
+import { ExpoRouter } from '@/.expo/types/router'
 import { HEIGHT, PADDING, TYPO } from '@/constants/Styles'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { Feather } from '@expo/vector-icons'
 import { Link } from 'expo-router'
 import { ReactNode } from 'react'
+import { Pressable, StyleSheet } from 'react-native'
+import { FadeIn } from 'react-native-reanimated'
 import { Category } from '../RecentEntries'
-import { ExpoRouter } from '@/.expo/types/router'
-import { FadeIn, FadeInRight } from 'react-native-reanimated'
+import { ThemedText } from '../ThemedText'
+import { AnimatedView, ThemedView } from '../ThemedView'
 
 const Wrapper = ({
   href,

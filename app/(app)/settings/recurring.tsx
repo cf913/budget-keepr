@@ -1,33 +1,22 @@
-import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
-import List from '@/components/Lists/List'
-import ListItemRecurring from '@/components/Lists/ListItemRecurring'
-import { Loader } from '@/components/Loader'
-import { ThemedText } from '@/components/ThemedText'
-import {
-  Recurring,
-  RecurringUpdateInput,
-  deleteRecurring,
-  getRecurrings,
-  updateRecurring,
-} from '@/data/recurring'
-import { useLocalSettings } from '@/stores/localSettings'
-import { isLastItem } from '@/utils/helpers'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import RecurringListActive from '@/components/Lists/RecurringListActive'
+import RecurringListArchived from '@/components/Lists/RecurringListArchived'
+import { RecurringUpdateInput, updateRecurring } from '@/data/recurring'
+import { queryClient } from '@/lib/tanstack'
+import { useMutation } from '@tanstack/react-query'
+import { useRef, useState } from 'react'
 import { Alert } from 'react-native'
+
+// TODO: split into two lists: active and archived
+// TODO: use forwardRef + useImperativeHandle to call refetch for both lists on pull down
 
 export type RecurringUpdateType = 'active' | 'archived'
 
 export default function Recurrings() {
+  const activeListRef = useRef<any>() // HACK: make this not <any>
+  const archivedListRef = useRef<any>() // HACK: make this not <any>
   const [refreshing, setRefreshing] = useState(false)
-  const { defaultBudget } = useLocalSettings()
-
-  const { data, error, refetch, isLoading } = useQuery({
-    queryKey: ['recurring'],
-    queryFn: () => getRecurrings(defaultBudget?.id),
-  })
 
   const updateMutation = useMutation({
     mutationFn: updateRecurring,
@@ -35,32 +24,15 @@ export default function Recurrings() {
       console.log('updateMutation optimistic update', variables)
     },
     onSuccess: () => {
-      refetch()
+      queryClient.invalidateQueries({ queryKey: ['recurringActive', 'recurringArchived'] })
+      activeListRef.current?.refetch()
+      archivedListRef.current?.refetch()
     },
     onError: error => {
       console.log('error', error.message)
       alert('Oops. ' + error.message)
     },
   })
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteRecurring,
-    onMutate: variables => {
-      console.log('deleteMutation optimistic update', variables)
-    },
-    onSuccess: () => {
-      refetch()
-    },
-    onError: error => {
-      console.log('error', error.message)
-      alert('Oops. ' + error.message)
-    },
-  })
-
-  if (error) {
-    console.log('error', error.message)
-    alert('Oops. ' + error.message)
-  }
 
   const onDelete = async (id: string) => {
     Alert.alert('Confirm delete?', 'This action cannot be undone.', [
@@ -71,7 +43,10 @@ export default function Recurrings() {
       },
       {
         text: 'Delete',
-        onPress: () => alert('TODO: make it delete ' + id), // deleteMutation.mutate(id),
+        onPress: () => {
+          // queryClient.invalidateQueries({ queryKey: ['recurringActive', 'recurringArchived'] })
+          alert('TODO: make it delete ' + id) // TODO: deleteMutation.mutate(id),
+        },
         style: 'destructive',
       },
     ])
@@ -88,13 +63,26 @@ export default function Recurrings() {
 
     switch (recurringType) {
       case 'active':
-        alertTitle = `Confirm pause?`
-        alertMessage =
-          'Your recurring payment will expire at the end of the current billing cycle. You can resume it at any time before expiry. However, once expired, a recurring payment cannot be resumed and a new one must be created.'
-        alertButton = `Pause`
+        if (recurring.active) {
+          alertTitle = `Confirm reactivate?`
+          alertMessage = 'Your recurring payment will resume shortly.'
+          alertButton = `Reactivate`
+        } else {
+          alertTitle = `Confirm pause?`
+          alertMessage =
+            'Your recurring payment will expire at the end of the current billing cycle. You can resume it at any time before expiry. However, once expired, a recurring payment cannot be reactivated and a new one must be created.'
+          alertButton = `Pause`
+        }
         break
       case 'archived':
-        // default settings
+        if (!recurring.archived) {
+          alertTitle = `Unarchive?`
+          alertMessage = `This will unarchive the recurring payment. It will be visible in the recurring payment list.`
+          alertButton = `Unarchive`
+        } else {
+          // default settings
+        }
+
         break
       default:
         break
@@ -120,37 +108,25 @@ export default function Recurrings() {
       title="Recurring Payments"
       back
       refreshing={refreshing}
-      onRefresh={async () => {
+      onRefresh={() => {
         setRefreshing(true)
-        await refetch()
+        activeListRef.current?.refetch()
+        archivedListRef.current?.refetch()
         setRefreshing(false)
       }}
     >
-      <Content>
-        {isLoading ? <Loader /> : null}
-        {data ? (
-          <List>
-            {(data || []).map((recurring, i) => {
-              return (
-                <ListItemRecurring
-                  key={recurring.id}
-                  recurring={recurring}
-                  onDelete={onDelete}
-                  onUpdate={onUpdate}
-                  lastItem={isLastItem(data, i)}
-                />
-              )
-            })}
-          </List>
-        ) : null}
-        {data && !data.length ? (
-          <ThemedText>
-            Looks like you don't have any recurring at this very point in time.
-            Nice 💪
-          </ThemedText>
-        ) : null}
-        {error ? <ThemedText>Error: {error.message}</ThemedText> : null}
-      </Content>
+      <RecurringListActive
+        ref={activeListRef}
+        onDelete={onDelete}
+        onUpdate={onUpdate}
+      />
+      <Padder />
+      <RecurringListArchived
+        ref={archivedListRef}
+        onDelete={onDelete}
+        onUpdate={onUpdate}
+      />
+
       <Padder />
       <Padder />
     </Page>

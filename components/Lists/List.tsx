@@ -8,15 +8,18 @@ import { AnimatedView, ThemedView } from '../ThemedView'
 export default function List({
   children,
   style,
+  shadow = false,
 }: {
   children: ReactNode
   style?: ViewStyle
+  shadow?: boolean
 }) {
   const backgroundColor = useThemeColor({}, 'bg_secondary')
+  const shadowStyle = shadow ? STYLES.shadow : {}
   return (
     <AnimatedView
       entering={FadeIn}
-      style={[STYLES.shadow, styles.shadow_container, { backgroundColor }, style]}
+      style={[shadowStyle, styles.shadow_container, { backgroundColor }, style]}
     >
       <ThemedView style={[styles.container, { backgroundColor }]}>
         {children}

@@ -57,7 +57,7 @@ export function LocalSettingsProvider(props: React.PropsWithChildren) {
       }
       // DONE, READY TO LOAD APP CONTENT
       setLoadingSettings(false)
-      await new Promise((res, rej) => setTimeout(res, 1000))
+      // await new Promise((res) => setTimeout(res, 1000))
       SplashScreen.hideAsync()
     }
 

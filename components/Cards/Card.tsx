@@ -1,11 +1,11 @@
-import {useThemeColor} from '@/hooks/useThemeColor'
-import {ThemedText} from '../ThemedText'
-import {AnimatedView, ThemedView} from '../ThemedView'
-import {PADDING, RADIUS, STYLES, TYPO} from '@/constants/Styles'
-import {StyleSheet} from 'react-native'
+import { PADDING, RADIUS, TYPO } from '@/constants/Styles'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { StyleSheet } from 'react-native'
+import { FlipInXUp, FlipOutXDown } from 'react-native-reanimated'
 import Padder from '../Layout/Padder'
-import {Loader} from '../Loader'
-import {FlipInXUp, FlipOutXDown, FlipOutXUp} from 'react-native-reanimated'
+import { Loader } from '../Loader'
+import { ThemedText } from '../ThemedText'
+import { AnimatedView, ThemedView } from '../ThemedView'
 
 export default function Card({
   title,
@@ -21,8 +21,8 @@ export default function Card({
   const tintColor = useThemeColor({}, 'mid')
 
   return (
-    <ThemedView style={[styles.card, {backgroundColor}]}>
-      <ThemedText style={[styles.title, {color: tintColor}]}>
+    <ThemedView style={[styles.card, { backgroundColor }]}>
+      <ThemedText style={[styles.title, { color: tintColor }]}>
         {title}
       </ThemedText>
       <Padder h={0.3} />
@@ -30,7 +30,7 @@ export default function Card({
         <Loader size="small" />
       ) : (
         <AnimatedView entering={FlipInXUp} exiting={FlipOutXDown}>
-          <ThemedText style={[styles.value, {color: textColor}]}>
+          <ThemedText style={[styles.value, { color: textColor }]}>
             {value}
           </ThemedText>
         </AnimatedView>
@@ -41,7 +41,7 @@ export default function Card({
 
 const styles = StyleSheet.create({
   card: {
-    ...STYLES.shadow,
+    // ...STYLES.shadow,
     borderRadius: RADIUS,
     flexGrow: 1,
     justifyContent: 'center',

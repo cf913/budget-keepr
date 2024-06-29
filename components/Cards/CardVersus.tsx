@@ -1,4 +1,4 @@
-import { PADDING, RADIUS, STYLES, TYPO } from '@/constants/Styles'
+import { PADDING, RADIUS, TYPO } from '@/constants/Styles'
 import { getWeeklyBreakdown } from '@/data/analytics'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { useLocalSettings } from '@/stores/localSettings'
@@ -92,7 +92,7 @@ export default function CardVersus({ counter }: { counter: number }) {
 
 const styles = StyleSheet.create({
   card: {
-    ...STYLES.shadow,
+    // ...STYLES.shadow,
     borderRadius: RADIUS,
     flexDirection: 'row',
     flexGrow: 1,

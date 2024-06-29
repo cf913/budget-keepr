@@ -37,7 +37,6 @@ export type Recurring = {
 }
 
 export const createRecurring = async (recurring: RecurringInput) => {
-
   const user = await getSupabaseUser()
   if (!user) return
 
@@ -52,7 +51,10 @@ export const createRecurring = async (recurring: RecurringInput) => {
   return { data, error }
 }
 
-export const getRecurrings = async (budget_id?: string): Promise<Recurring[]> => {
+export const getRecurrings = async (
+  budget_id?: string,
+  filters?: { active?: boolean; archived?: boolean },
+): Promise<Recurring[]> => {
   const user = await getSupabaseUser()
   if (!user) throw new Error('No user found')
 
@@ -60,7 +62,9 @@ export const getRecurrings = async (budget_id?: string): Promise<Recurring[]> =>
 
   console.log('FETCHING RECURRINGS')
 
-  const { data, error } = await supabase
+  console.log('filters', filters)
+
+  let query = supabase
     .from('recurring')
     .select(
       `
@@ -82,8 +86,21 @@ export const getRecurrings = async (budget_id?: string): Promise<Recurring[]> =>
       `,
     )
     .eq('budget_id', budget_id)
-    .order('next_at', { ascending: true })
-    .returns<Recurring[]>()
+
+  const cleanFilters = filters || {}
+  const { active, archived } = cleanFilters
+
+  console.log('cleanFilters', cleanFilters)
+
+  if (typeof active !== 'undefined')
+    query = query.eq('active', active)
+
+  if (typeof archived !== 'undefined')
+    query = query
+      .eq('archived', archived)
+      .order('next_at', { ascending: !archived })
+
+  const { data, error } = await query.returns<Recurring[]>()
 
   if (error) throw error
 
@@ -106,7 +123,6 @@ export const updateRecurring = async (recurring: RecurringUpdateInput) => {
   if (error) throw error
 
   return data
-
 }
 
 export const deleteRecurring = async (id: string) => {
@@ -115,14 +131,9 @@ export const deleteRecurring = async (id: string) => {
 
   if (!id) throw new Error('No recurring id provided')
 
-  let { error } = await supabase
-    .from('recurring')
-    .delete()
-    .eq('id', id)
+  let { error } = await supabase.from('recurring').delete().eq('id', id)
 
   if (error) throw error
 
   return
 }
-
-

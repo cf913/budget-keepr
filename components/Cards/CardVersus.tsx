@@ -73,8 +73,8 @@ export default function CardVersus({ counter }: { counter: number }) {
                       color: textColor,
                       opacity: 0.4,
                       fontFamily: 'Space Mono',
-                      fontSize: 14,
-                      lineHeight: 20,
+                      fontSize: 12,
+                      lineHeight: 18,
                     },
                   ]}
                 >
@@ -115,6 +115,6 @@ const styles = StyleSheet.create({
     // letterSpacing: 2,
   },
   value: {
-    ...TYPO.card_value,
+    ...TYPO.card_value_compact,
   },
 })

@@ -16,6 +16,7 @@ import Card from './Cards/Card'
 import { useLocalSettings } from '@/stores/localSettings'
 
 import CardVersus from './Cards/CardVersus'
+import Padder from './Layout/Padder'
 
 export const AnalyticsQueryKeys = [
   'getAllTimeSpend',
@@ -78,60 +79,49 @@ export default function Analytics({ counter }: { counter: number }) {
   const dailySpend = allTimeData.data / (diff || 1)
 
   if (lastWeekData.error || currentWeekData.error || currentMonthData.error) {
-    alert(lastWeekData.error?.message || currentWeekData.error?.message || currentMonthData.error?.message)
+    alert(
+      lastWeekData.error?.message ||
+      currentWeekData.error?.message ||
+      currentMonthData.error?.message,
+    )
   }
 
   return (
-    <ThemedView style={styles.container}>
-      {/* <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
-      <Card
-        loading={allTimeData.isLoading}
-        title={'This Year'}
-        value={toMoney(allTimeData.data, true)}
-      />
-      <Card
-        loading={avgDailyData.isLoading}
-        title={'All Time Daily Avg.'}
-        value={toMoney(dailySpend, true)}
-      />
-      <Card
-        loading={currentMonthData.isLoading}
-        title={'This Month'}
-        value={toMoney(currentMonthData.data, true)}
-      />
-      <Card
-        loading={lastWeekData.isLoading}
-        title={'Last Week'}
-        value={toMoney(lastWeekData.data, true)}
-      />
-      <Card
-        loading={currentWeekData.isLoading}
-        title={'This Week'}
-        value={toMoney(currentWeekData.data, true)}
-      />
-      <Card
-        loading={todayData.isLoading}
-        title={'Today'}
-        value={toMoney(todayData.data, true)}
-      />
-      <CardVersus counter={counter} />
-      {/* </ThemedView>
-      <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
-      {/* <Card title={'All Time Spend'} value={toMoney(allTimeSpend)} />
-      <Card title={'Average Daily'} value={toMoney(dailySpend)} /> */}
-      {/* </ThemedView> */}
-      {/* <BarChart data={data} /> */}
-      {/* <LineChart data={data} />
-      <PieChart data={data} />
-      <PopulationPyramid
-        data={[
-          {left: 10, right: 12},
-          {left: 9, right: 8},
-        ]}
-      />
-      <BarChart data={data} horizontal />
-      <LineChart data={data} areaChart />
-      <PieChart data={data} donut /> */}
+    <ThemedView>
+      <ThemedView style={styles.container}>
+        {/* <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
+        <Card
+          loading={allTimeData.isLoading}
+          title={'This Year'}
+          value={toMoney(allTimeData.data, true)}
+        />
+        <Card
+          loading={avgDailyData.isLoading}
+          title={'Daily Avg.'}
+          value={toMoney(dailySpend, true)}
+        />
+        <Card
+          loading={currentMonthData.isLoading}
+          title={'This Month'}
+          value={toMoney(currentMonthData.data, true)}
+        />
+        <Card
+          loading={lastWeekData.isLoading}
+          title={'Last Week'}
+          value={toMoney(lastWeekData.data, true)}
+        />
+        <Card
+          loading={currentWeekData.isLoading}
+          title={'This Week'}
+          value={toMoney(currentWeekData.data, true)}
+        />
+        <Card
+          loading={todayData.isLoading}
+          title={'Today'}
+          value={toMoney(todayData.data, true)}
+        />
+        <CardVersus counter={counter} />
+      </ThemedView>
     </ThemedView>
   )
 }

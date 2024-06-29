@@ -20,10 +20,9 @@ interface ListItemRecurringProps {
 
 export default function ListItemRecurring(props: ListItemRecurringProps) {
   const ref = useRef<Swipeable>(null)
-  const { recurring, lastItem, onDelete, onUpdate } = props
+  const { recurring, lastItem, onUpdate } = props
 
   const bgColor = useThemeColor({}, 'bg_secondary')
-  const bgColor2 = useThemeColor({}, 'bg')
   const tintColor = useThemeColor({}, 'tint')
 
   const [isExpired, listItemRight, listItemDescription] = useMemo(() => {
@@ -61,11 +60,6 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
       id: recurring.id,
       archived: !recurring.archived,
     })
-    ref.current?.close()
-  }
-
-  const onDeleteItem = () => {
-    onDelete(recurring.id)
     ref.current?.close()
   }
 

@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native'
-import {Colors} from './Colors'
+import { StyleSheet } from 'react-native'
+import { Colors } from './Colors'
 
 export const RADIUS = 12
 
@@ -14,6 +14,11 @@ export const TYPO = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 22,
     lineHeight: 24,
+  },
+  card_value_compact: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    lineHeight: 22,
   },
   title: {
     fontSize: 30,

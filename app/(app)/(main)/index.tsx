@@ -41,9 +41,7 @@ export default function HomeScreen() {
     >
       <Content style={{ flex: 1 }}>
         {/* ANALYTICS */}
-        <Padder />
         <Analytics {...{ counter }} />
-        <Padder />
         <Padder />
         <Divider />
         <Padder />
@@ -60,31 +58,7 @@ export default function HomeScreen() {
         </ThemedView>
         <Padder />
         <Padder style={{ height: insets.bottom ? insets.bottom : PADDING }} />
-        {/* <Padder />
-        <Padder />
-        <Padder />
-        <Padder /> */}
-        {/* <ThemedButton
-          title="Sentry"
-          onPress={() => {
-            // await new Promise(r => setTimeout(r, 1000))
-            throw new Error('Hello Sentry from ' + VERSION)
-          }}
-        /> */}
-
-        {/* <ThemedText style={{}}>- TODO: Delete entries</ThemedText>
-        <ThemedText style={{}}>- TODO: Edit entries</ThemedText>
-        <ThemedText style={{}}>- TODO: Create New Budget</ThemedText> */}
       </Content>
-      {/* <Spacer /> */}
-      {/* <Content floating>
-        <ThemedView>
-          <ThemedButton
-            onPress={() => router.push('add-new-entry')}
-            title="ADD NEW ENTRY"
-          ></ThemedButton>
-        </ThemedView>
-      </Content> */}
     </Page>
   )
 }

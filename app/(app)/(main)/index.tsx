@@ -38,8 +38,8 @@ export default function HomeScreen() {
           <ThemedButton
             round
             icon={<Feather name="settings" size={24} color={textColor} />}
-            onPress={() => router.navigate('add-new-entry')}
-            title="ADD NEW ENTRY"
+            onPress={() => router.navigate('/settings')}
+            title="SETTINGS"
             style={{ zIndex: 99 }}
           ></ThemedButton>
           <ThemedButton

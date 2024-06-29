@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { Colors } from './Colors'
 
-export const RADIUS = 12
+export const RADIUS = 16
 
 export const PADDING = 16
 

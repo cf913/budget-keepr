@@ -42,9 +42,7 @@ export default function HomeScreen() {
       <Content style={{ flex: 1 }}>
         {/* ANALYTICS */}
         <Analytics {...{ counter }} />
-        <Padder />
-        <Divider />
-        <Padder />
+        <Padder h={2 / 3} />
         {/* /////// RECENT ENTRIES ///////// */}
         <ThemedView
           style={{

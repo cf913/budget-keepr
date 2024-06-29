@@ -1,22 +1,21 @@
-import { useQuery } from '@tanstack/react-query'
+import { PADDING } from '@/constants/Styles'
 import {
   getAvgDailySpend,
   getCurrentMonthSpend,
   getCurrentWeekSpend,
+  getLastWeekSpend,
   getThisYearSpend,
   getTodaySpend,
-  getLastWeekSpend,
 } from '@/data/analytics'
+import { useLocalSettings } from '@/stores/localSettings'
 import { toMoney } from '@/utils/helpers'
-import { ThemedView } from './ThemedView'
+import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { StyleSheet } from 'react-native'
-import { PADDING } from '@/constants/Styles'
 import Card from './Cards/Card'
-import { useLocalSettings } from '@/stores/localSettings'
+import { ThemedView } from './ThemedView'
 
 import CardVersus from './Cards/CardVersus'
-import Padder from './Layout/Padder'
 
 export const AnalyticsQueryKeys = [
   'getAllTimeSpend',
@@ -128,7 +127,7 @@ export default function Analytics({ counter }: { counter: number }) {
 
 const styles = StyleSheet.create({
   container: {
-    gap: PADDING / 2,
+    gap: PADDING / 1.5,
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',

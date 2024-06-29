@@ -33,13 +33,14 @@ export default function HomeScreen() {
       title={defaultBudget.name}
       refreshing={false}
       onRefresh={onRefresh}
+      withSettings
       footer={
         <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'transparent' }}>
           <ThemedButton
             round
-            icon={<Feather name="settings" size={24} color={textColor} />}
-            onPress={() => router.navigate('/settings')}
-            title="SETTINGS"
+            icon={<Feather name="list" size={24} color={textColor} />}
+            onPress={() => router.navigate("/settings/select-budget")}
+            title="BUDGET"
             style={{ zIndex: 99 }}
           ></ThemedButton>
           <ThemedButton

@@ -1,0 +1,4 @@
+package-lock.json
+README.md
+supabase/*.sql
+supabase/migrations/*

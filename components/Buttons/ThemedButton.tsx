@@ -12,6 +12,7 @@ export type ThemedViewProps = ViewProps & {
   round?: boolean
   loading?: boolean
   title: string
+  icon?: React.ReactNode
   onPress?: () => void
   lightColor?: string
   darkColor?: string
@@ -21,6 +22,7 @@ const ROUND_WIDTH = HEIGHT.item * 1.2
 
 export function ThemedButton({
   round = false,
+  icon,
   loading = false,
   title,
   onPress,
@@ -52,7 +54,7 @@ export function ThemedButton({
         <Loader size="small" />
       ) : round ? (
         // ICON
-        <Feather name="plus" size={ROUND_WIDTH / 2} color={textColor} />
+        icon ? icon : <Feather name={'plus'} size={ROUND_WIDTH / 2} color={textColor} />
       ) : (
         // TEXT
         <AnimatedView exiting={FadeOut} entering={FadeIn}>

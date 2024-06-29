@@ -11,11 +11,15 @@ import { Divider } from '@/components/Divider'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ThemedView } from '@/components/ThemedView'
 import { PADDING } from '@/constants/Styles'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { Feather } from '@expo/vector-icons'
 
 export default function HomeScreen() {
   const { defaultBudget } = useLocalSettings()
   const insets = useSafeAreaInsets()
+
   const [counter, setCounter] = useState(0)
+  const textColor = useThemeColor({}, 'text')
 
   if (!defaultBudget) return <Redirect href="select-budget-onboarding" />
 
@@ -27,16 +31,25 @@ export default function HomeScreen() {
     <Page
       scroll
       title={defaultBudget.name}
-      withSettings
       refreshing={false}
       onRefresh={onRefresh}
       footer={
-        <ThemedButton
-          round
-          onPress={() => router.navigate('add-new-entry')}
-          title="ADD NEW ENTRY"
-          style={{ zIndex: 99 }}
-        ></ThemedButton>
+        <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'transparent' }}>
+          <ThemedButton
+            round
+            icon={<Feather name="settings" size={24} color={textColor} />}
+            onPress={() => router.navigate('add-new-entry')}
+            title="ADD NEW ENTRY"
+            style={{ zIndex: 99 }}
+          ></ThemedButton>
+          <ThemedButton
+            round
+            onPress={() => router.navigate('add-new-entry')}
+
+            title="ADD NEW ENTRY"
+            style={{ zIndex: 99 }}
+          ></ThemedButton>
+        </ThemedView>
       }
     >
       <Content style={{ flex: 1 }}>

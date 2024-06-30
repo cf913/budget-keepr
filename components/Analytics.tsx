@@ -29,32 +29,32 @@ export default function Analytics({ counter, budget_id }: { counter: number, bud
 
   // THIS YEAR
   const allTimeData = useQuery({
-    queryKey: ['getAllTimeSpend', counter],
+    queryKey: ['getAllTimeSpend', counter, budget_id],
     queryFn: () => getThisYearSpend(budget_id),
   })
 
   const avgDailyData = useQuery({
-    queryKey: ['getAvgDailySpend', counter],
+    queryKey: ['getAvgDailySpend', counter, budget_id],
     queryFn: () => getAvgDailySpend(budget_id),
   })
 
   const currentWeekData = useQuery({
-    queryKey: ['getCurrentWeekSpend', counter],
+    queryKey: ['getCurrentWeekSpend', counter, budget_id],
     queryFn: () => getCurrentWeekSpend(budget_id),
   })
 
   const lastWeekData = useQuery({
-    queryKey: ['getLastWeekSpend', counter],
+    queryKey: ['getLastWeekSpend', counter, budget_id],
     queryFn: () => getLastWeekSpend(budget_id),
   })
 
   const currentMonthData = useQuery({
-    queryKey: ['getCurrentMonthSpend', counter],
+    queryKey: ['getCurrentMonthSpend', counter, budget_id],
     queryFn: () => getCurrentMonthSpend(budget_id),
   })
 
   const todayData = useQuery({
-    queryKey: ['getTodaySpend', counter],
+    queryKey: ['getTodaySpend', counter, budget_id],
     queryFn: () => getTodaySpend(budget_id),
   })
 

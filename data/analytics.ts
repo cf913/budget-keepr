@@ -128,11 +128,26 @@ export const getTodaySpend = async (budget_id?: string) => {
   return data.sum
 }
 
-export const getWeeklyBreakdown = async (budget_id?: string) => {
+export const getBreakdown = async (budget_id: string | null, timeframe: string) => {
   const user = await getSupabaseUser()
-  if (!user) return
+  if (!user) throw new Error('User not found')
 
-  const currentWeek = getWeekNumber()
+  let tf = timeframe
+  let tf_value = 0
+
+  switch (tf) {
+    case 'week':
+      tf_value = getWeekNumber()
+      break
+    case 'month':
+      tf_value = getSQLFriendlyMonth()
+      break
+    case 'year':
+      tf_value = new Date().getFullYear()
+      break
+    default:
+      throw new Error('Invalid timeframe')
+  }
 
   let query = supabase
     .from('entries')
@@ -140,7 +155,7 @@ export const getWeeklyBreakdown = async (budget_id?: string) => {
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 
-  const { data, error } = await query.eq('week', currentWeek)
+  const { data, error } = await query.eq(tf, tf_value)
   // .order('sum', {ascending: false})
   // .single()
 

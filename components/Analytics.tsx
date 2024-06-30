@@ -22,7 +22,7 @@ export const AnalyticsQueryKeys = [
   'getTodaySpend',
   'getCurrentMonthSpend',
   'getLastWeekSpend',
-  'getWeeklyBreakdown',
+  'getBreakdown',
 ]
 
 export default function Analytics({ counter, budget_id }: { counter: number, budget_id?: string }) {
@@ -109,7 +109,7 @@ export default function Analytics({ counter, budget_id }: { counter: number, bud
           title={'Today'}
           value={toMoney(todayData.data, true)}
         />
-        <CardVersus counter={counter} />
+        {budget_id ? <CardVersus counter={counter} /> : null}
       </ThemedView>
     </ThemedView>
   )

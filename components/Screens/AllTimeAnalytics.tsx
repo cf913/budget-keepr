@@ -5,6 +5,7 @@ import Analytics from '../Analytics'
 import Content from '../Layout/Content'
 import Padder from '../Layout/Padder'
 import Page from '../Layout/Page'
+import CardVersusAll from '../Cards/CardVersusAll'
 
 export default function AllTimeAnalytics() {
   const insets = useSafeAreaInsets()
@@ -26,6 +27,7 @@ export default function AllTimeAnalytics() {
         {/* ANALYTICS */}
         <Analytics {...{ counter }} />
         <Padder h={2 / 3} />
+        <CardVersusAll counter={counter} />
         <Padder style={{ height: insets.bottom ? insets.bottom : PADDING }} />
       </Content>
     </Page>

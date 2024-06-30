@@ -1,26 +1,35 @@
 import { PADDING, RADIUS, TYPO } from '@/constants/Styles'
 import { getBreakdown } from '@/data/analytics'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { useLocalSettings } from '@/stores/localSettings'
 import { sortByKey, toMoney } from '@/utils/helpers'
+import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useQuery } from '@tanstack/react-query'
-import { Fragment, useMemo } from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
 import { StyleSheet } from 'react-native'
-import { FlipInXUp, FlipOutXDown } from 'react-native-reanimated'
 import Padder from '../Layout/Padder'
 import { Loader } from '../Loader'
 import { ThemedText } from '../ThemedText'
 import { AnimatedView, ThemedView } from '../ThemedView'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
 
-export default function CardVersus({ counter }: { counter: number }) {
-  const { defaultBudget } = useLocalSettings()
+type CardVersusProps = {
+  counter: number
+}
+
+export default function CardVersus({ counter }: CardVersusProps) {
+
+  const TIME_FRAMES = ['Week', 'Month', 'Year']
+  const [timeFrameIndex, setTimeFrameIndex] = useState(0)
+
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   const textColor = useThemeColor({}, 'text')
   const tintColor = useThemeColor({}, 'mid')
 
+  const timeframe = TIME_FRAMES[timeFrameIndex].toLowerCase()
+
   const weeklyData = useQuery({
-    queryKey: ['getBreakdown', counter, 'week'],
-    queryFn: () => getBreakdown(defaultBudget?.id!, 'week'),
+    queryKey: ['getBreakdown', counter, timeframe],
+    queryFn: () => getBreakdown(null, timeframe)
   })
 
   const [data, total] = useMemo(() => {
@@ -39,7 +48,7 @@ export default function CardVersus({ counter }: { counter: number }) {
   return (
     <ThemedView style={[styles.card, { backgroundColor }]}>
       {/* EMPTY STATE */}
-      {!data?.length ? (
+      {!data?.length && !weeklyData.isLoading ? (
         <Fragment>
           <ThemedText style={[styles.title, { color: tintColor }]}>
             0 entries found this week. Congrats! 🎉
@@ -47,9 +56,21 @@ export default function CardVersus({ counter }: { counter: number }) {
           <Padder h={0.3} />
         </Fragment>
       ) : null}
+      <ThemedView style={{ width: '100%', backgroundColor: 'transparent' }}>
+        <SegmentedControl
+          values={TIME_FRAMES}
+          selectedIndex={timeFrameIndex}
+          onChange={(event: {
+            nativeEvent: { selectedSegmentIndex: number }
+          }) => {
+            setTimeFrameIndex(event.nativeEvent.selectedSegmentIndex)
+          }}
+        />
+      </ThemedView>
       {/* WITH DATA */}
       {data && data.length
-        ? data.slice(0, 4).map((item: any) => (
+        ? // TOP 4
+        data.map((item: any) => (
           <ThemedView key={item.label} style={styles.inner}>
             <ThemedText style={[styles.title, { color: item.frontColor }]}>
               {item.label}
@@ -59,8 +80,8 @@ export default function CardVersus({ counter }: { counter: number }) {
               <Loader size="small" />
             ) : (
               <AnimatedView
-                entering={FlipInXUp}
-                exiting={FlipOutXDown}
+                entering={FadeIn}
+                exiting={FadeOut}
                 style={{ alignItems: 'center' }}
               >
                 <ThemedText style={[styles.value, { color: textColor }]}>
@@ -94,10 +115,9 @@ const styles = StyleSheet.create({
   card: {
     // ...STYLES.shadow,
     borderRadius: RADIUS,
-    flexDirection: 'row',
     flexGrow: 1,
     alignItems: 'center',
-    paddingHorizontal: PADDING,
+    paddingHorizontal: PADDING / 1.5,
     paddingVertical: PADDING / 1.5,
     width: '100%',
   },

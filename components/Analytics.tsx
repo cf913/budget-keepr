@@ -7,14 +7,12 @@ import {
   getThisYearSpend,
   getTodaySpend,
 } from '@/data/analytics'
-import { useLocalSettings } from '@/stores/localSettings'
 import { toMoney } from '@/utils/helpers'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { StyleSheet } from 'react-native'
 import Card from './Cards/Card'
 import { ThemedView } from './ThemedView'
-
 import CardVersus from './Cards/CardVersus'
 
 export const AnalyticsQueryKeys = [
@@ -27,44 +25,37 @@ export const AnalyticsQueryKeys = [
   'getWeeklyBreakdown',
 ]
 
-export default function Analytics({ counter }: { counter: number }) {
-  const { defaultBudget } = useLocalSettings()
-
-  // ALL TIME
-  // const allTimeData = useQuery({
-  //   queryKey: ['getAllTimeSpend', counter],
-  //   queryFn: getAllTimeSpend,
-  // })
+export default function Analytics({ counter, budget_id }: { counter: number, budget_id?: string }) {
 
   // THIS YEAR
   const allTimeData = useQuery({
     queryKey: ['getAllTimeSpend', counter],
-    queryFn: () => getThisYearSpend(defaultBudget?.id),
+    queryFn: () => getThisYearSpend(budget_id),
   })
 
   const avgDailyData = useQuery({
     queryKey: ['getAvgDailySpend', counter],
-    queryFn: () => getAvgDailySpend(defaultBudget?.id),
+    queryFn: () => getAvgDailySpend(budget_id),
   })
 
   const currentWeekData = useQuery({
     queryKey: ['getCurrentWeekSpend', counter],
-    queryFn: () => getCurrentWeekSpend(defaultBudget?.id),
+    queryFn: () => getCurrentWeekSpend(budget_id),
   })
 
   const lastWeekData = useQuery({
     queryKey: ['getLastWeekSpend', counter],
-    queryFn: () => getLastWeekSpend(defaultBudget?.id),
+    queryFn: () => getLastWeekSpend(budget_id),
   })
 
   const currentMonthData = useQuery({
     queryKey: ['getCurrentMonthSpend', counter],
-    queryFn: () => getCurrentMonthSpend(defaultBudget?.id),
+    queryFn: () => getCurrentMonthSpend(budget_id),
   })
 
   const todayData = useQuery({
     queryKey: ['getTodaySpend', counter],
-    queryFn: () => getTodaySpend(defaultBudget?.id),
+    queryFn: () => getTodaySpend(budget_id),
   })
 
   const diffRaw = dayjs()
@@ -88,7 +79,6 @@ export default function Analytics({ counter }: { counter: number }) {
   return (
     <ThemedView>
       <ThemedView style={styles.container}>
-        {/* <ThemedView style={{flexDirection: 'row', gap: PADDING}}> */}
         <Card
           loading={allTimeData.isLoading}
           title={'This Year'}

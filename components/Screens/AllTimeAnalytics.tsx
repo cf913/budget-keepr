@@ -1,16 +1,10 @@
 import { PADDING } from '@/constants/Styles'
-import { Feather } from '@expo/vector-icons'
-import { router } from 'expo-router'
+import { useState } from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Analytics from '../Analytics'
-import { ThemedButton } from '../Buttons/ThemedButton'
 import Content from '../Layout/Content'
 import Padder from '../Layout/Padder'
 import Page from '../Layout/Page'
-import RecentEntries from '../RecentEntries'
-import { ThemedView } from '../ThemedView'
-import { useThemeColor } from '@/hooks/useThemeColor'
-import { useState } from 'react'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function AllTimeAnalytics() {
   const insets = useSafeAreaInsets()

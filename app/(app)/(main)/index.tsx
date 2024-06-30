@@ -1,6 +1,7 @@
 import Analytics from '@/components/Analytics'
 import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import Content from '@/components/Layout/Content'
+import Footer from '@/components/Layout/Footer'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import RecentEntries from '@/components/RecentEntries'
@@ -42,33 +43,10 @@ export default function HomeScreen() {
             refreshing={false}
             onRefresh={onRefresh}
             withSettings
-            footer={
-              <ThemedView
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  backgroundColor: 'transparent',
-                }}
-              >
-                <ThemedButton
-                  round
-                  icon={<Feather name="list" size={24} color={textColor} />}
-                  onPress={() => router.navigate('/settings/select-budget')}
-                  title="BUDGET"
-                  style={{ zIndex: 99 }}
-                ></ThemedButton>
-                <ThemedButton
-                  round
-                  onPress={() => router.navigate('add-new-entry')}
-                  title="ADD NEW ENTRY"
-                  style={{ zIndex: 99 }}
-                ></ThemedButton>
-              </ThemedView>
-            }
           >
             <Content style={{ flex: 1 }}>
               {/* ANALYTICS */}
-              <Analytics {...{ counter }} />
+              <Analytics {...{ counter, budget_id: defaultBudget?.id }} />
               <Padder h={2 / 3} />
               {/* /////// RECENT ENTRIES ///////// */}
               <ThemedView
@@ -89,6 +67,29 @@ export default function HomeScreen() {
           </Page>
         </ThemedView>
       </PagerView>
+      <Footer>
+        <ThemedView
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            backgroundColor: 'transparent',
+          }}
+        >
+          <ThemedButton
+            round
+            icon={<Feather name="list" size={24} color={textColor} />}
+            onPress={() => router.navigate('/settings/select-budget')}
+            title="BUDGET"
+            style={{ zIndex: 99 }}
+          ></ThemedButton>
+          <ThemedButton
+            round
+            onPress={() => router.navigate('add-new-entry')}
+            title="ADD NEW ENTRY"
+            style={{ zIndex: 99 }}
+          ></ThemedButton>
+        </ThemedView>
+      </Footer>
     </ThemedView>
   )
 }
@@ -96,6 +97,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'relative',
   },
   page: {
     flex: 1,

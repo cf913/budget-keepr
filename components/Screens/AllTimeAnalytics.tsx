@@ -17,7 +17,7 @@ export default function AllTimeAnalytics() {
   return (
     <Page
       scroll
-      title={'All Time'}
+      title={'Overview'}
       refreshing={false}
       onRefresh={onRefresh}
       withSettings

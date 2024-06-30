@@ -1,6 +1,9 @@
+import { PADDING, TYPO } from '@/constants/Styles'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { Feather } from '@expo/vector-icons'
+import { useHeaderHeight } from '@react-navigation/elements'
+import { router } from 'expo-router'
 import { ReactNode } from 'react'
-import { ThemedView } from '../ThemedView'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
   Pressable,
   RefreshControl,
@@ -10,16 +13,12 @@ import {
   ViewProps,
   ViewStyle,
 } from 'react-native'
-import { ThemedText } from '../ThemedText'
-import { PADDING, TYPO } from '@/constants/Styles'
-import { useHeaderHeight } from '@react-navigation/elements'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import SettingsButton from '../Buttons/SettingsButton'
-import { Feather } from '@expo/vector-icons'
-import { useThemeColor } from '@/hooks/useThemeColor'
-import { router } from 'expo-router'
-import Content from './Content'
+import { ThemedText } from '../ThemedText'
+import { ThemedView } from '../ThemedView'
+import Footer from './Footer'
 import Padder from './Padder'
-
 const Wrapper = ({
   scroll,
   refreshControl,
@@ -40,6 +39,21 @@ const Wrapper = ({
   )
 }
 
+type PageProps = {
+  scroll?: boolean
+  back?: boolean
+  down?: boolean
+  refreshing?: boolean
+  onRefresh?: () => void
+  withSettings?: boolean
+  withHeader?: boolean
+  title?: string
+  subtitle?: string
+  style?: ViewStyle
+  footer?: ReactNode
+  children: ReactNode
+}
+
 export default function Page({
   scroll = false,
   back = false,
@@ -53,20 +67,8 @@ export default function Page({
   style,
   footer = null,
   children,
-}: {
-  scroll?: boolean
-  back?: boolean
-  down?: boolean
-  refreshing?: boolean
-  onRefresh?: () => void
-  withSettings?: boolean
-  withHeader?: boolean
-  title?: string
-  subtitle?: string
-  style?: ViewStyle
-  footer?: ReactNode
-  children: ReactNode
-}) {
+}: PageProps) {
+
   const insets = useSafeAreaInsets()
   const headerHeight = useHeaderHeight()
   const colorText = useThemeColor({}, 'mid')
@@ -148,15 +150,7 @@ export default function Page({
         {children}
       </Wrapper>
       {footer ? (
-        <Content
-          floating
-          style={{
-            paddingBottom: insets.bottom || PADDING,
-            backgroundColor: 'transparent',
-          }}
-        >
-          {footer}
-        </Content>
+        <Footer>{footer}</Footer>
       ) : null}
     </ThemedView>
   )

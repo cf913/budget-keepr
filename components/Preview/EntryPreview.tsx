@@ -3,15 +3,21 @@ import { ThemedText } from '@/components/ThemedText'
 import { TYPO } from '@/constants/Styles'
 import { toMoney } from '@/utils/helpers'
 import dayjs from 'dayjs'
+import { SubCategory } from '../RecentEntries'
 import List from './../Lists/List'
 import ListItem from './../Lists/ListItem'
 
-export default function EntryPreview({ subCategory, amount }: any) {
+type EntryPreviewProps = {
+  subCategory: null | SubCategory
+  amount: string
+  description?: string
+}
+
+export default function EntryPreview({ subCategory, amount, description }: EntryPreviewProps) {
   return subCategory ? (
     <>
       <ThemedText
         style={{
-          // fontWeight: 'bold',
           textAlign: 'center',
           letterSpacing: 3,
           ...TYPO.small,
@@ -24,9 +30,8 @@ export default function EntryPreview({ subCategory, amount }: any) {
         <ListItem
           lastItem
           title={subCategory.name}
-          description={dayjs().format('HH:mm - ddd D MMM')}
+          description={description ? description : dayjs().format('HH:mm - ddd D MMM')}
           category={subCategory.category}
-          // description={entry.categories.name}
           right={toMoney(+amount * 100)}
         />
       </List>

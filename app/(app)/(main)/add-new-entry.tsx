@@ -10,6 +10,7 @@ import EntryPreview from '@/components/Preview/EntryPreview'
 import PreviewDisclaimer from '@/components/Preview/PreviewDisclaimer'
 import { SubCategory } from '@/components/RecentEntries'
 import RecurringInputs from '@/components/RecurringInputs'
+import { ThemedText } from '@/components/ThemedText'
 import { AnimatedView, ThemedView } from '@/components/ThemedView'
 import { createEntry } from '@/data/mutations'
 import { createRecurring } from '@/data/recurring'
@@ -17,6 +18,7 @@ import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { useTempStore } from '@/stores/tempStore'
 import { getDayJSFrequencyFromString, getSQLFriendlyMonth, getWeekNumber } from '@/utils/helpers'
+import DateTimePicker from '@react-native-community/datetimepicker'
 import { useMutation } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { router } from 'expo-router'
@@ -118,18 +120,16 @@ export default function AddNewEntry() {
     setSaving(true)
     // insert query
 
-    // create entry
-    const now = new Date()
-
     mutationEntry.mutate({
       amount: Math.round(+amount * 100),
+      created_at: date.toISOString(),
       sub_category_id: subCategory.id,
       category_id: subCategory.category?.id,
       budget_id: defaultBudget?.id,
-      year: now.getFullYear(),
-      month: getSQLFriendlyMonth(now),
-      week: getWeekNumber(now),
-      day: now.getDay(),
+      year: date.getFullYear(),
+      month: getSQLFriendlyMonth(date),
+      week: getWeekNumber(date),
+      day: date.getDay(),
     })
   }
 
@@ -144,6 +144,12 @@ export default function AddNewEntry() {
     height: translateValue.value,
     opacity: opacityValue.value,
   }))
+
+
+  const onChange = (_event: any, selectedDate?: Date) => {
+    if (!selectedDate) return
+    setDate(selectedDate)
+  }
 
   return (
     <Page
@@ -204,6 +210,24 @@ export default function AddNewEntry() {
           }}
         />
         <Padder />
+        <ThemedView
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <ThemedText>Date</ThemedText>
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={'date'}
+            is24Hour={true}
+            onChange={onChange}
+            key={date.toISOString()}
+          />
+        </ThemedView>
+        <Padder />
         <RecurringInputs
           isRecurring={isRecurring}
           setRecurring={setRecurring}
@@ -215,7 +239,7 @@ export default function AddNewEntry() {
         <Padder />
         {!isRecurring && subCategory ? (
           <AnimatedView entering={FadeInUp} exiting={FadeOutDown.duration(200)}>
-            <EntryPreview subCategory={subCategory} amount={amount} />
+            <EntryPreview subCategory={subCategory} amount={amount} description={dayjs(date).format('HH:mm - ddd D MMM')} />
             <Padder h={0.5} />
             <PreviewDisclaimer />
           </AnimatedView>

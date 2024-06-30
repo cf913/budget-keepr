@@ -9,8 +9,8 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker'
 import dayjs from 'dayjs'
 import { router } from 'expo-router'
-import { useMemo, useState } from 'react'
-import { Pressable } from 'react-native'
+import { useMemo } from 'react'
+import { Pressable, Switch } from 'react-native'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { ThemedButtonCompact } from './Buttons/ThemedButtonCompact'
 import ThemedCheckbox from './Inputs/ThemedCheckbox'
@@ -21,6 +21,7 @@ import PreviewDisclaimer from './Preview/PreviewDisclaimer'
 import { SubCategory } from './RecentEntries'
 import { ThemedText } from './ThemedText'
 import { AnimatedView, ThemedView } from './ThemedView'
+import { useThemeColor } from '@/hooks/useThemeColor'
 
 export type Frequency =
   | 'daily'
@@ -47,8 +48,9 @@ export default function RecurringInputs({
   amount: string
 }) {
   const { selectedFrequency } = useTempStore()
+  const tintColor = useThemeColor({}, 'tint')
 
-  const onChange = (event: any, selectedDate?: Date) => {
+  const onChange = (_event: any, selectedDate?: Date) => {
     if (!selectedDate) return
     setDate(selectedDate)
   }
@@ -67,13 +69,12 @@ export default function RecurringInputs({
   return (
     <ThemedView>
       <ThemedView
-        style={{ flexDirection: 'row', alignItems: 'center', zIndex: 2 }}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
       >
-        <ThemedCheckbox
-          checked={isRecurring}
-          onChange={() => setRecurring(!isRecurring)}
-        />
-        <Padder style={{ width: PADDING / 2 }} />
         <Pressable
           onPress={() => setRecurring(!isRecurring)}
           hitSlop={10}
@@ -81,6 +82,16 @@ export default function RecurringInputs({
         >
           <ThemedText>Recurring?</ThemedText>
         </Pressable>
+        <Switch
+          trackColor={{ true: tintColor }}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={() => setRecurring(!isRecurring)}
+          value={isRecurring}
+        />
+        {/* <ThemedCheckbox
+          checked={isRecurring}
+          onChange={() => setRecurring(!isRecurring)}
+        /> */}
       </ThemedView>
       <Padder />
       {isRecurring ? (
@@ -99,7 +110,7 @@ export default function RecurringInputs({
             />
           </ThemedView>
           <Padder />
-          <ThemedView
+          {/* <ThemedView
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -115,7 +126,7 @@ export default function RecurringInputs({
               onChange={onChange}
               key={date.toISOString()}
             />
-          </ThemedView>
+          </ThemedView> */}
           {subCategory ? (
             <>
               <Padder h={1} />

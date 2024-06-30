@@ -39,7 +39,6 @@ export default function Auth() {
 
     if (error) {
       Alert.alert(error.message)
-      throw error
     }
     setLoading(false)
   }

@@ -5,31 +5,35 @@ import { sortByKey, toMoney } from '@/utils/helpers'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useQuery } from '@tanstack/react-query'
 import React, { Fragment, useMemo, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, useWindowDimensions } from 'react-native'
 import Padder from '../Layout/Padder'
 import { Loader } from '../Loader'
 import { ThemedText } from '../ThemedText'
 import { AnimatedView, ThemedView } from '../ThemedView'
 import { FadeIn, FadeOut } from 'react-native-reanimated'
+import { ScrollView } from 'react-native-gesture-handler'
+import { BlurView } from 'expo-blur'
 
 type CardVersusProps = {
   counter: number
 }
 
 export default function CardVersus({ counter }: CardVersusProps) {
-
+  const dims = useWindowDimensions()
   const TIME_FRAMES = ['Week', 'Month', 'Year']
-  const [timeFrameIndex, setTimeFrameIndex] = useState(0)
+  const [maxAmountWidth, setMaxAmountWidth] = useState<number[] | null>(null)
+  const [headerHeight, setHeaderHeight] = useState<number | null>(null)
+  const [timeFrameIndex, setTimeFrameIndex] = useState(2) // TODO: reset to 0
 
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   const textColor = useThemeColor({}, 'text')
-  const tintColor = useThemeColor({}, 'mid')
+  const midColor = useThemeColor({}, 'mid')
 
   const timeframe = TIME_FRAMES[timeFrameIndex].toLowerCase()
 
   const weeklyData = useQuery({
     queryKey: ['getBreakdown', counter, timeframe],
-    queryFn: () => getBreakdown(null, timeframe)
+    queryFn: () => getBreakdown(null, timeframe),
   })
 
   const [data, total] = useMemo(() => {
@@ -45,21 +49,103 @@ export default function CardVersus({ counter }: CardVersusProps) {
     return [sortByKey(arr, 'value'), total]
   }, [weeklyData.data])
 
+  const normalizedWidth = (percentage: number) => {
+    if (!maxAmountWidth) return 0
+    // fullscreen - padding h content - padding h inner card - width of max amount - space between bar and max amount
+    const fullWidth =
+      dims.width -
+      2 * PADDING -
+      2 * (PADDING / 1.5) -
+      maxAmountWidth[0] -
+      PADDING
+    const width = (percentage * fullWidth) / maxAmountWidth[1]
+    return width
+  }
+
   return (
     <ThemedView style={[styles.card, { backgroundColor }]}>
       {/* EMPTY STATE */}
-      {!data?.length && !weeklyData.isLoading ? (
+      {!data?.length && !weeklyData.isLoading && headerHeight ? (
         <Fragment>
-          <ThemedText style={[styles.title, { color: tintColor }]}>
-            0 entries found this week. Congrats! 🎉
+          <Padder hv={headerHeight} />
+          <ThemedText style={[styles.title, { color: midColor }]}>
+            0 entries found this {TIME_FRAMES[timeFrameIndex]}. Congrats! 🎉
           </ThemedText>
           <Padder h={0.3} />
         </Fragment>
       ) : null}
-      <ThemedView style={{ width: '100%', backgroundColor: 'transparent' }}>
+      {/* WITH DATA */}
+      {data && data.length && headerHeight ? (
+        // TOP 4
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Padder hv={headerHeight} />
+          {data.map((item: any, index: number) => {
+            const percentage = (item.value / (total || 1)) * 100
+            return (
+              <ThemedView key={item.label} style={styles.inner}>
+                <ThemedText style={[styles.title, { color: textColor }]}>
+                  {item.label}
+                </ThemedText>
+                <Padder hv={1} />
+                {weeklyData.isLoading ? (
+                  <Loader size="small" />
+                ) : (
+                  <AnimatedView entering={FadeIn} exiting={FadeOut}>
+                    <ThemedView
+                      style={{
+                        width: '100%',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        backgroundColor: 'transparent',
+                      }}
+                    >
+                      <ThemedView
+                        style={{
+                          width: normalizedWidth(percentage),
+                          backgroundColor: item.frontColor,
+                          borderRadius: 6,
+                          height: PADDING,
+                        }}
+                      ></ThemedView>
+                      <ThemedText
+                        style={[styles.value, { color: textColor }]}
+                        onLayout={event => {
+                          if (index > 0) return
+                          const { width } = event.nativeEvent.layout
+                          setMaxAmountWidth([width, percentage])
+                        }}
+                      >
+                        {toMoney(item.value, true)}
+                      </ThemedText>
+                    </ThemedView>
+                    <Padder hv={8} />
+                  </AnimatedView>
+                )}
+              </ThemedView>
+            )
+          })}
+        </ScrollView>
+      ) : null}
+      <ThemedView
+        style={{
+          backgroundColor: 'transparent',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          padding: PADDING / 2,
+          zIndex: 2,
+        }}
+        onLayout={event => {
+          const { height } = event.nativeEvent.layout
+          setHeaderHeight(height - PADDING / 1.5) // card.paddingVertical
+        }}
+      >
         <SegmentedControl
           values={TIME_FRAMES}
           selectedIndex={timeFrameIndex}
+          backgroundColor={backgroundColor}
           onChange={(event: {
             nativeEvent: { selectedSegmentIndex: number }
           }) => {
@@ -67,46 +153,6 @@ export default function CardVersus({ counter }: CardVersusProps) {
           }}
         />
       </ThemedView>
-      {/* WITH DATA */}
-      {data && data.length
-        ? // TOP 4
-        data.map((item: any) => (
-          <ThemedView key={item.label} style={styles.inner}>
-            <ThemedText style={[styles.title, { color: item.frontColor }]}>
-              {item.label}
-            </ThemedText>
-            <Padder h={0.3} />
-            {weeklyData.isLoading ? (
-              <Loader size="small" />
-            ) : (
-              <AnimatedView
-                entering={FadeIn}
-                exiting={FadeOut}
-                style={{ alignItems: 'center' }}
-              >
-                <ThemedText style={[styles.value, { color: textColor }]}>
-                  {toMoney(item.value, true)}
-                </ThemedText>
-                <ThemedText
-                  style={[
-                    {},
-                    {
-                      color: textColor,
-                      opacity: 0.4,
-                      fontFamily: 'Space Mono',
-                      fontSize: 12,
-                      lineHeight: 18,
-                    },
-                  ]}
-                >
-                  {/* get percentage of value from total */}
-                  {((item.value / (total || 1)) * 100).toFixed(2)}%
-                </ThemedText>
-              </AnimatedView>
-            )}
-          </ThemedView>
-        ))
-        : null}
     </ThemedView>
   )
 }
@@ -116,17 +162,18 @@ const styles = StyleSheet.create({
     // ...STYLES.shadow,
     borderRadius: RADIUS,
     flexGrow: 1,
-    alignItems: 'center',
     paddingHorizontal: PADDING / 1.5,
     paddingVertical: PADDING / 1.5,
     width: '100%',
+    height: 0,
+    position: 'relative',
   },
   inner: {
     columnGap: PADDING,
     flex: 1,
     backgroundColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   title: {
     ...TYPO.small,

@@ -5,7 +5,7 @@ import Footer from '../Layout/Footer'
 import { AnimatedView, ThemedView } from '../ThemedView'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { Fragment, useState } from 'react'
-import { Easing, FadeIn, FadeOut, SlideInDown } from 'react-native-reanimated'
+import { Easing, FadeIn, FadeOut } from 'react-native-reanimated'
 import { Pressable, useWindowDimensions } from 'react-native'
 import SelectBudget from '../Selects/SelectBudget'
 import { PADDING, RADIUS, TYPO } from '@/constants/Styles'
@@ -85,7 +85,6 @@ export default function HomePageFooter() {
           {/* TOGGLEABLE MENU TOP */}
           {showMenu ? (
             <AnimatedView
-              // entering={SlideInDown.duration(200).easing(Easing.inOut(Easing.quad))}
               entering={entering}
               style={{
                 paddingVertical: PADDING,

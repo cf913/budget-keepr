@@ -1,19 +1,14 @@
 import Analytics from '@/components/Analytics'
-import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import HomePageFooter from '@/components/Footers/HomePageFooter'
 import Content from '@/components/Layout/Content'
-import Footer from '@/components/Layout/Footer'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import RecentEntries from '@/components/RecentEntries'
 import AllTimeAnalytics from '@/components/Screens/AllTimeAnalytics'
-import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 import { PADDING } from '@/constants/Styles'
-import { useThemeColor } from '@/hooks/useThemeColor'
 import { useLocalSettings } from '@/stores/localSettings'
-import { Feather } from '@expo/vector-icons'
-import { Redirect, router } from 'expo-router'
+import { Redirect } from 'expo-router'
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import PagerView from 'react-native-pager-view'
@@ -24,7 +19,6 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets()
 
   const [counter, setCounter] = useState(0)
-  const textColor = useThemeColor({}, 'text')
 
   if (!defaultBudget) return <Redirect href="select-budget-onboarding" />
 

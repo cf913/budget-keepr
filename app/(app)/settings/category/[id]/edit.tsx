@@ -33,15 +33,10 @@ export default function Container() {
     queryFn: () => getCategory(id),
   })
 
-
-  if (dataCategory.isLoading) return <Loader />
-
-  if (!dataCategory.data) return <ThemedText>Category not found</ThemedText>
-
-  return <CategoryEdit category={dataCategory.data} />
+  return <CategoryEdit category={dataCategory.data} isLoading={dataCategory.isLoading} />
 }
 
-function CategoryEdit({ category }: { category: Category }) {
+function CategoryEdit({ category, isLoading }: { category: Category | undefined, isLoading: boolean }) {
   const { defaultBudget } = useLocalSettings()
   const insets = useSafeAreaInsets()
   const [name, setName] = useState<string>(category?.name ?? '')
@@ -77,6 +72,11 @@ function CategoryEdit({ category }: { category: Category }) {
       alert('No default budget set')
       return
     }
+
+    if (!category) {
+      alert('Category not found')
+      return
+    }
     mutation.mutate({ name, color, id: category.id })
   }
 
@@ -99,7 +99,8 @@ function CategoryEdit({ category }: { category: Category }) {
         paddingBottom: insets.bottom,
       }}
     >
-      <KeyboardAvoidingView
+      {isLoading && <Loader />}
+      {!isLoading ? <KeyboardAvoidingView
         behavior="padding"
         style={{ flex: 1 }}
         keyboardVerticalOffset={HEIGHT.item + PADDING}
@@ -109,7 +110,6 @@ function CategoryEdit({ category }: { category: Category }) {
             value={name}
             placeholder="Restaurant, Shop, ..."
             onChangeText={setName}
-            autoFocus
           />
           <Padder h={0.5} />
           <ThemedView
@@ -145,7 +145,7 @@ function CategoryEdit({ category }: { category: Category }) {
           </ThemedView>
         </Content>
       </KeyboardAvoidingView>
-
+        : null}
       <Modal visible={showModal} animationType="slide">
         <Page>
           <Content>

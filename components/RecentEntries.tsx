@@ -140,6 +140,9 @@ export default function RecentEntries({
           return (
             <Swipeable
               key={entry.id}
+              // TODO: enable delete in RecentEntries Screen
+              enabled={false}
+
               renderRightActions={() => (
                 <RectButton
                   style={[

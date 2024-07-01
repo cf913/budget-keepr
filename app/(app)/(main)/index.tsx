@@ -39,6 +39,7 @@ export default function HomeScreen() {
             refreshing={false}
             onRefresh={onRefresh}
             withSettings
+            footer={<HomePageFooter />}
           >
             <Content style={{ flex: 1 }}>
               {/* ANALYTICS */}
@@ -63,7 +64,6 @@ export default function HomeScreen() {
           </Page>
         </ThemedView>
       </PagerView>
-      <HomePageFooter />
     </ThemedView>
   )
 }

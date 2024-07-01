@@ -5,7 +5,7 @@ import Footer from '../Layout/Footer'
 import { AnimatedView, ThemedView } from '../ThemedView'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { Fragment, useState } from 'react'
-import { Easing, FadeIn, FadeOut } from 'react-native-reanimated'
+import { Easing, FadeIn, FadeOut, SlideInDown } from 'react-native-reanimated'
 import { Pressable, useWindowDimensions } from 'react-native'
 import SelectBudget from '../Selects/SelectBudget'
 import { PADDING, RADIUS, TYPO } from '@/constants/Styles'
@@ -35,14 +35,14 @@ export default function HomePageFooter() {
     }
   }
 
-  const entering = FadeIn.duration(100).easing(Easing.inOut(Easing.quad))
+  const entering = SlideInDown.duration(200).easing(Easing.out(Easing.ease))
   const exiting = FadeOut.duration(50).easing(Easing.inOut(Easing.quad))
 
   return (
     <Fragment>
       {showBlur ? (
         <AnimatedView
-          entering={FadeIn.duration(200).easing(Easing.inOut(Easing.quad))}
+          entering={FadeIn.duration(150).easing(Easing.inOut(Easing.quad))}
           exiting={exiting}
           style={{
             height,
@@ -105,12 +105,12 @@ export default function HomePageFooter() {
                   <ThemedText style={{ ...TYPO.title_mini, textAlign: 'center' }}>Default Budget</ThemedText>
                   <Padder h={.5} />
                 </Content>
-                <SelectBudget callback={() => setTimeout(toggleMenu, 200)} />
+                <SelectBudget callback={toggleMenu} />
               </ThemedView>
             </AnimatedView>
           ) : null}
           {/* MENU BOTTOM */}
-          <ThemedView
+          {!showMenu ? <ThemedView
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -130,7 +130,7 @@ export default function HomePageFooter() {
               title="ADD NEW ENTRY"
               style={{ zIndex: 95 }}
             ></ThemedButton>
-          </ThemedView>
+          </ThemedView> : null}
         </ThemedView>
       </Footer>
     </Fragment>

@@ -10,6 +10,7 @@ export default function Footer({ children }: { children: React.ReactNode }) {
       style={{
         paddingBottom: insets.bottom || PADDING,
         backgroundColor: 'transparent',
+        zIndex: 99,
       }}
     >
       {children}

@@ -15,7 +15,7 @@ const Wrapper = ({
   onSelectItem,
   children,
 }: {
-  href?: ExpoRouter.Href
+  href?: string
   onSelectItem: (item: any) => void
   children: ReactNode
 }) => {
@@ -46,7 +46,7 @@ export default function ListItem({
 }: {
   item?: any
   onSelect?: (item: any) => void
-  href?: ExpoRouter.Href
+  href?: string
   title: string
   description?: string | null
   category?: Category

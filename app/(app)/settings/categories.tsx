@@ -1,23 +1,29 @@
-import {ThemedButton} from '@/components/Buttons/ThemedButton'
+import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
-import {Loader} from '@/components/Loader'
-import {ThemedText} from '@/components/ThemedText'
-import {getCategories} from '@/data/categories'
-import {useLocalSettings} from '@/stores/localSettings'
-import {isLastItem} from '@/utils/helpers'
-import {useQuery} from '@tanstack/react-query'
-import {router} from 'expo-router'
-import {useState} from 'react'
+import { Loader } from '@/components/Loader'
+import { ThemedText } from '@/components/ThemedText'
+import { getCategories } from '@/data/categories'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { useLocalSettings } from '@/stores/localSettings'
+import { isLastItem } from '@/utils/helpers'
+import { Feather } from '@expo/vector-icons'
+import { useQuery } from '@tanstack/react-query'
+import { router } from 'expo-router'
+import { useRef, useState } from 'react'
+import { Animated } from 'react-native'
+import { RectButton, Swipeable } from 'react-native-gesture-handler'
 
 export default function Categories() {
   const [refreshing, setRefreshing] = useState(false)
-  const {defaultBudget} = useLocalSettings()
+  const { defaultBudget } = useLocalSettings()
 
-  const {data, error, refetch, isLoading} = useQuery({
+  const textColor = useThemeColor({}, 'text')
+
+  const { data, error, refetch, isLoading } = useQuery({
     queryKey: ['categories'],
     queryFn: () => getCategories(defaultBudget?.id),
   })
@@ -25,6 +31,10 @@ export default function Categories() {
   if (error) {
     console.log('error', error.message)
     alert('Oops. ' + error.message)
+  }
+
+  const onEdit = (id: string) => {
+    router.push(`/settings/category/${id}/edit`)
   }
 
   return (
@@ -44,7 +54,7 @@ export default function Categories() {
           round
           onPress={() => router.push('/settings/category-create')}
           title=""
-          style={{zIndex: 99}}
+          style={{ zIndex: 99 }}
         ></ThemedButton>
         // ) : null
       }
@@ -55,17 +65,43 @@ export default function Categories() {
           <List>
             {(data || []).map((category, i) => {
               return (
-                <ListItem
-                  href={{
-                    pathname: '/settings/category/[id]',
-                    params: {id: category.id},
-                  }}
-                  title={category.name}
-                  right={category.sub_categories?.length}
+
+                <Swipeable
                   key={category.id}
-                  lastItem={isLastItem(data, i)}
-                  category={category}
-                />
+                  renderRightActions={() => (
+                    <RectButton
+                      style={[
+                        {},
+                        {
+                          width: 70,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        },
+                      ]}
+                      onPress={() => onEdit(category.id)}
+                    >
+                      <Animated.Text
+                        style={[
+                          // styles.actionText,
+                          {
+                            // transform: [{translateX: trans}],
+                          },
+                        ]}
+                      >
+                        <Feather name="edit" size={24} color={textColor} />
+                      </Animated.Text>
+                    </RectButton>
+                  )}
+                >
+                  <ListItem
+                    href={`/settings/category/${category.id}`}
+                    title={category.name}
+                    right={category.sub_categories?.length}
+                    key={category.id}
+                    lastItem={isLastItem(data, i)}
+                    category={category}
+                  />
+                </Swipeable>
               )
             })}
           </List>

@@ -1,4 +1,5 @@
-import { PADDING, TYPO } from '@/constants/Styles'
+import { TYPO } from '@/constants/Styles'
+import { useThemeColor } from '@/hooks/useThemeColor'
 import { useTempStore } from '@/stores/tempStore'
 import {
   capitalizeFirstLetter,
@@ -6,14 +7,12 @@ import {
   getTimeStringFromFrequency,
   toMoney,
 } from '@/utils/helpers'
-import DateTimePicker from '@react-native-community/datetimepicker'
 import dayjs from 'dayjs'
 import { router } from 'expo-router'
 import { useMemo } from 'react'
 import { Pressable, Switch } from 'react-native'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { ThemedButtonCompact } from './Buttons/ThemedButtonCompact'
-import ThemedCheckbox from './Inputs/ThemedCheckbox'
 import Padder from './Layout/Padder'
 import List from './Lists/List'
 import ListItem from './Lists/ListItem'
@@ -21,7 +20,6 @@ import PreviewDisclaimer from './Preview/PreviewDisclaimer'
 import { SubCategory } from './RecentEntries'
 import { ThemedText } from './ThemedText'
 import { AnimatedView, ThemedView } from './ThemedView'
-import { useThemeColor } from '@/hooks/useThemeColor'
 
 export type Frequency =
   | 'daily'

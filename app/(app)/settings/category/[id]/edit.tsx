@@ -4,15 +4,17 @@ import Content from '@/components/Layout/Content'
 import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import Spacer from '@/components/Layout/Spacer'
+import { Loader } from '@/components/Loader'
+import { Category } from '@/components/RecentEntries'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 import { HEIGHT, PADDING } from '@/constants/Styles'
-import { createCategory } from '@/data/categories'
+import { createCategory, getCategory, updateCategory } from '@/data/categories'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
-import { useMutation } from '@tanstack/react-query'
-import { router } from 'expo-router'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { router, useLocalSearchParams } from 'expo-router'
 import { useState } from 'react'
 import { KeyboardAvoidingView, Modal, Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -22,13 +24,31 @@ import ColorPicker, {
   Preview,
   Swatches,
 } from 'reanimated-color-picker'
-export default function CategoryCreate() {
+
+export default function Container() {
+  const { id } = useLocalSearchParams<{ id: string }>()
+
+  const dataCategory = useQuery({
+    queryKey: ['category', id],
+    queryFn: () => getCategory(id),
+  })
+
+
+  if (dataCategory.isLoading) return <Loader />
+
+  if (!dataCategory.data) return <ThemedText>Category not found</ThemedText>
+
+  return <CategoryEdit category={dataCategory.data} />
+}
+
+function CategoryEdit({ category }: { category: Category }) {
   const { defaultBudget } = useLocalSettings()
   const insets = useSafeAreaInsets()
-  const [name, setName] = useState('')
+  const [name, setName] = useState<string>(category?.name ?? '')
+  const [color, setColor] = useState(category?.color ?? '#000000')
+
   const [showModal, setShowModal] = useState(false)
 
-  const [color, setColor] = useState('#000000')
   const [tempColor, setTempColor] = useState(color)
 
   const midColor = useThemeColor({}, 'mid')
@@ -41,7 +61,7 @@ export default function CategoryCreate() {
   }
 
   const mutation = useMutation({
-    mutationFn: createCategory,
+    mutationFn: updateCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       router.back()
@@ -57,7 +77,7 @@ export default function CategoryCreate() {
       alert('No default budget set')
       return
     }
-    mutation.mutate({ name, budget_id: defaultBudget.id, color })
+    mutation.mutate({ name, color, id: category.id })
   }
 
   const onSaveColor = () => {
@@ -73,8 +93,7 @@ export default function CategoryCreate() {
   return (
     <Page
       back
-      title="New Category"
-      withHeader
+      title="Edit Category"
       style={{
         position: 'relative',
         paddingBottom: insets.bottom,

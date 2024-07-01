@@ -12,7 +12,6 @@ import { ThemedText } from '../ThemedText'
 import { AnimatedView, ThemedView } from '../ThemedView'
 import { FadeIn, FadeOut } from 'react-native-reanimated'
 import { ScrollView } from 'react-native-gesture-handler'
-import { BlurView } from 'expo-blur'
 
 type CardVersusProps = {
   counter: number
@@ -23,8 +22,9 @@ export default function CardVersus({ counter }: CardVersusProps) {
   const TIME_FRAMES = ['Week', 'Month', 'Year']
   const [maxAmountWidth, setMaxAmountWidth] = useState<number[] | null>(null)
   const [headerHeight, setHeaderHeight] = useState<number | null>(null)
-  const [timeFrameIndex, setTimeFrameIndex] = useState(2) // TODO: reset to 0
+  const [timeFrameIndex, setTimeFrameIndex] = useState(1)
 
+  const tintColor = useThemeColor({}, 'tint')
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   const textColor = useThemeColor({}, 'text')
   const midColor = useThemeColor({}, 'mid')
@@ -109,7 +109,7 @@ export default function CardVersus({ counter }: CardVersusProps) {
                         }}
                       ></ThemedView>
                       <ThemedText
-                        style={[styles.value, { color: textColor }]}
+                        style={{ color: tintColor }}
                         onLayout={event => {
                           if (index > 0) return
                           const { width } = event.nativeEvent.layout

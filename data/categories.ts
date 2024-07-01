@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import { getSupabaseUser } from './api'
+import { Category } from '@/components/RecentEntries'
 
 export const getCategory = async (id?: string) => {
   const user = await getSupabaseUser()
@@ -57,12 +58,39 @@ export interface CategoryInput {
   color: string
 }
 
+export interface CategoryUpdateInput {
+  id: string
+  name?: string
+  color?: string
+}
+
 export const createCategory = async (category: CategoryInput) => {
   const user = await getSupabaseUser()
   if (!user) return
 
   const { data, error } = await supabase.from('categories').insert(category)
 
+  if (error) throw error
+
+  return data
+}
+
+
+export const updateCategory = async (category: CategoryUpdateInput) => {
+  const user = await getSupabaseUser()
+  if (!user) throw new Error('No user found')
+
+  if (!category.id) throw new Error('No recurring id provided')
+
+  let { data, error } = await supabase
+    .from('categories')
+    .update(category)
+    .eq('id', category.id)
+    .select()
+    .returns<Category>()
+
+
+  console.log('data', data)
   if (error) throw error
 
   return data

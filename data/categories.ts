@@ -54,6 +54,7 @@ export interface CategoryInput {
   id?: string
   name: string
   budget_id: string
+  color: string
 }
 
 export const createCategory = async (category: CategoryInput) => {

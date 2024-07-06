@@ -1,13 +1,13 @@
-import { Budget, useLocalSettings } from "@/stores/localSettings"
-import { isLastItem } from "@/utils/helpers"
-import ErrorContainer from "../ErrorContainer"
-import Content from "../Layout/Content"
-import List from "../Lists/List"
-import ListItem from "../Lists/ListItem"
-import { Loader } from "../Loader"
-import { getBudgets } from "@/data/queries"
-import { queryClient } from "@/lib/tanstack"
-import { useQuery } from "@tanstack/react-query"
+import { Budget, useLocalSettings } from '@/stores/localSettings'
+import { isLastItem } from '@/utils/helpers'
+import ErrorContainer from '../ErrorContainer'
+import Content from '../Layout/Content'
+import List from '../Lists/List'
+import ListItem from '../Lists/ListItem'
+import { Loader } from '../Loader'
+import { getBudgets } from '@/data/queries'
+import { queryClient } from '@/lib/tanstack'
+import { useQuery } from '@tanstack/react-query'
 
 type SelectBudgetProps = {
   callback?: () => void
@@ -29,7 +29,6 @@ export default function SelectBudget({ callback }: SelectBudgetProps) {
   }
 
   return (
-
     <Content>
       {!isLoading && error ? (
         <ErrorContainer error={error.message} onRetry={refetch} />

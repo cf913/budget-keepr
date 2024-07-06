@@ -1,12 +1,17 @@
+import { Category } from '@/components/RecentEntries'
 import { Frequency } from '@/components/RecurringInputs'
 import React from 'react'
 
 const TempStoreContext = React.createContext<{
   selectedFrequency: Frequency,
   setSelectedFrequency: (frequency: Frequency) => void
+  selectedCategory: Category | null
+  setSelectedCategory: (category: Category | null) => void
 }>({
   selectedFrequency: 'monthly',
   setSelectedFrequency: () => { },
+  selectedCategory: null,
+  setSelectedCategory: () => { },
 })
 
 export function useTempStore() {
@@ -21,12 +26,15 @@ export function useTempStore() {
 
 export function TempStoreProvider({ children }: { children: React.ReactNode }) {
   const [selectedFrequency, setSelectedFrequency] = React.useState<Frequency>('monthly')
+  const [selectedCategory, setSelectedCategory] = React.useState<Category | null>(null)
 
   return (
     <TempStoreContext.Provider
       value={{
         selectedFrequency,
         setSelectedFrequency,
+        selectedCategory,
+        setSelectedCategory,
       }}
     >
       {children}

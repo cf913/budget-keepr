@@ -62,6 +62,7 @@ function CategorySuggestionsScreen({
       includeMatches: true,
       minMatchCharLength: 0,
       keys: ['name'],
+      threshold: 0.3,
     }
 
     const fuse = new Fuse(data, options)

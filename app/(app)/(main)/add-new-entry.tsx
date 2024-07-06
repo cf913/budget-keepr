@@ -14,16 +14,23 @@ import { ThemedText } from '@/components/ThemedText'
 import { AnimatedView, ThemedView } from '@/components/ThemedView'
 import { createEntry } from '@/data/mutations'
 import { createRecurring } from '@/data/recurring'
+import { useColors } from '@/hooks/useColors'
+import { useThemeColor } from '@/hooks/useThemeColor'
 import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { useTempStore } from '@/stores/tempStore'
-import { getDayJSFrequencyFromString, getSQLFriendlyMonth, getWeekNumber } from '@/utils/helpers'
+import {
+  getDayJSFrequencyFromString,
+  getSQLFriendlyMonth,
+  getWeekNumber,
+} from '@/utils/helpers'
+import { Feather } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useMutation } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { router } from 'expo-router'
 import React, { useRef, useState } from 'react'
-import { Keyboard, TextInput } from 'react-native'
+import { Keyboard, Pressable, TextInput } from 'react-native'
 import {
   FadeInUp,
   FadeOutDown,
@@ -40,6 +47,7 @@ export default function AddNewEntry() {
   const insets = useSafeAreaInsets()
   const translateValue = useSharedValue(48 + 8) // 48 is the height of the input and 8 is the padding
   const opacityValue = useSharedValue(1)
+  const { textColor, tintColor, bgColor2 } = useColors()
 
   // stores
   const { defaultBudget } = useLocalSettings()
@@ -145,7 +153,6 @@ export default function AddNewEntry() {
     opacity: opacityValue.value,
   }))
 
-
   const onChange = (_event: any, selectedDate?: Date) => {
     if (!selectedDate) return
     setDate(selectedDate)
@@ -179,26 +186,53 @@ export default function AddNewEntry() {
         </AnimatedView>
 
         {/* CATEGORY */}
-        <ThemedInput
-          ref={subCategoryInput}
-          value={subCategorySearchText}
-          placeholder="Name (Coles, Maccas)"
-          onChangeText={setSubCategorySearchText}
-          returnKeyType="search"
-          onInputFocus={() => {
-            opacityValue.value = withTiming(0, { duration: 200 })
-            translateValue.value = withTiming(0, { duration: 300 })
-            setSuggestionsVisible(true)
-          }}
-          onInputBlur={() => {
-            opacityValue.value = withTiming(1, { duration: 300 })
-            translateValue.value = withDelay(
-              100,
-              withTiming(48 + 8, { duration: 200 }),
-            )
-            setSuggestionsVisible(false)
-          }}
-        />
+        <ThemedView style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <ThemedView style={{ flex: 1 }}>
+            <ThemedInput
+              ref={subCategoryInput}
+              value={subCategorySearchText}
+              placeholder="Name (Coles, Maccas)"
+              onChangeText={setSubCategorySearchText}
+              returnKeyType="search"
+              onInputFocus={() => {
+                opacityValue.value = withTiming(0, { duration: 200 })
+                translateValue.value = withTiming(0, { duration: 300 })
+                setSuggestionsVisible(true)
+              }}
+              onInputBlur={() => {
+                opacityValue.value = withTiming(1, { duration: 300 })
+                translateValue.value = withDelay(
+                  100,
+                  withTiming(48 + 8, { duration: 200 }),
+                )
+                setSuggestionsVisible(false)
+              }}
+            />
+          </ThemedView>
+          <Padder w={0.5} />
+          <Pressable
+            onPress={() => {
+              console.log('before')
+              router.navigate('/new-category')
+              console.log('after')
+            }}
+          >
+            <ThemedView
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                height: 48,
+                borderRadius: 8,
+                paddingHorizontal: 16,
+                marginBottom: 8,
+                // borderColor: tintColor,
+                backgroundColor: bgColor2,
+              }}
+            >
+              <Feather name="plus" size={24} color={textColor} />
+            </ThemedView>
+          </Pressable>
+        </ThemedView>
 
         <CategorySuggestions
           onSelect={onSelect}
@@ -239,7 +273,11 @@ export default function AddNewEntry() {
         <Padder />
         {!isRecurring && subCategory ? (
           <AnimatedView entering={FadeInUp} exiting={FadeOutDown.duration(200)}>
-            <EntryPreview subCategory={subCategory} amount={amount} description={dayjs(date).format('HH:mm - ddd D MMM')} />
+            <EntryPreview
+              subCategory={subCategory}
+              amount={amount}
+              description={dayjs(date).format('HH:mm - ddd D MMM')}
+            />
             <Padder h={0.5} />
             <PreviewDisclaimer />
           </AnimatedView>

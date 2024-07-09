@@ -182,9 +182,11 @@ export default function AddNewEntry() {
             keyboardType="decimal-pad"
             autoFocus
             returnKeyType="done"
-            onSubmitEditing={() =>
-              subCategory ? null : subCategoryInput?.current?.focus()
-            }
+            onSubmitEditing={() => {
+              subCategory
+                ? Keyboard.dismiss()
+                : subCategoryInput?.current?.focus()
+            }}
             blurOnSubmit={false}
           />
         </AnimatedView>
@@ -205,7 +207,7 @@ export default function AddNewEntry() {
               }}
               onInputBlur={() => {
                 opacityValue.value = withTiming(1, { duration: 300 })
-                opacityValue.value = withDelay(
+                translateValue.value = withDelay(
                   100,
                   withTiming(48 + 8, { duration: 200 }),
                 )

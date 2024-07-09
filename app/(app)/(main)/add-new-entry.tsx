@@ -15,7 +15,6 @@ import { AnimatedView, ThemedView } from '@/components/ThemedView'
 import { createEntry } from '@/data/mutations'
 import { createRecurring } from '@/data/recurring'
 import { useColors } from '@/hooks/useColors'
-import { useThemeColor } from '@/hooks/useThemeColor'
 import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { useTempStore } from '@/stores/tempStore'
@@ -47,7 +46,7 @@ export default function AddNewEntry() {
   const insets = useSafeAreaInsets()
   const translateValue = useSharedValue(48 + 8) // 48 is the height of the input and 8 is the padding
   const opacityValue = useSharedValue(1)
-  const { textColor, tintColor, bgColor2 } = useColors()
+  const { textColor, bgColor2 } = useColors()
 
   // stores
   const { defaultBudget } = useLocalSettings()

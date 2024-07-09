@@ -25,7 +25,7 @@ export default function CategorySuggestions({
 }) {
   const { defaultBudget } = useLocalSettings()
   const { data, error, isLoading } = useQuery({
-    queryKey: ['sub_categories'],
+    queryKey: ['sub_categories', defaultBudget?.id],
     queryFn: () => getSubCategories({ budget_id: defaultBudget?.id }),
   })
 

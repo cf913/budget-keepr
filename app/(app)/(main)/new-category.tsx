@@ -7,14 +7,19 @@ import Page from '@/components/Layout/Page'
 import Spacer from '@/components/Layout/Spacer'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
+import { createSubCategory } from '@/data/sub_categories'
+import { queryClient } from '@/lib/tanstack'
+import { useLocalSettings } from '@/stores/localSettings'
 import { useTempStore } from '@/stores/tempStore'
 import { capitalizeFirstLetter } from '@/utils/helpers'
+import { useMutation } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function NewCategory() {
   const { selectedCategory } = useTempStore()
+  const { defaultBudget } = useLocalSettings()
   const insets = useSafeAreaInsets()
 
   const [name, setName] = useState<string>('')
@@ -24,14 +29,36 @@ export default function NewCategory() {
     return router.navigate('/(main)/select-category')
   }
 
+  const mutation = useMutation({
+    mutationFn: createSubCategory,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['sub_categories', defaultBudget?.id],
+      })
+      router.back()
+    },
+    onError: error => {
+      // throw new Error(error.message)
+      alert('Oops.. ' + error.message)
+    },
+    onSettled: () => {
+      setSaving(false)
+    },
+  })
+
   const handleSave = async () => {
     if (!name) return alert('Nice try! Looks like you forgot to add a name :)')
-    // set loading on button
+    if (!selectedCategory?.id) return alert('Select a parent category')
+    if (!defaultBudget) return alert('Whoops, no default budget found')
     setSaving(true)
+
+    mutation.mutate({
+      name,
+      parent_id: selectedCategory.id,
+      budget_id: defaultBudget.id,
+    })
+    // set loading on button
     // insert query
-    await new Promise(r => setTimeout(r, 1000))
-    setSaving(false)
-    return router.back()
   }
 
   return (
@@ -55,7 +82,9 @@ export default function NewCategory() {
           <ThemedText>Category</ThemedText>
           <ThemedButtonCompact
             onPress={onSelectParent}
-            title={capitalizeFirstLetter(selectedCategory?.name || 'Select Category')}
+            title={capitalizeFirstLetter(
+              selectedCategory?.name || 'Select Category',
+            )}
             style={{ borderColor: selectedCategory?.color, borderWidth: 2 }}
           />
         </ThemedView>
@@ -73,7 +102,11 @@ export default function NewCategory() {
       <Content>
         <ThemedView style={{ alignItems: 'center' }}>
           <Padder />
-          <ThemedButton onPress={handleSave} title="Save Sub Category" loading={saving} />
+          <ThemedButton
+            onPress={handleSave}
+            title="Save Sub Category"
+            loading={saving}
+          />
         </ThemedView>
       </Content>
     </Page>

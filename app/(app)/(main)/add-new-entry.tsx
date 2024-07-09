@@ -158,6 +158,10 @@ export default function AddNewEntry() {
     setDate(selectedDate)
   }
 
+  const goToNewCategory = () => {
+    router.navigate('/new-category')
+  }
+
   return (
     <Page
       down
@@ -201,7 +205,7 @@ export default function AddNewEntry() {
               }}
               onInputBlur={() => {
                 opacityValue.value = withTiming(1, { duration: 300 })
-                translateValue.value = withDelay(
+                opacityValue.value = withDelay(
                   100,
                   withTiming(48 + 8, { duration: 200 }),
                 )
@@ -210,13 +214,7 @@ export default function AddNewEntry() {
             />
           </ThemedView>
           <Padder w={0.5} />
-          <Pressable
-            onPress={() => {
-              console.log('before')
-              router.navigate('/new-category')
-              console.log('after')
-            }}
-          >
+          <Pressable onPress={goToNewCategory}>
             <ThemedView
               style={{
                 flexDirection: 'row',
@@ -238,10 +236,7 @@ export default function AddNewEntry() {
           onSelect={onSelect}
           searchText={subCategorySearchText}
           visible={suggestionsVisible}
-          onAddNew={() => {
-            router.back()
-            router.navigate('/settings/categories')
-          }}
+          onAddNew={goToNewCategory}
         />
         <Padder />
         <ThemedView

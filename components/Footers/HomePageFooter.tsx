@@ -5,7 +5,17 @@ import Footer from '../Layout/Footer'
 import { AnimatedView, ThemedView } from '../ThemedView'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { Fragment, useState } from 'react'
-import { Easing, FadeIn, FadeOut, SlideInDown, useAnimatedStyle, useSharedValue, withDecay } from 'react-native-reanimated'
+import {
+  Easing,
+  FadeIn,
+  FadeOut,
+  SlideInDown,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withDecay,
+  withTiming,
+} from 'react-native-reanimated'
 import { Pressable, useWindowDimensions } from 'react-native'
 import SelectBudget from '../Selects/SelectBudget'
 import { PADDING, RADIUS, TYPO } from '@/constants/Styles'
@@ -43,22 +53,38 @@ export default function HomePageFooter() {
       offset.value += event.changeY
     })
     .onEnd(() => { })
-    .onFinalize((event) => {
-      offset.value = withDecay({
-        velocity: event.velocityY,
-        rubberBandEffect: true,
-        clamp: [
-          0,
-          0
-        ],
-      })
+    .onFinalize(event => {
+      if (event.translationY > 30) {
+        if (event.velocityY > 200) {
+          offset.value = withDecay(
+            {
+              velocity: event.velocityY,
+              rubberBandEffect: true,
+              clamp: [300, 400],
+            },
+            () => {
+              runOnJS(toggleMenu)()
+            },
+          )
+        } else {
+          offset.value = withTiming(300, { duration: 200 }, () => {
+            runOnJS(toggleMenu)()
+          })
+        }
+      } else {
+        offset.value = withDecay({
+          velocity: event.velocityY,
+          rubberBandEffect: true,
+          clamp: [0, 0],
+        })
+      }
     })
 
   const entering = SlideInDown.duration(200).easing(Easing.out(Easing.ease))
   const exiting = FadeOut.duration(50).easing(Easing.inOut(Easing.quad))
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: offset.value }]
+    transform: [{ translateY: offset.value }],
   }))
 
   return (
@@ -78,9 +104,7 @@ export default function HomePageFooter() {
             zIndex: 97,
           }}
         >
-          <BlurView
-            style={{ flex: 1 }}
-          ></BlurView>
+          <BlurView style={{ flex: 1 }}></BlurView>
         </AnimatedView>
       ) : null}
       {showBlur ? (
@@ -95,8 +119,7 @@ export default function HomePageFooter() {
               left: 0,
               zIndex: 97,
             }}
-          >
-          </ThemedView>
+          ></ThemedView>
         </Pressable>
       ) : null}
       <Footer>
@@ -116,46 +139,52 @@ export default function HomePageFooter() {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   backgroundColor: 'transparent',
-                  ...animatedStyle
+                  ...animatedStyle,
                 }}
               >
                 <ThemedView
                   style={{
                     paddingVertical: PADDING,
                     flex: 1,
-                    borderRadius: RADIUS + 4
+                    borderRadius: RADIUS + 4,
                   }}
                 >
                   <Content>
-                    <ThemedText style={{ ...TYPO.title_mini, textAlign: 'center' }}>Default Budget</ThemedText>
-                    <Padder h={.5} />
+                    <ThemedText
+                      style={{ ...TYPO.title_mini, textAlign: 'center' }}
+                    >
+                      Default Budget
+                    </ThemedText>
+                    <Padder h={0.5} />
                   </Content>
                   <SelectBudget callback={toggleMenu} />
                 </ThemedView>
               </AnimatedView>
             ) : null}
             {/* MENU BOTTOM */}
-            {!showMenu ? <ThemedView
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                backgroundColor: 'transparent',
-              }}
-            >
-              <ThemedButton
-                round
-                icon={<Feather name="list" size={24} color={textColor} />}
-                onPress={toggleMenu}
-                title="BUDGET"
-                style={{ zIndex: 99 }}
-              ></ThemedButton>
-              <ThemedButton
-                round
-                onPress={() => router.navigate('add-new-entry')}
-                title="ADD NEW ENTRY"
-                style={{ zIndex: 95 }}
-              ></ThemedButton>
-            </ThemedView> : null}
+            {!showMenu ? (
+              <ThemedView
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  backgroundColor: 'transparent',
+                }}
+              >
+                <ThemedButton
+                  round
+                  icon={<Feather name="list" size={24} color={textColor} />}
+                  onPress={toggleMenu}
+                  title="BUDGET"
+                  style={{ zIndex: 99 }}
+                ></ThemedButton>
+                <ThemedButton
+                  round
+                  onPress={() => router.navigate('add-new-entry')}
+                  title="ADD NEW ENTRY"
+                  style={{ zIndex: 95 }}
+                ></ThemedButton>
+              </ThemedView>
+            ) : null}
           </ThemedView>
         </GestureDetector>
       </Footer>

@@ -60,10 +60,6 @@ export const getRecurrings = async (
 
   if (!budget_id) throw new Error('No budget_id provided')
 
-  console.log('FETCHING RECURRINGS')
-
-  console.log('filters', filters)
-
   let query = supabase
     .from('recurring')
     .select(
@@ -80,7 +76,8 @@ export const getRecurrings = async (
         ),
         category:category_id(
           id,
-          name
+          name,
+          color
         ),
         archived
       `,
@@ -89,8 +86,6 @@ export const getRecurrings = async (
 
   const cleanFilters = filters || {}
   const { active, archived } = cleanFilters
-
-  console.log('cleanFilters', cleanFilters)
 
   if (typeof active !== 'undefined')
     query = query.eq('active', active)

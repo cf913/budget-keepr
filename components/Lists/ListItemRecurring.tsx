@@ -7,6 +7,7 @@ import { useMemo, useRef } from 'react'
 import { Animated } from 'react-native'
 import { RectButton, Swipeable } from 'react-native-gesture-handler'
 import ListItem from './ListItem'
+import { toMoney } from '@/utils/helpers'
 
 interface ListItemRecurringProps {
   recurring: Recurring
@@ -36,7 +37,9 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
 
     const verb = isExpired ? 'Expired on' : isExpiring ? 'Expires' : 'Renews'
 
-    const listItemRight = isExpired ? 'Expired' : recurring.active ? 'Active' : 'Inactive'
+    // const listItemRightRaw = isExpired ? 'Expired' : recurring.active ? 'Active' : 'Inactive'
+
+    const listItemRight = toMoney(recurring.amount)
 
     return [
       isExpired,
@@ -122,6 +125,7 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
         key={recurring.id}
         lastItem={lastItem}
         description={listItemDescription}
+        category={recurring.category}
       />
     </Swipeable>
   )

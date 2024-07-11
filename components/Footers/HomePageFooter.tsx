@@ -44,6 +44,7 @@ export default function HomePageFooter() {
       // hide menu, then hide blur
       setShowMenu(false)
       setTimeout(() => setShowBlur(false), 51)
+      setTimeout(() => offset.value = 0, 100)
     }
   }
 

@@ -54,16 +54,13 @@ export const createRecurring = async (recurring: RecurringInput) => {
 export const getRecurrings = async (
   budget_id?: string,
   filters?: { active?: boolean; archived?: boolean },
+  limit?: number,
 ): Promise<Recurring[]> => {
   const user = await getSupabaseUser()
   if (!user) throw new Error('No user found')
 
-  if (!budget_id) throw new Error('No budget_id provided')
-
-  let query = supabase
-    .from('recurring')
-    .select(
-      `
+  let query = supabase.from('recurring').select(
+    `
         id,
         next_at,
         created_at,
@@ -81,19 +78,21 @@ export const getRecurrings = async (
         ),
         archived
       `,
-    )
-    .eq('budget_id', budget_id)
+  )
+
+  if (budget_id) query = query.eq('budget_id', budget_id)
 
   const cleanFilters = filters || {}
   const { active, archived } = cleanFilters
 
-  if (typeof active !== 'undefined')
-    query = query.eq('active', active)
+  if (typeof active !== 'undefined') query = query.eq('active', active)
 
   if (typeof archived !== 'undefined')
     query = query
       .eq('archived', archived)
       .order('next_at', { ascending: !archived })
+
+  if (limit) query = query.order('next_at', { ascending: true }).limit(limit)
 
   const { data, error } = await query.returns<Recurring[]>()
 

@@ -6,6 +6,7 @@ import Content from '../Layout/Content'
 import Padder from '../Layout/Padder'
 import Page from '../Layout/Page'
 import CardVersusAll from '../Cards/CardVersusAll'
+import RecentRecurrings from '../RecentRecurrings'
 
 export default function AllTimeAnalytics() {
   const insets = useSafeAreaInsets()
@@ -22,6 +23,8 @@ export default function AllTimeAnalytics() {
         <Analytics {...{ counter }} />
         <Padder h={2 / 3} />
         <CardVersusAll counter={counter} />
+        <Padder h={2 / 3} />
+        <RecentRecurrings />
         <Padder />
         <Padder style={{ height: insets.bottom ? insets.bottom : PADDING }} />
       </Content>

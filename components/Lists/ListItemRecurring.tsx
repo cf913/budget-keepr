@@ -17,11 +17,12 @@ interface ListItemRecurringProps {
     recurringType: RecurringUpdateType,
     recurring: RecurringUpdateInput,
   ) => void
+  enabled?: boolean
 }
 
 export default function ListItemRecurring(props: ListItemRecurringProps) {
   const ref = useRef<Swipeable>(null)
-  const { recurring, lastItem, onUpdate } = props
+  const { recurring, lastItem, onUpdate, enabled = true } = props
 
   const bgColor = useThemeColor({}, 'bg_secondary')
   const tintColor = useThemeColor({}, 'tint')
@@ -48,8 +49,6 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
     ]
   }, [recurring])
 
-
-
   const onUpdateActive = () => {
     onUpdate('active', {
       id: recurring.id,
@@ -70,6 +69,7 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
     <Swipeable
       ref={ref}
       key={recurring.id}
+      enabled={enabled}
       containerStyle={{ backgroundColor: bgColor }}
       renderRightActions={() =>
         isExpired ? null : (

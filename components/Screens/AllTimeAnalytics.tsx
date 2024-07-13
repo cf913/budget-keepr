@@ -16,13 +16,7 @@ export default function AllTimeAnalytics() {
   }
 
   return (
-    <Page
-      scroll
-      title={'Overview'}
-      refreshing={false}
-      onRefresh={onRefresh}
-      withSettings
-    >
+    <Page scroll title={'Overview'} refreshing={false} onRefresh={onRefresh}>
       <Content style={{ flex: 1 }}>
         {/* ANALYTICS */}
         <Analytics {...{ counter }} />

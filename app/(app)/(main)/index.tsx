@@ -13,6 +13,7 @@ import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import PagerView from 'react-native-pager-view'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Settings from '../settings'
 
 export default function HomeScreen() {
   const { defaultBudget } = useLocalSettings()
@@ -26,6 +27,7 @@ export default function HomeScreen() {
     setCounter(prev => prev + 1)
   }
 
+  // TODO: make pages lazy load
   return (
     <ThemedView style={styles.container}>
       <PagerView style={styles.container} initialPage={1}>
@@ -38,7 +40,6 @@ export default function HomeScreen() {
             title={defaultBudget.name}
             refreshing={false}
             onRefresh={onRefresh}
-            withSettings
             footer={<HomePageFooter />}
           >
             <Content style={{ flex: 1 }}>
@@ -63,6 +64,9 @@ export default function HomeScreen() {
             </Content>
           </Page>
         </ThemedView>
+        <ThemedView style={styles.page} key="2">
+          <Settings />
+        </ThemedView>
       </PagerView>
     </ThemedView>
   )
@@ -77,4 +81,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 })
-

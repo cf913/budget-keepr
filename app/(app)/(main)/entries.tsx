@@ -6,17 +6,21 @@ import ListItem from '@/components/Lists/ListItem'
 import ListItemSkeleton from '@/components/Lists/ListItemSkeleton'
 import { Loader } from '@/components/Loader'
 import { ThemedView } from '@/components/ThemedView'
-import { HEIGHT, PADDING } from '@/constants/Styles'
+import { HEIGHT, PADDING, RADIUS } from '@/constants/Styles'
 import { getEntries } from '@/data/entries'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import Toasty from '@/lib/Toasty'
 import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { toMoney } from '@/utils/helpers'
+import { Feather } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import React, { useMemo } from 'react'
+import { router } from 'expo-router'
+import React, { Fragment, useMemo } from 'react'
+import { Animated } from 'react-native'
+import { RectButton, Swipeable } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const PAGE_SIZE = 18
@@ -25,6 +29,7 @@ export default function Entries() {
   const insets = useSafeAreaInsets()
   const { defaultBudget } = useLocalSettings()
   const textColor = useThemeColor({}, 'text')
+  const backgroundColor = useThemeColor({}, 'bg_secondary')
 
   const {
     data: { pages, pageParams } = { pages: [], pageParams: [] },
@@ -58,6 +63,10 @@ export default function Entries() {
   if (error) Toasty.error(error.message)
 
   const data = useMemo(() => pages.flat(), [pages])
+
+  const onEdit = (id: string) => {
+    alert('GO TO EDIT ENTRY')
+  }
 
   return (
     <Page
@@ -105,19 +114,96 @@ export default function Entries() {
                 renderItem={({ item, index }) => {
                   if (!item) return null
                   return (
-                    <ListItem
+                    <Swipeable
                       key={item.id}
-                      firstItem={index === 0}
-                      lastItem={index === data.length - 1}
-                      href={'entries'}
-                      showHrefIcon={false}
-                      title={item.sub_category?.name}
-                      description={dayjs(item.created_at).format(
-                        'HH:mm - ddd D MMM',
+                      containerStyle={[
+                        {
+                          backgroundColor,
+                        },
+                        index === 0
+                          ? {
+                            borderTopLeftRadius: RADIUS,
+                            borderTopRightRadius: RADIUS,
+                          }
+                          : undefined,
+                        index === data.length - 1
+                          ? {
+                            borderBottomLeftRadius: RADIUS,
+                            borderBottomRightRadius: RADIUS,
+                          }
+                          : undefined,
+                      ]}
+                      renderRightActions={() => (
+                        <Fragment>
+                          <RectButton
+                            // EDIT BUTTON
+                            style={[
+                              {},
+                              {
+                                width: 50,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor,
+                              },
+                            ]}
+                            onPress={() => onEdit(item.id)}
+                          >
+                            <Animated.Text
+                              style={[
+                                // styles.actionText,
+                                {
+                                  // transform: [{translateX: trans}],
+                                },
+                              ]}
+                            >
+                              <Feather
+                                name="edit"
+                                size={24}
+                                color={textColor}
+                              />
+                            </Animated.Text>
+                          </RectButton>
+                          <RectButton
+                            // DELETE BUTTON
+                            style={[
+                              {},
+                              {
+                                width: 50,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor,
+                              },
+                            ]}
+                            onPress={() => onEdit(item.id)}
+                          >
+                            <Animated.Text
+                              style={[
+                                // styles.actionText,
+                                {
+                                  // transform: [{translateX: trans}],
+                                },
+                              ]}
+                            >
+                              <Feather name="trash-2" size={24} color={'red'} />
+                            </Animated.Text>
+                          </RectButton>
+                        </Fragment>
                       )}
-                      category={item.category}
-                      right={toMoney(item.amount)}
-                    />
+                    >
+                      <ListItem
+                        key={item.id}
+                        firstItem={index === 0}
+                        lastItem={index === data.length - 1}
+                        href={'entries'}
+                        showHrefIcon={false}
+                        title={item.sub_category?.name}
+                        description={dayjs(item.created_at).format(
+                          'HH:mm - ddd D MMM',
+                        )}
+                        category={item.category}
+                        right={toMoney(item.amount)}
+                      />
+                    </Swipeable>
                   )
                 }}
                 ListFooterComponent={

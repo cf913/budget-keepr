@@ -1,8 +1,6 @@
 import { PADDING, TYPO } from '@/constants/Styles'
 import { Recurring, getRecurrings } from '@/data/recurring'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { useLocalSettings } from '@/stores/localSettings'
-import { useQuery } from '@tanstack/react-query'
 import { BlurView } from 'expo-blur'
 import { ScrollView } from 'react-native-gesture-handler'
 import Padder from './Layout/Padder'
@@ -10,8 +8,9 @@ import List from './Lists/List'
 import ListItemRecurring from './Lists/ListItemRecurring'
 import ListItemSkeleton from './Lists/ListItemSkeleton'
 import { ThemedText } from './ThemedText'
+import { useQuery } from '@tanstack/react-query'
 
-export default function RecentRecurrings() {
+export default function RecentRecurrings({ id }: { id?: string }) {
   const textColor = useThemeColor({}, 'text')
 
   const {
@@ -21,8 +20,8 @@ export default function RecentRecurrings() {
     refetch,
     isRefetching,
   } = useQuery({
-    queryKey: ['recurrings'],
-    queryFn: () => getRecurrings(undefined, {}, 2),
+    queryKey: ['recurrings', id],
+    queryFn: () => getRecurrings(id, {}, 2),
   })
 
   // TODO: error handling
@@ -87,8 +86,8 @@ export default function RecentRecurrings() {
           }}
         >
           {(recurrings || []).length
-            ? 'Next Recurring Payments'
-            : ' 0 Recurring Payments. Congrats! 🎉'}
+            ? 'Next Recurring'
+            : ' 0 Recurring. Congrats! 🎉'}
         </ThemedText>
       </BlurView>
     </List>

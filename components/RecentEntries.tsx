@@ -5,13 +5,11 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { toMoney } from '@/utils/helpers'
-import { Feather } from '@expo/vector-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { BlurView } from 'expo-blur'
-import { Alert, Animated } from 'react-native'
-import { RectButton, ScrollView } from 'react-native-gesture-handler'
-import Swipeable from 'react-native-gesture-handler/Swipeable'
+import { Alert } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import { AnalyticsQueryKeys } from './Analytics'
 import Padder from './Layout/Padder'
 import List from './Lists/List'
@@ -50,7 +48,6 @@ export default function RecentEntries({
 }) {
   const { defaultBudget } = useLocalSettings()
   const textColor = useThemeColor({}, 'text')
-  const bgColor = useThemeColor({}, 'bg_secondary')
 
   const {
     data: entries = [],
@@ -104,7 +101,7 @@ export default function RecentEntries({
 
   return isLoading || isRefetching ? (
     <List style={{ marginBottom: PADDING, zIndex: 2 }}>
-      {[...Array(entries?.length || 5).keys()].map((v: number, i: number) => {
+      {[...Array(entries?.length || 3).keys()].map((v: number, i: number) => {
         return (
           <ListItemSkeleton
             key={v}
@@ -121,65 +118,19 @@ export default function RecentEntries({
         position: 'relative',
       }}
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={
-          {
-            // maxHeight: height * 0.5,
-            // flex: 1,
-          }
-        }
-        contentContainerStyle={
-          {
-            // flex: 1,
-          }
-        }
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Padder style={{ height: PADDING / 2 + 20 }} />
         {(entries || []).map((entry: Entry, i: number) => {
           return (
-            <Swipeable
+            <ListItem
               key={entry.id}
-              // TODO: enable delete in RecentEntries Screen
-              enabled={false}
-
-              renderRightActions={() => (
-                <RectButton
-                  style={[
-                    {},
-                    {
-                      width: 70,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      backgroundColor: bgColor,
-                    },
-                  ]}
-                  onPress={() => onDelete(entry.id)}
-                >
-                  <Animated.Text
-                    style={[
-                      // styles.actionText,
-                      {
-                        // transform: [{translateX: trans}],
-                      },
-                    ]}
-                  >
-                    <Feather name="trash-2" size={24} color={'red'} />
-                  </Animated.Text>
-                </RectButton>
-              )}
-            >
-              <ListItem
-                lastItem={i === (entries || []).length - 1}
-                title={entry.sub_category?.name}
-                description={dayjs(entry.created_at).format(
-                  'HH:mm - ddd D MMM',
-                )}
-                category={entry.category}
-                // description={entry.categories.name}
-                right={toMoney(entry.amount)}
-              />
-            </Swipeable>
+              lastItem={i === (entries || []).length - 1}
+              href={'entries'}
+              title={entry.sub_category?.name}
+              description={dayjs(entry.created_at).format('HH:mm - ddd D MMM')}
+              category={entry.category}
+              right={toMoney(entry.amount)}
+            />
           )
         })}
       </ScrollView>

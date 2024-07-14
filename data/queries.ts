@@ -45,7 +45,7 @@ export const getEntries = async (budgetId?: string) => {
     )
     .eq('budget_id', budgetId)
     .order('created_at', { ascending: false })
-    .limit(20)
+    .limit(3)
     .returns<Entry[]>()
 
   /// DEV

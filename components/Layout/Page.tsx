@@ -15,6 +15,7 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import SettingsButton from '../Buttons/SettingsButton'
+import { Header } from './Header'
 import { ThemedText } from '../ThemedText'
 import { ThemedView } from '../ThemedView'
 import Footer from './Footer'
@@ -68,7 +69,6 @@ export default function Page({
   footer = null,
   children,
 }: PageProps) {
-
   const insets = useSafeAreaInsets()
   const headerHeight = useHeaderHeight()
   const colorText = useThemeColor({}, 'mid')
@@ -106,52 +106,12 @@ export default function Page({
       >
         <Padder style={{ height: withHeader ? headerHeight : insets.top }} />
         <ThemedView style={[{}, styles.header]}>
-          {title ? (
-            <ThemedView style={styles.title_container}>
-              {back || down ? (
-                <Pressable
-                  onPress={() => router.back()}
-                  hitSlop={30}
-                  style={{ zIndex: 2 }}
-                >
-                  {back ? <Feather
-                    name={'chevron-left'}
-                    size={28}
-                    color={colorText}
-                    style={{ marginLeft: -10 }}
-                  /> :
-
-                    <Feather
-                      name={'x'}
-                      size={24}
-                      color={colorText}
-                      style={{ marginLeft: -6, paddingRight: 2 }} />}
-                </Pressable>
-              ) : null}
-              <ThemedView>
-                <ThemedText
-                  style={[
-                    styles.title,
-                    subtitle ? TYPO.title_compact : TYPO.title,
-                  ]}
-                >
-                  {title}
-                </ThemedText>
-                {subtitle ? (
-                  <ThemedText style={[{}, styles.subtitle]}>
-                    {subtitle}
-                  </ThemedText>
-                ) : null}
-              </ThemedView>
-            </ThemedView>
-          ) : null}
+          {title ? <Header title={title} back={back} down={down} /> : null}
           {withSettings ? <SettingsButton /> : null}
         </ThemedView>
         {children}
       </Wrapper>
-      {footer ? (
-        <Footer>{footer}</Footer>
-      ) : null}
+      {footer ? <Footer>{footer}</Footer> : null}
     </ThemedView>
   )
 }
@@ -174,7 +134,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   header: {
-    padding: PADDING,
+    paddingHorizontal: PADDING,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

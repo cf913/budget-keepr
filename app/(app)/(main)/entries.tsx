@@ -1,8 +1,10 @@
 import Content from '@/components/Layout/Content'
+import Padder from '@/components/Layout/Padder'
 import Page from '@/components/Layout/Page'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import ListItemSkeleton from '@/components/Lists/ListItemSkeleton'
+import { Loader } from '@/components/Loader'
 import { ThemedView } from '@/components/ThemedView'
 import { HEIGHT, PADDING } from '@/constants/Styles'
 import { getEntries } from '@/data/entries'
@@ -55,11 +57,8 @@ export default function Entries() {
 
   if (error) Toasty.error(error.message)
 
-  // console.log('PAGES', JSON.stringify(pages, null, 2))
-  // console.log('PAGES_PARAMS', JSON.stringify(pageParams, null, 2))
-
   const data = useMemo(() => pages.flat(), [pages])
-  console.log('DATA', data.length)
+
   return (
     <Page
       back
@@ -75,7 +74,7 @@ export default function Entries() {
       <Content style={{ flexGrow: 1, height: 0 }}>
         {isLoading || isRefetching ? (
           <List style={{ marginBottom: PADDING, zIndex: 2 }}>
-            {[...Array(PAGE_SIZE).keys()].map((v: number, i: number) => {
+            {[...Array(5).keys()].map((v: number, i: number) => {
               return (
                 <ListItemSkeleton
                   key={v}
@@ -87,9 +86,6 @@ export default function Entries() {
         ) : (
           <List
             style={{
-              // marginBottom: PADDING,
-              // fle
-              //
               zIndex: 2,
               position: 'relative',
             }}
@@ -124,6 +120,15 @@ export default function Entries() {
                     />
                   )
                 }}
+                ListFooterComponent={
+                  isFetchingNextPage ? (
+                    <ThemedView>
+                      <Padder />
+                      <Loader />
+                      <Padder />
+                    </ThemedView>
+                  ) : null
+                }
                 estimatedItemSize={HEIGHT.item}
               />
             </ThemedView>

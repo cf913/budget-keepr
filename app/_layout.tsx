@@ -19,7 +19,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import * as Sentry from '@sentry/react-native'
 import { isRunningInExpoGo } from 'expo'
 import { TempStoreProvider } from '@/stores/tempStore'
-import { toast, Toasts } from '@backpackapp-io/react-native-toast'
+import { Toasts } from '@backpackapp-io/react-native-toast'
 import Toasty from '@/lib/Toasty'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.

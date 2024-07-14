@@ -1,6 +1,5 @@
 import { PADDING, TYPO } from '@/constants/Styles'
-import { deleteEntry } from '@/data/entries'
-import { getEntries } from '@/data/queries'
+import { deleteEntry, getEntries } from '@/data/entries'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
@@ -57,48 +56,15 @@ export default function RecentEntries({
     refetch,
     isRefetching,
   } = useQuery({
-    queryKey: ['entries'],
-    queryFn: () => getEntries(defaultBudget?.id),
+    queryKey: ['recent_entries', defaultBudget?.id],
+    queryFn: () => getEntries(defaultBudget?.id, { limit: 3, offset: 0 }),
   })
 
   useEffect(() => {
     refetch()
   }, [refetch, counter])
 
-  const mutation = useMutation({
-    mutationFn: (entryId: string) => deleteEntry(entryId),
-    // onMutate(variables) {
-
-    // },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['entries', ...AnalyticsQueryKeys],
-      })
-      setCounter(counter + 1)
-      refetch()
-    },
-    onError: error => {
-      console.log('error', error.message)
-      alert('Oops. ' + error.message)
-    },
-  })
-
   if (error) Toasty.error('RecentEntries: ' + error.message)
-
-  const onDelete = async (id: string) => {
-    Alert.alert('Confirm delete?', 'This action cannot be undone.', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: 'Delete',
-        onPress: () => mutation.mutate(id),
-        style: 'destructive',
-      },
-    ])
-  }
 
   return isLoading || isRefetching ? (
     <List style={{ marginBottom: PADDING, zIndex: 2 }}>
@@ -127,6 +93,7 @@ export default function RecentEntries({
               key={entry.id}
               lastItem={i === (entries || []).length - 1}
               href={'entries'}
+              showHrefIcon={false}
               title={entry.sub_category?.name}
               description={dayjs(entry.created_at).format('HH:mm - ddd D MMM')}
               category={entry.category}

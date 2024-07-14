@@ -25,33 +25,3 @@ export const getBudgets = async () => {
 
   return data
 }
-
-export const getEntries = async (budgetId?: string) => {
-  const user = await getSupabaseUser()
-  if (!user) return
-
-  if (!budgetId) return
-
-  const { data, error } = await supabase
-    .from('entries')
-    .select(
-      `
-      id,
-      category:category_id(id, name, color),
-      sub_category:sub_category_id(id, name),
-      amount,
-      created_at
-      `,
-    )
-    .eq('budget_id', budgetId)
-    .order('created_at', { ascending: false })
-    .limit(3)
-    .returns<Entry[]>()
-
-  /// DEV
-  // logRes('getEntries', data, error)
-
-  if (error) throw new Error(error.message)
-
-  return data
-}

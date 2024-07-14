@@ -36,6 +36,7 @@ export default function ListItem({
   item,
   onSelect,
   href,
+  showHrefIcon = true,
   title,
   description,
   category,
@@ -47,6 +48,7 @@ export default function ListItem({
   item?: any
   onSelect?: (item: any) => void
   href?: string
+  showHrefIcon?: boolean
   title: string
   description?: string | null
   category?: Category
@@ -58,7 +60,10 @@ export default function ListItem({
   const backgroundColor = useThemeColor({}, 'bg_secondary')
   const borderColor = useThemeColor({}, 'mid2')
   const chevronColor = useThemeColor({}, 'mid')
-  const rightColor = useThemeColor({ light: rightColorOverride, dark: rightColorOverride }, 'tint')
+  const rightColor = useThemeColor(
+    { light: rightColorOverride, dark: rightColorOverride },
+    'tint',
+  )
 
   const withCategory = category
     ? {
@@ -83,13 +88,17 @@ export default function ListItem({
         <ThemedView style={[{}, styles.left]}>
           <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
           {description ? (
-            <ThemedText style={[{}, styles.description]} numberOfLines={1} ellipsizeMode="tail">
+            <ThemedText
+              style={[{}, styles.description]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {description}
             </ThemedText>
           ) : null}
         </ThemedView>
         <AnimatedView entering={FadeIn} style={styles.right}>
-          {href ? (
+          {href && showHrefIcon ? (
             <Feather
               name="chevron-right"
               size={24}

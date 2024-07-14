@@ -1,5 +1,5 @@
 import { ExpoRouter } from '@/.expo/types/router'
-import { HEIGHT, PADDING, TYPO } from '@/constants/Styles'
+import { HEIGHT, PADDING, RADIUS, TYPO } from '@/constants/Styles'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { Feather } from '@expo/vector-icons'
 import { Link } from 'expo-router'
@@ -9,6 +9,7 @@ import { FadeIn } from 'react-native-reanimated'
 import { Category } from '../RecentEntries'
 import { ThemedText } from '../ThemedText'
 import { AnimatedView, ThemedView } from '../ThemedView'
+import Padder from '../Layout/Padder'
 
 const Wrapper = ({
   href,
@@ -41,6 +42,7 @@ export default function ListItem({
   description,
   category,
   lastItem = false,
+  firstItem = false,
   checked = false,
   right,
   rightColorOverride,
@@ -53,6 +55,7 @@ export default function ListItem({
   description?: string | null
   category?: Category
   lastItem?: boolean
+  firstItem?: boolean
   checked?: boolean
   right?: string | number
   rightColorOverride?: string
@@ -65,13 +68,6 @@ export default function ListItem({
     'tint',
   )
 
-  const withCategory = category
-    ? {
-      borderStartWidth: 5,
-      borderStartColor: category.color,
-    }
-    : null
-
   const onSelectItem = () => (onSelect ? onSelect(item) : null)
 
   return (
@@ -79,23 +75,50 @@ export default function ListItem({
       <ThemedView
         style={[
           styles.container,
+          firstItem
+            ? { borderTopLeftRadius: RADIUS, borderTopRightRadius: RADIUS }
+            : undefined,
+          lastItem
+            ? {
+              borderBottomLeftRadius: RADIUS,
+              borderBottomRightRadius: RADIUS,
+            }
+            : undefined,
           {
             backgroundColor,
-            ...withCategory,
           },
         ]}
       >
-        <ThemedView style={[{}, styles.left]}>
-          <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
-          {description ? (
-            <ThemedText
-              style={[{}, styles.description]}
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {description}
-            </ThemedText>
+        <ThemedView
+          style={{
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          {category ? (
+            <ThemedView
+              style={{
+                backgroundColor: category.color,
+                flex: 1,
+                height: HEIGHT.item,
+                maxWidth: 5,
+              }}
+            ></ThemedView>
           ) : null}
+          <Padder w={1} />
+          <ThemedView style={[{}, styles.left]}>
+            <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
+            {description ? (
+              <ThemedText
+                style={[{}, styles.description]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {description}
+              </ThemedText>
+            ) : null}
+          </ThemedView>
         </ThemedView>
         <AnimatedView entering={FadeIn} style={styles.right}>
           {href && showHrefIcon ? (
@@ -140,7 +163,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: PADDING,
+    paddingLeft: 0,
     height: HEIGHT.item,
+    overflow: 'hidden',
   },
   left: {
     ...common_styles.bg_view,

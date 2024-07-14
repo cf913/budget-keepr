@@ -1,25 +1,26 @@
-import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import Content from '@/components/Layout/Content'
 import Page from '@/components/Layout/Page'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import ListItemSkeleton from '@/components/Lists/ListItemSkeleton'
-import { Entry } from '@/components/RecentEntries'
-import { ThemedText } from '@/components/ThemedText'
-import { PADDING } from '@/constants/Styles'
+import { ThemedView } from '@/components/ThemedView'
+import { HEIGHT, PADDING } from '@/constants/Styles'
 import { getEntries } from '@/data/entries'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import Toasty from '@/lib/Toasty'
 import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { toMoney } from '@/utils/helpers'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { FlashList } from '@shopify/flash-list'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { ScrollView } from 'react-native'
+import React, { useMemo } from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const PAGE_SIZE = 17
+const PAGE_SIZE = 18
 
 export default function Entries() {
+  const insets = useSafeAreaInsets()
   const { defaultBudget } = useLocalSettings()
   const textColor = useThemeColor({}, 'text')
 
@@ -57,11 +58,12 @@ export default function Entries() {
   // console.log('PAGES', JSON.stringify(pages, null, 2))
   // console.log('PAGES_PARAMS', JSON.stringify(pageParams, null, 2))
 
+  const data = useMemo(() => pages.flat(), [pages])
+  console.log('DATA', data.length)
   return (
     <Page
-      scroll
-      title="Entries"
       back
+      title="Entries"
       refreshing={isRefetching}
       onRefresh={() => {
         queryClient.invalidateQueries({
@@ -70,7 +72,7 @@ export default function Entries() {
         refetch()
       }}
     >
-      <Content>
+      <Content style={{ flexGrow: 1, height: 0 }}>
         {isLoading || isRefetching ? (
           <List style={{ marginBottom: PADDING, zIndex: 2 }}>
             {[...Array(PAGE_SIZE).keys()].map((v: number, i: number) => {
@@ -86,36 +88,45 @@ export default function Entries() {
           <List
             style={{
               // marginBottom: PADDING,
+              // fle
+              //
               zIndex: 2,
               position: 'relative',
             }}
           >
-            {(pages || []).map((page: any, i: number) => {
-              return page.map((entry: Entry, j: number) => {
-                return (
-                  <ListItem
-                    key={entry.id}
-                    lastItem={j === (pages || []).length - 1}
-                    href={'entries'}
-                    showHrefIcon={false}
-                    title={entry.sub_category?.name}
-                    description={dayjs(entry.created_at).format(
-                      'HH:mm - ddd D MMM',
-                    )}
-                    category={entry.category}
-                    right={toMoney(entry.amount)}
-                  />
-                )
-              })
-            })}
-            <ThemedText>
-              {hasNextPage ? 'Has Next Page' : 'No Next Page'}
-            </ThemedText>
-            <ThemedButton
-              title="Load More"
-              onPress={fetchNextPage}
-              loading={isFetchingNextPage}
-            />
+            <ThemedView
+              style={{
+                flexGrow: 1,
+                flexDirection: 'row',
+              }}
+            >
+              <FlashList
+                data={data}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: insets.bottom }}
+                onEndReached={fetchNextPage}
+                keyExtractor={(item, i) => item?.id || i.toString()}
+                renderItem={({ item, index }) => {
+                  if (!item) return null
+                  return (
+                    <ListItem
+                      key={item.id}
+                      firstItem={index === 0}
+                      lastItem={index === data.length - 1}
+                      href={'entries'}
+                      showHrefIcon={false}
+                      title={item.sub_category?.name}
+                      description={dayjs(item.created_at).format(
+                        'HH:mm - ddd D MMM',
+                      )}
+                      category={item.category}
+                      right={toMoney(item.amount)}
+                    />
+                  )
+                }}
+                estimatedItemSize={HEIGHT.item}
+              />
+            </ThemedView>
           </List>
         )}
       </Content>

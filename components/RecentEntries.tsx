@@ -18,6 +18,7 @@ import ListItemSkeleton from './Lists/ListItemSkeleton'
 import { ThemedText } from './ThemedText'
 
 import { useEffect } from 'react'
+import Toasty from '@/lib/Toasty'
 
 export interface Category {
   id: string
@@ -82,7 +83,7 @@ export default function RecentEntries({
     },
   })
 
-  if (error) alert(error.message)
+  if (error) Toasty.error('RecentEntries: ' + error.message)
 
   const onDelete = async (id: string) => {
     Alert.alert('Confirm delete?', 'This action cannot be undone.', [

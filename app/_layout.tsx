@@ -1,8 +1,12 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import { Slot, useNavigationContainerRef } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import 'react-native-reanimated'
 
 import { useColorScheme } from '@/hooks/useColorScheme'
@@ -15,6 +19,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import * as Sentry from '@sentry/react-native'
 import { isRunningInExpoGo } from 'expo'
 import { TempStoreProvider } from '@/stores/tempStore'
+import { toast, Toasts } from '@backpackapp-io/react-native-toast'
+import Toasty from '@/lib/Toasty'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -55,6 +61,7 @@ function RootLayout() {
   useEffect(() => {
     if (loaded) {
       // SplashScreen.hideAsync()
+      Toasty.success('App ready!')
     }
   }, [loaded])
 
@@ -73,6 +80,7 @@ function RootLayout() {
               <TempStoreProvider>
                 <QueryClientProvider client={queryClient}>
                   <Slot />
+                  <Toasts />
                 </QueryClientProvider>
               </TempStoreProvider>
             </LocalSettingsProvider>

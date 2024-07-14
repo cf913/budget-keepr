@@ -15,6 +15,7 @@ import { AnimatedView, ThemedView } from '@/components/ThemedView'
 import { createEntry } from '@/data/mutations'
 import { createRecurring } from '@/data/recurring'
 import { useColors } from '@/hooks/useColors'
+import Toasty from '@/lib/Toasty'
 import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { useTempStore } from '@/stores/tempStore'
@@ -23,6 +24,7 @@ import {
   getSQLFriendlyMonth,
   getWeekNumber,
 } from '@/utils/helpers'
+import { toast } from '@backpackapp-io/react-native-toast'
 import { Feather } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useMutation } from '@tanstack/react-query'
@@ -110,12 +112,13 @@ export default function AddNewEntry() {
           queryKey: ['entries', ...AnalyticsQueryKeys],
         })
         setSaving(false)
+        Toasty.success('Entry saved!')
         return router.replace('/(main)')
       }
     },
     onError: error => {
       console.log('error', error.message)
-      alert('Oops. ' + error.message)
+      Toasty.error(error.message)
     },
   })
 

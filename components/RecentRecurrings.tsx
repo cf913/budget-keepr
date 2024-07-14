@@ -25,7 +25,6 @@ export default function RecentRecurrings({ id }: { id?: string }) {
   })
 
   // TODO: error handling
-  if (error) alert(error.message)
 
   return isLoading || isRefetching ? (
     <List style={{ marginBottom: PADDING, zIndex: 2 }}>

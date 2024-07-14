@@ -14,6 +14,8 @@ import { StyleSheet } from 'react-native'
 import Card from './Cards/Card'
 import { ThemedView } from './ThemedView'
 import CardVersus from './Cards/CardVersus'
+import { toast } from '@backpackapp-io/react-native-toast'
+import Toasty from '@/lib/Toasty'
 
 export const AnalyticsQueryKeys = [
   'getAllTimeSpend',
@@ -25,8 +27,13 @@ export const AnalyticsQueryKeys = [
   'getBreakdown',
 ]
 
-export default function Analytics({ counter, budget_id }: { counter: number, budget_id?: string }) {
-
+export default function Analytics({
+  counter,
+  budget_id,
+}: {
+  counter: number
+  budget_id?: string
+}) {
   // THIS YEAR
   const allTimeData = useQuery({
     queryKey: ['getAllTimeSpend', counter, budget_id],
@@ -69,10 +76,11 @@ export default function Analytics({ counter, budget_id }: { counter: number, bud
   const dailySpend = allTimeData.data / (diff || 1)
 
   if (lastWeekData.error || currentWeekData.error || currentMonthData.error) {
-    alert(
-      lastWeekData.error?.message ||
-      currentWeekData.error?.message ||
-      currentMonthData.error?.message,
+    Toasty.error(
+      'Analytics error: ' +
+      (lastWeekData.error?.message ||
+        currentWeekData.error?.message ||
+        currentMonthData.error?.message),
     )
   }
 

@@ -38,7 +38,7 @@ export default function Auth() {
     })
 
     if (error) {
-      Alert.alert(error.message)
+      Alert.alert('Auth error: ' + error.message)
     }
     setLoading(false)
   }

@@ -73,16 +73,14 @@ export default function Entries() {
       <Content>
         {isLoading || isRefetching ? (
           <List style={{ marginBottom: PADDING, zIndex: 2 }}>
-            {[...Array(pages?.length || 3).keys()].map(
-              (v: number, i: number) => {
-                return (
-                  <ListItemSkeleton
-                    key={v}
-                    lastItem={i === (pages || []).length - 1}
-                  />
-                )
-              },
-            )}
+            {[...Array(PAGE_SIZE).keys()].map((v: number, i: number) => {
+              return (
+                <ListItemSkeleton
+                  key={v}
+                  lastItem={i === (pages || []).length - 1}
+                />
+              )
+            })}
           </List>
         ) : (
           <List
@@ -92,34 +90,32 @@ export default function Entries() {
               position: 'relative',
             }}
           >
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {(pages || []).map((page: any, i: number) => {
-                return page.map((entry: Entry, j: number) => {
-                  return (
-                    <ListItem
-                      key={entry.id}
-                      lastItem={j === (pages || []).length - 1}
-                      href={'entries'}
-                      showHrefIcon={false}
-                      title={entry.sub_category?.name}
-                      description={dayjs(entry.created_at).format(
-                        'HH:mm - ddd D MMM',
-                      )}
-                      category={entry.category}
-                      right={toMoney(entry.amount)}
-                    />
-                  )
-                })
-              })}
-              <ThemedText>
-                {hasNextPage ? 'Has Next Page' : 'No Next Page'}
-              </ThemedText>
-              <ThemedButton
-                title="Load More"
-                onPress={fetchNextPage}
-                loading={isFetchingNextPage}
-              />
-            </ScrollView>
+            {(pages || []).map((page: any, i: number) => {
+              return page.map((entry: Entry, j: number) => {
+                return (
+                  <ListItem
+                    key={entry.id}
+                    lastItem={j === (pages || []).length - 1}
+                    href={'entries'}
+                    showHrefIcon={false}
+                    title={entry.sub_category?.name}
+                    description={dayjs(entry.created_at).format(
+                      'HH:mm - ddd D MMM',
+                    )}
+                    category={entry.category}
+                    right={toMoney(entry.amount)}
+                  />
+                )
+              })
+            })}
+            <ThemedText>
+              {hasNextPage ? 'Has Next Page' : 'No Next Page'}
+            </ThemedText>
+            <ThemedButton
+              title="Load More"
+              onPress={fetchNextPage}
+              loading={isFetchingNextPage}
+            />
           </List>
         )}
       </Content>

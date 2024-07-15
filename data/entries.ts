@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { getSupabaseUser } from './api'
 import { Entry } from '@/components/RecentEntries'
+import { logRes } from '@/utils/helpers'
 
 export const deleteEntry = async (entryId: string) => {
   const user = await getSupabaseUser()
@@ -11,6 +12,33 @@ export const deleteEntry = async (entryId: string) => {
   if (error) throw new Error(error.message)
 
   return true
+}
+
+export const getEntry = async (
+  entryId?: string,
+): Promise<Entry | undefined> => {
+  const user = await getSupabaseUser()
+  if (!user) throw new Error('No user found')
+  if (!entryId) throw new Error('No entry id provided')
+
+  const { data, error } = await supabase
+    .from('entries')
+    .select(
+      `
+      id,
+      category:category_id(id, name, color),
+      sub_category:sub_category_id(id, name),
+      amount,
+      created_at
+      `,
+    )
+    .eq('id', entryId)
+    .returns<Entry>()
+    .single()
+
+  if (error) throw new Error(error.message)
+
+  return data
 }
 
 export const getEntries = async (

@@ -24,8 +24,9 @@ export default function CategorySuggestions({
   searchText: string
 }) {
   const { defaultBudget } = useLocalSettings()
+
   const { data, error, isLoading } = useQuery({
-    queryKey: ['sub_categories', defaultBudget?.id],
+    queryKey: ['sub_categories', { budget_id: defaultBudget?.id }],
     queryFn: () => getSubCategories({ budget_id: defaultBudget?.id }),
   })
 
@@ -98,6 +99,7 @@ function CategorySuggestionsScreen({
                 title={subCat.name}
                 key={subCat.id}
                 description={subCat.category?.name}
+                category={subCat.category}
               />
             )
           })}

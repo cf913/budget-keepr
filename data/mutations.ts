@@ -20,3 +20,23 @@ export const createEntry = async (entry: any) => {
 
   return { data, error }
 }
+
+export const updateEntry = async (entry: any) => {
+  // sleep for 2 seconds
+  // await new Promise(resolve => setTimeout(resolve, 2000))
+  // return { data: { success: true }, error: null }
+
+  const user = await getSupabaseUser()
+  if (!user) return
+
+  let { data, error }: any = await supabase
+    .from('entries')
+    .update(entry)
+    .eq('id', entry.id)
+    .select()
+
+  /// DEV
+  logRes('updateEntry', data, error)
+
+  return { data, error }
+}

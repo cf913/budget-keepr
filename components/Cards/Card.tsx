@@ -1,7 +1,12 @@
 import { PADDING, RADIUS, TYPO } from '@/constants/Styles'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { StyleSheet } from 'react-native'
-import { FlipInXUp, FlipOutXDown } from 'react-native-reanimated'
+import {
+  FadeIn,
+  FadeOut,
+  FlipInXUp,
+  FlipOutXDown,
+} from 'react-native-reanimated'
 import Padder from '../Layout/Padder'
 import { Loader } from '../Loader'
 import { ThemedText } from '../ThemedText'
@@ -29,7 +34,7 @@ export default function Card({
       {loading ? (
         <Loader size="small" />
       ) : (
-        <AnimatedView entering={FlipInXUp} exiting={FlipOutXDown}>
+        <AnimatedView entering={FadeIn}>
           <ThemedText style={[styles.value, { color: textColor }]}>
             {value}
           </ThemedText>

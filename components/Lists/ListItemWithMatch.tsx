@@ -1,14 +1,14 @@
-import {Feather} from '@expo/vector-icons'
-import {useThemeColor} from '@/hooks/useThemeColor'
-import {ThemedText} from '../ThemedText'
-import {ThemedView} from '../ThemedView'
-import {Pressable, StyleSheet} from 'react-native'
-import {HEIGHT, PADDING, TYPO} from '@/constants/Styles'
-import {Link} from 'expo-router'
-import {ReactNode, useMemo} from 'react'
+import { Feather } from '@expo/vector-icons'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { ThemedText } from '../ThemedText'
+import { ThemedView } from '../ThemedView'
+import { Pressable, StyleSheet } from 'react-native'
+import { HEIGHT, PADDING, TYPO } from '@/constants/Styles'
+import { Link } from 'expo-router'
+import { ReactNode, useMemo } from 'react'
 import FadeInView from '../FadeInView'
-import {Category} from '../RecentEntries'
-import {ExpoRouter} from '@/.expo/types/router'
+import { Category } from '../RecentEntries'
+import { ExpoRouter } from '@/.expo/types/router'
 
 const Wrapper = ({
   href,
@@ -58,17 +58,16 @@ export default function ListItemWithMatch({
 
   const withCategory = category
     ? {
-        borderStartWidth: 5,
-        borderStartColor:
-          title === 'Coles' ? 'red' : title === 'Aldi' ? 'blue' : 'gold',
-      }
+      borderStartWidth: 5,
+      borderStartColor: category.color,
+    }
     : null
 
   const onSelectItem = () => (onSelect ? onSelect(item) : null)
 
   const matchingTitle = useMemo(() => {
-    const {matches, name} = item
-    const {indices} = matches[0]
+    const { matches, name } = item
+    const { indices } = matches[0]
     const [start, end] = indices[0]
     const pre = name.slice(0, start)
     const mid = name.slice(start, end + 1)
@@ -77,7 +76,7 @@ export default function ListItemWithMatch({
     return (
       <ThemedText style={[{}, styles.title]}>
         {pre}
-        <ThemedText style={{color: rightColor, fontWeight: 'bold'}}>
+        <ThemedText style={{ color: rightColor, fontWeight: 'bold' }}>
           {mid}
         </ThemedText>
         {suf}
@@ -110,17 +109,17 @@ export default function ListItemWithMatch({
               name="chevron-right"
               size={24}
               color={chevronColor}
-              style={{paddingLeft: PADDING / 4}}
+              style={{ paddingLeft: PADDING / 4 }}
             />
           ) : null}
           {right ? (
-            <ThemedText style={{color: rightColor}}>{right}</ThemedText>
+            <ThemedText style={{ color: rightColor }}>{right}</ThemedText>
           ) : null}
         </FadeInView>
       </ThemedView>
       {!+lastItem ? (
         <ThemedView
-          style={{width: '100%', height: 1, backgroundColor: borderColor}}
+          style={{ width: '100%', height: 1, backgroundColor: borderColor }}
         ></ThemedView>
       ) : null}
     </Wrapper>

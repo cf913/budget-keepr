@@ -23,7 +23,7 @@ import {
 } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { router } from 'expo-router'
-import React, { Fragment, useMemo } from 'react'
+import React, { Fragment, useMemo, useRef } from 'react'
 import { Alert, Animated } from 'react-native'
 import { RectButton, Swipeable } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -73,7 +73,7 @@ export default function Entries() {
   const data = useMemo(() => pages.flat(), [pages])
 
   const onEdit = (id: string) => {
-    alert('GO TO EDIT ENTRY')
+    router.navigate('/(main)/entries/' + id)
   }
 
   const mutation = useMutation({

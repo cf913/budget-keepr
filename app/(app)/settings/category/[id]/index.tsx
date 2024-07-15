@@ -25,7 +25,10 @@ export default function Category() {
   })
 
   const { data, error, refetch, isLoading } = useQuery({
-    queryKey: ['sub_categories', id],
+    queryKey: [
+      'sub_categories',
+      { categoryId: id, budget_id: defaultBudget?.id },
+    ],
     queryFn: () =>
       getSubCategories({ categoryId: id, budget_id: defaultBudget?.id }),
   })

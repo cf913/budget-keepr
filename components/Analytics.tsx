@@ -18,13 +18,13 @@ import { toast } from '@backpackapp-io/react-native-toast'
 import Toasty from '@/lib/Toasty'
 
 export const AnalyticsQueryKeys = [
-  'getAllTimeSpend',
-  'getAvgDailySpend',
-  'getCurrentWeekSpend',
-  'getTodaySpend',
-  'getCurrentMonthSpend',
-  'getLastWeekSpend',
-  'getBreakdown',
+  'AnalyticsGetAllTimeSpend',
+  'AnalyticsGetAvgDailySpend',
+  'AnalyticsGetCurrentWeekSpend',
+  'AnalyticsGetTodaySpend',
+  'AnalyticsGetCurrentMonthSpend',
+  'AnalyticsGetLastWeekSpend',
+  'AnalyticsGetBreakdown',
 ]
 
 export default function Analytics({
@@ -36,32 +36,32 @@ export default function Analytics({
 }) {
   // THIS YEAR
   const allTimeData = useQuery({
-    queryKey: ['getAllTimeSpend', counter, budget_id],
+    queryKey: ['AnalyticsGetAllTimeSpend', counter, budget_id],
     queryFn: () => getThisYearSpend(budget_id),
   })
 
   const avgDailyData = useQuery({
-    queryKey: ['getAvgDailySpend', counter, budget_id],
+    queryKey: ['AnalyticsGetAvgDailySpend', counter, budget_id],
     queryFn: () => getAvgDailySpend(budget_id),
   })
 
   const currentWeekData = useQuery({
-    queryKey: ['getCurrentWeekSpend', counter, budget_id],
+    queryKey: ['AnalyticsGetCurrentWeekSpend', counter, budget_id],
     queryFn: () => getCurrentWeekSpend(budget_id),
   })
 
   const lastWeekData = useQuery({
-    queryKey: ['getLastWeekSpend', counter, budget_id],
+    queryKey: ['AnalyticsGetLastWeekSpend', counter, budget_id],
     queryFn: () => getLastWeekSpend(budget_id),
   })
 
   const currentMonthData = useQuery({
-    queryKey: ['getCurrentMonthSpend', counter, budget_id],
+    queryKey: ['AnalyticsGetCurrentMonthSpend', counter, budget_id],
     queryFn: () => getCurrentMonthSpend(budget_id),
   })
 
   const todayData = useQuery({
-    queryKey: ['getTodaySpend', counter, budget_id],
+    queryKey: ['AnalyticsGetTodaySpend', counter, budget_id],
     queryFn: () => getTodaySpend(budget_id),
   })
 

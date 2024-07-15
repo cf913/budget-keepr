@@ -3,8 +3,7 @@ import Page from '@/components/Layout/Page'
 import RecurringListActive from '@/components/Lists/RecurringListActive'
 import RecurringListArchived from '@/components/Lists/RecurringListArchived'
 import { RecurringUpdateInput, updateRecurring } from '@/data/recurring'
-import { queryClient } from '@/lib/tanstack'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
 import { Alert } from 'react-native'
 
@@ -17,6 +16,7 @@ export default function Recurrings() {
   const activeListRef = useRef<any>() // HACK: make this not <any>
   const archivedListRef = useRef<any>() // HACK: make this not <any>
   const [refreshing, setRefreshing] = useState(false)
+  const queryClient = useQueryClient()
 
   const updateMutation = useMutation({
     mutationFn: updateRecurring,
@@ -24,7 +24,9 @@ export default function Recurrings() {
       console.log('updateMutation optimistic update', variables)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['recurringActive', 'recurringArchived'] })
+      queryClient.invalidateQueries({
+        queryKey: ['recurringActive', 'recurringArchived'],
+      })
       activeListRef.current?.refetch()
       archivedListRef.current?.refetch()
     },

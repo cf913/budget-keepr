@@ -16,7 +16,6 @@ import { createEntry } from '@/data/mutations'
 import { createRecurring } from '@/data/recurring'
 import { useColors } from '@/hooks/useColors'
 import Toasty from '@/lib/Toasty'
-import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { useTempStore } from '@/stores/tempStore'
 import {
@@ -27,7 +26,7 @@ import {
 import { toast } from '@backpackapp-io/react-native-toast'
 import { Feather } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { router } from 'expo-router'
 import React, { useRef, useState } from 'react'
@@ -49,6 +48,7 @@ export default function AddNewEntry() {
   const translateValue = useSharedValue(48 + 8) // 48 is the height of the input and 8 is the padding
   const opacityValue = useSharedValue(1)
   const { textColor, bgColor2 } = useColors()
+  const queryClient = useQueryClient()
 
   // stores
   const { defaultBudget } = useLocalSettings()
@@ -69,7 +69,13 @@ export default function AddNewEntry() {
     mutationFn: createRecurring,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['entries', ...AnalyticsQueryKeys],
+        queryKey: ['entries'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['Analytics'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['infinite_entries'],
       })
 
       setSaving(false)
@@ -109,8 +115,19 @@ export default function AddNewEntry() {
       } else {
         // carry on with normal entry
         queryClient.invalidateQueries({
-          queryKey: ['entries', ...AnalyticsQueryKeys],
+          queryKey: ['entries'],
         })
+
+        queryClient.invalidateQueries({
+          queryKey: ['infinite_entries'],
+        })
+
+        for (const qk of AnalyticsQueryKeys) {
+          queryClient.invalidateQueries({
+            queryKey: [qk],
+          })
+        }
+
         setSaving(false)
         Toasty.success('Entry saved!')
         return router.replace('/(main)')

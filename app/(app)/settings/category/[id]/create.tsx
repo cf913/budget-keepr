@@ -7,9 +7,8 @@ import Spacer from '@/components/Layout/Spacer'
 import { ThemedView } from '@/components/ThemedView'
 import { HEIGHT, PADDING } from '@/constants/Styles'
 import { createSubCategory } from '@/data/sub_categories'
-import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useState } from 'react'
 import { KeyboardAvoidingView } from 'react-native'
@@ -18,6 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function CategoryCreate() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { defaultBudget } = useLocalSettings()
+  const queryClient = useQueryClient()
 
   const insets = useSafeAreaInsets()
   const [name, setName] = useState('')

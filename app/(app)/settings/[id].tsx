@@ -9,11 +9,10 @@ import { Category } from '@/components/RecentEntries'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 import { HEIGHT, PADDING } from '@/constants/Styles'
-import { createCategory, getCategory, updateCategory } from '@/data/categories'
+import { getCategory, updateCategory } from '@/data/categories'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useState } from 'react'
 import { KeyboardAvoidingView, Modal, Pressable } from 'react-native'
@@ -33,7 +32,6 @@ export default function Container() {
     queryFn: () => getCategory(id),
   })
 
-
   if (dataCategory.isLoading) return <Loader />
 
   if (!dataCategory.data) return <ThemedText>Category not found</ThemedText>
@@ -42,6 +40,7 @@ export default function Container() {
 }
 
 function CategoryEdit({ category }: { category: Category }) {
+  const queryClient = useQueryClient()
   const { defaultBudget } = useLocalSettings()
   const insets = useSafeAreaInsets()
   const [name, setName] = useState<string>(category?.name ?? '')
@@ -114,11 +113,14 @@ function CategoryEdit({ category }: { category: Category }) {
           />
           <Padder h={0.5} />
           <ThemedView
-            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
             <ThemedText>Color</ThemedText>
             <Pressable onPress={() => setShowModal(true)}>
-
               <ThemedView
                 style={{
                   borderWidth: 1,
@@ -150,7 +152,7 @@ function CategoryEdit({ category }: { category: Category }) {
       <Modal visible={showModal} animationType="slide">
         <Page>
           <Content>
-            <ColorPicker value={color} onComplete={onSelectColor} >
+            <ColorPicker value={color} onComplete={onSelectColor}>
               <Preview />
               <Padder h={0.5} />
               <Panel1 />
@@ -161,7 +163,11 @@ function CategoryEdit({ category }: { category: Category }) {
             </ColorPicker>
             <ThemedButton title="Ok" onPress={onSaveColor} />
             <Padder h={0.5} />
-            <ThemedButton style={{ backgroundColor: bgColor }} title="Cancel" onPress={onCancelColor} />
+            <ThemedButton
+              style={{ backgroundColor: bgColor }}
+              title="Cancel"
+              onPress={onCancelColor}
+            />
           </Content>
         </Page>
       </Modal>

@@ -9,9 +9,8 @@ import { ThemedView } from '@/components/ThemedView'
 import { HEIGHT, PADDING } from '@/constants/Styles'
 import { createCategory } from '@/data/categories'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { useState } from 'react'
 import { KeyboardAvoidingView, Modal, Pressable } from 'react-native'
@@ -27,6 +26,7 @@ export default function CategoryCreate() {
   const insets = useSafeAreaInsets()
   const [name, setName] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const queryClient = useQueryClient()
 
   const [color, setColor] = useState('#000000')
   const [tempColor, setTempColor] = useState(color)
@@ -94,11 +94,14 @@ export default function CategoryCreate() {
           />
           <Padder h={0.5} />
           <ThemedView
-            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
             <ThemedText>Color</ThemedText>
             <Pressable onPress={() => setShowModal(true)}>
-
               <ThemedView
                 style={{
                   borderWidth: 1,
@@ -130,7 +133,7 @@ export default function CategoryCreate() {
       <Modal visible={showModal} animationType="slide">
         <Page>
           <Content>
-            <ColorPicker value={color} onComplete={onSelectColor} >
+            <ColorPicker value={color} onComplete={onSelectColor}>
               <Preview />
               <Padder h={0.5} />
               <Panel1 />
@@ -141,7 +144,11 @@ export default function CategoryCreate() {
             </ColorPicker>
             <ThemedButton title="Ok" onPress={onSaveColor} />
             <Padder h={0.5} />
-            <ThemedButton style={{ backgroundColor: bgColor }} title="Cancel" onPress={onCancelColor} />
+            <ThemedButton
+              style={{ backgroundColor: bgColor }}
+              title="Cancel"
+              onPress={onCancelColor}
+            />
           </Content>
         </Page>
       </Modal>

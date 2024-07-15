@@ -9,14 +9,15 @@ export default function List({
   children,
   style,
   shadow = false,
-  entering = FadeIn
+  entering = FadeIn,
 }: {
   children: ReactNode
   style?: ViewStyle
   shadow?: boolean
   entering?: any
 }) {
-  const backgroundColor = useThemeColor({}, 'bg_secondary')
+  // const backgroundColor = useThemeColor({}, 'bg_secondary')
+  const backgroundColor = 'transparent'
   const shadowStyle = shadow ? STYLES.shadow : {}
   return (
     <AnimatedView

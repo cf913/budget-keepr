@@ -1,7 +1,6 @@
 import { PADDING, TYPO } from '@/constants/Styles'
 import { deleteEntry, getEntries } from '@/data/entries'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { toMoney } from '@/utils/helpers'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -18,6 +17,7 @@ import { ThemedText } from './ThemedText'
 
 import { useEffect } from 'react'
 import Toasty from '@/lib/Toasty'
+import { useRefreshOnFocus } from '@/hooks/useRefreshOnFocus'
 
 export interface Category {
   id: string
@@ -58,6 +58,7 @@ export default function RecentEntries({
   } = useQuery({
     queryKey: ['recent_entries', defaultBudget?.id],
     queryFn: () => getEntries(defaultBudget?.id, { limit: 3, offset: 0 }),
+    refetchOnWindowFocus: true,
   })
 
   useEffect(() => {
@@ -66,15 +67,10 @@ export default function RecentEntries({
 
   if (error) Toasty.error('RecentEntries: ' + error.message)
 
-  return isLoading || isRefetching ? (
+  return !entries && isLoading ? (
     <List style={{ marginBottom: PADDING, zIndex: 2 }}>
-      {[...Array(entries?.length || 3).keys()].map((v: number, i: number) => {
-        return (
-          <ListItemSkeleton
-            key={v}
-            lastItem={i === (entries || []).length - 1}
-          />
-        )
+      {[...Array(3).keys()].map((v: number, i: number) => {
+        return <ListItemSkeleton key={v} lastItem={i === 3 - 1} />
       })}
     </List>
   ) : (

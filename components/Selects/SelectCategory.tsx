@@ -1,21 +1,23 @@
-import { getCategories } from "@/data/categories"
-import { queryClient } from "@/lib/tanstack"
-import { useLocalSettings } from "@/stores/localSettings"
-import { isLastItem } from "@/utils/helpers"
-import { useQuery } from "@tanstack/react-query"
-import ErrorContainer from "../ErrorContainer"
-import Content from "../Layout/Content"
-import List from "../Lists/List"
-import ListItem from "../Lists/ListItem"
-import { Loader } from "../Loader"
-import { Category } from "../RecentEntries"
+import { getCategories } from '@/data/categories'
+import { useLocalSettings } from '@/stores/localSettings'
+import { isLastItem } from '@/utils/helpers'
+import { useQuery } from '@tanstack/react-query'
+import ErrorContainer from '../ErrorContainer'
+import Content from '../Layout/Content'
+import List from '../Lists/List'
+import ListItem from '../Lists/ListItem'
+import { Loader } from '../Loader'
+import { Category } from '../RecentEntries'
 
 type SelectCategoryProps = {
   callback?: (category: Category) => void
   value?: Category | null
 }
 
-export default function SelectCategory({ callback, value }: SelectCategoryProps) {
+export default function SelectCategory({
+  callback,
+  value,
+}: SelectCategoryProps) {
   const { defaultBudget } = useLocalSettings()
 
   const { data, error, refetch, isLoading } = useQuery({
@@ -28,7 +30,6 @@ export default function SelectCategory({ callback, value }: SelectCategoryProps)
   }
 
   return (
-
     <Content>
       {!isLoading && error ? (
         <ErrorContainer error={error.message} onRetry={refetch} />

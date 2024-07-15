@@ -8,11 +8,10 @@ import Spacer from '@/components/Layout/Spacer'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 import { createSubCategory } from '@/data/sub_categories'
-import { queryClient } from '@/lib/tanstack'
 import { useLocalSettings } from '@/stores/localSettings'
 import { useTempStore } from '@/stores/tempStore'
 import { capitalizeFirstLetter } from '@/utils/helpers'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -21,6 +20,7 @@ export default function NewCategory() {
   const { selectedCategory } = useTempStore()
   const { defaultBudget } = useLocalSettings()
   const insets = useSafeAreaInsets()
+  const queryClient = useQueryClient()
 
   const [name, setName] = useState<string>('')
   const [saving, setSaving] = useState(false)

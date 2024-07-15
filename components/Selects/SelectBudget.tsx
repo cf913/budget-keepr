@@ -6,8 +6,7 @@ import List from '../Lists/List'
 import ListItem from '../Lists/ListItem'
 import { Loader } from '../Loader'
 import { getBudgets } from '@/data/queries'
-import { queryClient } from '@/lib/tanstack'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 type SelectBudgetProps = {
   callback?: () => void
@@ -15,6 +14,7 @@ type SelectBudgetProps = {
 
 export default function SelectBudget({ callback }: SelectBudgetProps) {
   const { defaultBudget, setDefaultBudget } = useLocalSettings()
+  const queryClient = useQueryClient()
 
   const { data, error, refetch, isLoading } = useQuery({
     queryKey: ['budgets'],

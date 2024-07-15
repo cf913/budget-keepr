@@ -35,7 +35,7 @@ export default function Settings() {
     ])
   }
   return (
-    <Page title="Settings">
+    <Page title="Settings" back>
       {/* TODO: build a list of clickable items relating to each setting */}
       {/* SELECT DEFAULT BUDGET */}
       <Content>

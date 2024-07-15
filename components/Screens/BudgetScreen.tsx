@@ -27,6 +27,7 @@ export default function BudgetScreen() {
       refreshing={false}
       onRefresh={onRefresh}
       footer={<HomePageFooter />}
+      withSettings
     >
       <Content style={{ flex: 1 }}>
         {/* ANALYTICS */}

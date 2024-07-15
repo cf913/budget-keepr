@@ -22,9 +22,9 @@ export default function HomeScreen() {
         <ThemedView style={styles.page} key="1">
           <BudgetScreen />
         </ThemedView>
-        <ThemedView style={styles.page} key="2">
-          <Settings />
-        </ThemedView>
+        {/* <ThemedView style={styles.page} key="2"> */}
+        {/*   <Settings /> */}
+        {/* </ThemedView> */}
       </PagerView>
     </ThemedView>
   )

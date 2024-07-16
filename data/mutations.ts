@@ -3,10 +3,6 @@ import { logRes } from '@/utils/helpers'
 import { getSupabaseUser } from './api'
 
 export const createEntry = async (entry: any) => {
-  // sleep for 2 seconds
-  // await new Promise(resolve => setTimeout(resolve, 2000))
-  // return { data: { success: true }, error: null }
-
   const user = await getSupabaseUser()
   if (!user) return
 
@@ -22,10 +18,6 @@ export const createEntry = async (entry: any) => {
 }
 
 export const updateEntry = async (entry: any) => {
-  // sleep for 2 seconds
-  // await new Promise(resolve => setTimeout(resolve, 2000))
-  // return { data: { success: true }, error: null }
-
   const user = await getSupabaseUser()
   if (!user) return
 

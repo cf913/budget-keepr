@@ -1,5 +1,3 @@
-import React, { useCallback } from 'react'
-import { Alert, RefreshControl } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
 import {
   useInfiniteQuery,
@@ -7,11 +5,17 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { router } from 'expo-router'
+import React, { useCallback } from 'react'
+import { Alert, RefreshControl } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import Content from '@/components/Layout/Content'
 import Page from '@/components/Layout/Page'
+import EntryListItem from '@/components/Lists/EntryListItem'
 import List from '@/components/Lists/List'
+import ListEmpty from '@/components/Lists/ListEmpty'
+import ListFooter from '@/components/Lists/ListFooter'
+import { Entry } from '@/components/RecentEntries'
 import ErrorScreen from '@/components/Screens/ErrorScreen'
 import { ThemedView } from '@/components/ThemedView'
 import { HEIGHT } from '@/constants/Styles'
@@ -20,9 +24,6 @@ import { useRefreshOnFocus } from '@/hooks/useRefreshOnFocus'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import Toasty from '@/lib/Toasty'
 import { useLocalSettings } from '@/stores/localSettings'
-import { Entry } from '@/components/RecentEntries'
-import EntryListItem from '@/components/Lists/EntryListItem'
-import ListFooter from '@/components/Lists/ListFooter'
 
 const PAGE_SIZE = 18
 
@@ -37,6 +38,7 @@ export default function Entries() {
     data,
     error,
     refetch,
+    isLoading,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
@@ -131,17 +133,7 @@ export default function Entries() {
     item?.id || i.toString()
 
   return (
-    <Page
-      back
-      title="Entries"
-      refreshing={isRefetching}
-      onRefresh={() => {
-        queryClient.invalidateQueries({
-          queryKey: ['infinite_entries', defaultBudget?.id],
-        })
-        refetch()
-      }}
-    >
+    <Page back title="Entries">
       <Content style={{ flexGrow: 1, height: 0 }}>
         <List style={{ zIndex: 2, position: 'relative' }}>
           <ThemedView style={{ flexGrow: 1, flexDirection: 'row' }}>
@@ -152,6 +144,9 @@ export default function Entries() {
               onEndReached={onEndReached}
               keyExtractor={keyExtractor}
               renderItem={renderItem}
+              ListEmptyComponent={
+                <ListEmpty isLoading={isLoading} hasNextPage={hasNextPage} />
+              }
               ListFooterComponent={
                 <ListFooter
                   isFetchingNextPage={isFetchingNextPage}

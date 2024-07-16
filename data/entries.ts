@@ -72,5 +72,6 @@ export const getEntries = async (
 
   if (error) throw new Error(error.message)
 
+  await sleep(2000)
   return data
 }

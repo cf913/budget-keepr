@@ -1,4 +1,19 @@
-import { AnalyticsQueryKeys } from '@/components/Analytics'
+import { Feather } from '@expo/vector-icons'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { router } from 'expo-router'
+import React, { useCallback, useRef, useState } from 'react'
+import { Keyboard, Pressable, TextInput } from 'react-native'
+import Animated, {
+  FadeInUp,
+  FadeOutDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
 import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import CategorySuggestions from '@/components/CategorySuggestions'
 import ThemedInput from '@/components/Inputs/ThemedInput'
@@ -23,38 +38,19 @@ import {
   getSQLFriendlyMonth,
   getWeekNumber,
 } from '@/utils/helpers'
-import { toast } from '@backpackapp-io/react-native-toast'
-import { Feather } from '@expo/vector-icons'
-import DateTimePicker from '@react-native-community/datetimepicker'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { router } from 'expo-router'
-import React, { useRef, useState } from 'react'
-import { Keyboard, Pressable, TextInput } from 'react-native'
-import {
-  FadeInUp,
-  FadeOutDown,
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withTiming,
-} from 'react-native-reanimated'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function AddNewEntry() {
-  // hooks
   const subCategoryInput = useRef<TextInput>(null)
   const insets = useSafeAreaInsets()
-  const translateValue = useSharedValue(48 + 8) // 48 is the height of the input and 8 is the padding
+  const translateValue = useSharedValue(56)
   const opacityValue = useSharedValue(1)
   const { textColor, bgColor2 } = useColors()
   const queryClient = useQueryClient()
 
-  // stores
   const { defaultBudget } = useLocalSettings()
   const { selectedFrequency } = useTempStore()
 
-  // state
   const [date, setDate] = useState<Date>(new Date())
   const [suggestionsVisible, setSuggestionsVisible] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -63,123 +59,119 @@ export default function AddNewEntry() {
   const [subCategorySearchText, setSubCategorySearchText] = useState<string>('')
   const [isRecurring, setRecurring] = useState<boolean>(false)
 
-  // queries
-  // 2
   const mutationRecurring = useMutation({
     mutationFn: createRecurring,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['entries'],
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['Analytics'],
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['infinite_entries'],
-      })
-
+      queryClient.invalidateQueries({ queryKey: ['entries'] })
+      queryClient.invalidateQueries({ queryKey: ['Analytics'] })
+      queryClient.invalidateQueries({ queryKey: ['infinite_entries'] })
       setSaving(false)
-      return router.replace('/(main)')
+      router.replace('/(main)')
     },
     onError: error => {
-      console.log('error', error.message)
-      alert('Oops. ' + error.message)
+      console.error('Error creating recurring entry:', error)
+      Toasty.error('Failed to create recurring entry')
     },
   })
 
-  // 1
   const mutationEntry = useMutation({
     mutationFn: createEntry,
     onSuccess: () => {
-      // if recurring entry then create recurring
       if (isRecurring) {
-        const [unit, frequencyString] =
-          getDayJSFrequencyFromString(selectedFrequency)
-        const nextDate = dayjs(date).add(unit, frequencyString)
-
-        if (!subCategory)
-          return alert(
-            'Oops... this should not have happened. Please select a category.',
-          )
-
-        mutationRecurring.mutate({
-          budget_id: defaultBudget?.id!,
-          start_at: date.toISOString(),
-          next_at: nextDate.toISOString(),
-          sub_category_id: subCategory.id,
-          category_id: subCategory.category?.id,
-          amount: Math.round(+amount * 100),
-          frequency: selectedFrequency,
-          active: true,
-        })
+        handleRecurringEntry()
       } else {
-        // carry on with normal entry
-        queryClient.invalidateQueries({
-          queryKey: ['entries'],
-        })
-
-        queryClient.invalidateQueries({
-          queryKey: ['infinite_entries'],
-        })
-
-        for (const qk of AnalyticsQueryKeys) {
-          queryClient.invalidateQueries({
-            queryKey: [qk],
-          })
-        }
-
-        setSaving(false)
-        Toasty.success('Entry saved!')
-        return router.replace('/(main)')
+        handleNormalEntry()
       }
     },
     onError: error => {
-      console.log('error', error.message)
-      Toasty.error(error.message)
+      console.error('Error creating entry:', error)
+      Toasty.error('Failed to create entry')
     },
   })
 
-  const handleSave = async () => {
-    if (!amount)
-      return alert('Nice try! Looks like you forgot to add an amount :)')
-    if (!subCategory) return alert('Oops... please select a category.')
-    // set loading on button
+  const handleRecurringEntry = useCallback(() => {
+    if (!subCategory) {
+      Toasty.error('Please select a category')
+      return
+    }
+
+    const [unit, frequencyString] =
+      getDayJSFrequencyFromString(selectedFrequency)
+    const nextDate = dayjs(date).add(unit, frequencyString)
+
+    mutationRecurring.mutate({
+      budget_id: defaultBudget?.id!,
+      start_at: date.toISOString(),
+      next_at: nextDate.toISOString(),
+      sub_category_id: subCategory.id,
+      category_id: subCategory.category?.id!,
+      amount: Math.round(+amount * 100),
+      frequency: selectedFrequency,
+      active: true,
+    })
+  }, [
+    subCategory,
+    date,
+    amount,
+    selectedFrequency,
+    defaultBudget,
+    mutationRecurring,
+  ])
+
+  const handleNormalEntry = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['entries'] })
+    queryClient.invalidateQueries({ queryKey: ['infinite_entries'] })
+    // AnalyticsQueryKeys.forEach((qk: string) => {
+    //   queryClient.invalidateQueries({ queryKey: [qk] })
+    // })
+    setSaving(false)
+    Toasty.success('Entry saved!')
+    router.replace('/(main)')
+  }, [queryClient])
+
+  const handleSave = useCallback(() => {
+    if (!amount) {
+      Toasty.error('Please enter an amount')
+      return
+    }
+    if (!subCategory) {
+      Toasty.error('Please select a category')
+      return
+    }
     setSaving(true)
-    // insert query
 
     mutationEntry.mutate({
       amount: Math.round(+amount * 100),
       created_at: date.toISOString(),
       sub_category_id: subCategory.id,
-      category_id: subCategory.category?.id,
-      budget_id: defaultBudget?.id,
+      category_id: subCategory.category?.id!,
+      budget_id: defaultBudget?.id!,
       year: date.getFullYear(),
       month: getSQLFriendlyMonth(date),
       week: getWeekNumber(date),
       day: date.getDay(),
     })
-  }
+  }, [amount, subCategory, date, defaultBudget, mutationEntry])
 
-  const onSelect = (sub_cat: SubCategory) => {
+  const onSelect = useCallback((sub_cat: SubCategory) => {
     setSubCategorySearchText(sub_cat.name)
     setSubCategory(sub_cat)
     Keyboard.dismiss()
     subCategoryInput.current?.blur()
-  }
+  }, [])
 
   const animatedStyles = useAnimatedStyle(() => ({
     height: translateValue.value,
     opacity: opacityValue.value,
   }))
 
-  const onChange = (_event: any, selectedDate?: Date) => {
-    if (!selectedDate) return
-    setDate(selectedDate)
-  }
+  const onChange = useCallback((_event: any, selectedDate?: Date) => {
+    if (selectedDate) setDate(selectedDate)
+  }, [])
 
-  const goToNewCategory = () => {
+  const goToNewCategory = useCallback(() => {
     router.navigate('/new-category')
-  }
+  }, [])
 
   return (
     <Page
@@ -192,7 +184,6 @@ export default function AddNewEntry() {
       }}
     >
       <Content style={{ zIndex: 2 }}>
-        {/* AMOUNT */}
         <AnimatedView style={[animatedStyles]}>
           <ThemedInput
             value={amount}
@@ -210,7 +201,6 @@ export default function AddNewEntry() {
           />
         </AnimatedView>
 
-        {/* CATEGORY */}
         <ThemedView style={{ flexDirection: 'row', alignItems: 'center' }}>
           <ThemedView style={{ flex: 1 }}>
             <ThemedInput
@@ -228,7 +218,7 @@ export default function AddNewEntry() {
                 opacityValue.value = withTiming(1, { duration: 300 })
                 translateValue.value = withDelay(
                   100,
-                  withTiming(48 + 8, { duration: 200 }),
+                  withTiming(56, { duration: 200 }),
                 )
                 setSuggestionsVisible(false)
               }}
@@ -244,7 +234,6 @@ export default function AddNewEntry() {
                 borderRadius: 8,
                 paddingHorizontal: 16,
                 marginBottom: 8,
-                // borderColor: tintColor,
                 backgroundColor: bgColor2,
               }}
             >
@@ -287,8 +276,11 @@ export default function AddNewEntry() {
           setDate={setDate}
         />
         <Padder />
-        {!isRecurring && subCategory ? (
-          <AnimatedView entering={FadeInUp} exiting={FadeOutDown.duration(200)}>
+        {!isRecurring && subCategory && (
+          <Animated.View
+            entering={FadeInUp}
+            exiting={FadeOutDown.duration(200)}
+          >
             <EntryPreview
               subCategory={subCategory}
               amount={amount}
@@ -296,11 +288,10 @@ export default function AddNewEntry() {
             />
             <Padder h={0.5} />
             <PreviewDisclaimer />
-          </AnimatedView>
-        ) : null}
+          </Animated.View>
+        )}
         <Padder />
       </Content>
-      {/* // FLOATING BUTTON */}
       <Spacer />
       <Content>
         <ThemedView style={{ alignItems: 'center' }}>
@@ -308,9 +299,6 @@ export default function AddNewEntry() {
           <ThemedButton onPress={handleSave} title="Save" loading={saving} />
         </ThemedView>
       </Content>
-      {/* </>
-      </TouchableWithoutFeedback> */}
-      {/* </KeyboardAvoidingView> */}
     </Page>
   )
 }

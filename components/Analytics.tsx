@@ -1,3 +1,8 @@
+import React from 'react'
+import { StyleSheet } from 'react-native'
+import { useQueries } from '@tanstack/react-query'
+import dayjs from 'dayjs'
+
 import { PADDING } from '@/constants/Styles'
 import {
   getAvgDailySpend,
@@ -8,116 +13,101 @@ import {
   getTodaySpend,
 } from '@/data/analytics'
 import { toMoney } from '@/utils/helpers'
-import { useQuery } from '@tanstack/react-query'
-import dayjs from 'dayjs'
-import { StyleSheet } from 'react-native'
 import Card from './Cards/Card'
 import { ThemedView } from './ThemedView'
 import CardVersus from './Cards/CardVersus'
-import { toast } from '@backpackapp-io/react-native-toast'
 import Toasty from '@/lib/Toasty'
 
-export const AnalyticsQueryKeys = [
-  'AnalyticsGetAllTimeSpend',
-  'AnalyticsGetAvgDailySpend',
-  'AnalyticsGetCurrentWeekSpend',
-  'AnalyticsGetTodaySpend',
-  'AnalyticsGetCurrentMonthSpend',
-  'AnalyticsGetLastWeekSpend',
-  'AnalyticsGetBreakdown',
-]
+export const AnalyticsQueryKeys = {
+  AllTimeSpend: 'AnalyticsGetAllTimeSpend',
+  AvgDailySpend: 'AnalyticsGetAvgDailySpend',
+  CurrentWeekSpend: 'AnalyticsGetCurrentWeekSpend',
+  TodaySpend: 'AnalyticsGetTodaySpend',
+  CurrentMonthSpend: 'AnalyticsGetCurrentMonthSpend',
+  LastWeekSpend: 'AnalyticsGetLastWeekSpend',
+  Breakdown: 'AnalyticsGetBreakdown',
+}
 
-export default function Analytics({
-  counter,
-  budget_id,
-}: {
+interface AnalyticsProps {
   counter: number
   budget_id?: string
-}) {
-  // THIS YEAR
-  const allTimeData = useQuery({
-    queryKey: ['AnalyticsGetAllTimeSpend', counter, budget_id],
-    queryFn: () => getThisYearSpend(budget_id),
+}
+
+export default function Analytics({ counter, budget_id }: AnalyticsProps) {
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: [AnalyticsQueryKeys.AllTimeSpend, counter, budget_id],
+        queryFn: () => getThisYearSpend(budget_id),
+      },
+      {
+        queryKey: [AnalyticsQueryKeys.AvgDailySpend, counter, budget_id],
+        queryFn: () => getAvgDailySpend(budget_id),
+      },
+      {
+        queryKey: [AnalyticsQueryKeys.CurrentWeekSpend, counter, budget_id],
+        queryFn: () => getCurrentWeekSpend(budget_id),
+      },
+      {
+        queryKey: [AnalyticsQueryKeys.LastWeekSpend, counter, budget_id],
+        queryFn: () => getLastWeekSpend(budget_id),
+      },
+      {
+        queryKey: [AnalyticsQueryKeys.CurrentMonthSpend, counter, budget_id],
+        queryFn: () => getCurrentMonthSpend(budget_id),
+      },
+      {
+        queryKey: [AnalyticsQueryKeys.TodaySpend, counter, budget_id],
+        queryFn: () => getTodaySpend(budget_id),
+      },
+    ],
   })
 
-  const avgDailyData = useQuery({
-    queryKey: ['AnalyticsGetAvgDailySpend', counter, budget_id],
-    queryFn: () => getAvgDailySpend(budget_id),
-  })
+  const [
+    allTimeData,
+    avgDailyData,
+    currentWeekData,
+    lastWeekData,
+    currentMonthData,
+    todayData,
+  ] = queries
 
-  const currentWeekData = useQuery({
-    queryKey: ['AnalyticsGetCurrentWeekSpend', counter, budget_id],
-    queryFn: () => getCurrentWeekSpend(budget_id),
-  })
-
-  const lastWeekData = useQuery({
-    queryKey: ['AnalyticsGetLastWeekSpend', counter, budget_id],
-    queryFn: () => getLastWeekSpend(budget_id),
-  })
-
-  const currentMonthData = useQuery({
-    queryKey: ['AnalyticsGetCurrentMonthSpend', counter, budget_id],
-    queryFn: () => getCurrentMonthSpend(budget_id),
-  })
-
-  const todayData = useQuery({
-    queryKey: ['AnalyticsGetTodaySpend', counter, budget_id],
-    queryFn: () => getTodaySpend(budget_id),
-  })
+  React.useEffect(() => {
+    const error = queries.find(query => query.error)?.error
+    if (error) {
+      Toasty.error(`Analytics error: ${error.message}`)
+    }
+  }, [queries])
 
   const diffRaw = dayjs()
     .endOf('day')
     .diff(dayjs(avgDailyData.data?.created_at).startOf('day'), 'day', true)
 
-  // number of full days since the first transaction
-  // including day of first transaction and today
   const diff = Math.ceil(diffRaw)
-
   const dailySpend = allTimeData.data / (diff || 1)
 
-  if (lastWeekData.error || currentWeekData.error || currentMonthData.error) {
-    Toasty.error(
-      'Analytics error: ' +
-      (lastWeekData.error?.message ||
-        currentWeekData.error?.message ||
-        currentMonthData.error?.message),
-    )
-  }
+  const renderCard = (title: string, value: number, loading: boolean) => (
+    <Card loading={loading} title={title} value={toMoney(value, true)} />
+  )
 
   return (
     <ThemedView>
       <ThemedView style={styles.container}>
-        <Card
-          loading={allTimeData.isLoading}
-          title={'This Year'}
-          value={toMoney(allTimeData.data, true)}
-        />
-        <Card
-          loading={avgDailyData.isLoading}
-          title={'Daily Avg.'}
-          value={toMoney(dailySpend, true)}
-        />
-        <Card
-          loading={currentMonthData.isLoading}
-          title={'This Month'}
-          value={toMoney(currentMonthData.data, true)}
-        />
-        <Card
-          loading={lastWeekData.isLoading}
-          title={'Last Week'}
-          value={toMoney(lastWeekData.data, true)}
-        />
-        <Card
-          loading={currentWeekData.isLoading}
-          title={'This Week'}
-          value={toMoney(currentWeekData.data, true)}
-        />
-        <Card
-          loading={todayData.isLoading}
-          title={'Today'}
-          value={toMoney(todayData.data, true)}
-        />
-        {budget_id ? <CardVersus counter={counter} /> : null}
+        {renderCard('This Year', allTimeData.data, allTimeData.isLoading)}
+        {renderCard('Daily Avg.', dailySpend, avgDailyData.isLoading)}
+        {renderCard(
+          'This Month',
+          currentMonthData.data,
+          currentMonthData.isLoading,
+        )}
+        {renderCard('Last Week', lastWeekData.data, lastWeekData.isLoading)}
+        {renderCard(
+          'This Week',
+          currentWeekData.data,
+          currentWeekData.isLoading,
+        )}
+        {renderCard('Today', todayData.data, todayData.isLoading)}
+        {budget_id && <CardVersus counter={counter} />}
       </ThemedView>
     </ThemedView>
   )

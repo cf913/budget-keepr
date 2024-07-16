@@ -145,3 +145,6 @@ export const getSQLFriendlyMonth = (date?: Date) => {
   const actualDate = date || new Date()
   return actualDate.getMonth() + 1
 }
+
+export const sleep = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms))

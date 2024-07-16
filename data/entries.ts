@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { getSupabaseUser } from './api'
 import { Entry } from '@/components/RecentEntries'
-import { logRes } from '@/utils/helpers'
+import { logRes, sleep } from '@/utils/helpers'
 
 export const deleteEntry = async (entryId: string) => {
   const user = await getSupabaseUser()
@@ -65,8 +65,7 @@ export const getEntries = async (
     const to = from + filters?.limit
     query = query.range(from, to)
   }
-  /// DEV
-  // logRes('getEntries', data, error)
+
   const { data, error } = await query
     .order('created_at', { ascending: false })
     .returns<Entry[]>()

@@ -28,7 +28,7 @@ export default function ErrorContainer({
       <ThemedText>{error}</ThemedText>
       <Padder />
       <Padder />
-      <ThemedButton onPress={onRetry} title="Try again" />
+      {onRetry ? <ThemedButton onPress={onRetry} title="Try again" /> : null}
       <Padder />
     </ThemedView>
   )

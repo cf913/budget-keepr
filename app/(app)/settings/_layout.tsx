@@ -10,6 +10,14 @@ export default function SettingsLayout() {
           presentation: 'modal',
         }}
       />
+      <Stack.Screen
+        name="category/[id]/edit"
+        options={{
+          // Set the presentation mode to modal for our modal route.
+          presentation: 'modal',
+          headerShown: false,
+        }}
+      />
     </Stack>
   )
 }

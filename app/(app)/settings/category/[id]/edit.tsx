@@ -108,6 +108,7 @@ function CategoryEdit({
         position: 'relative',
         paddingBottom: insets.bottom,
       }}
+      withHeader
     >
       {isLoading && <Loader />}
       {!isLoading ? (

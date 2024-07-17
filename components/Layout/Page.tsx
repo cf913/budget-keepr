@@ -40,6 +40,7 @@ type PageProps = {
   scroll?: boolean
   back?: boolean
   down?: boolean
+  mid?: ReactNode
   refreshing?: boolean
   onRefresh?: () => void
   withSettings?: boolean
@@ -55,6 +56,7 @@ export function Page({
   scroll = false,
   back = false,
   down = false,
+  mid,
   refreshing = false,
   onRefresh,
   withSettings = false,
@@ -101,6 +103,7 @@ export function Page({
         <Padder style={{ height: withHeader ? headerHeight : insets.top }} />
         <ThemedView style={[{}, styles.header]}>
           {title ? <Header title={title} back={back} down={down} /> : null}
+          {mid ? mid : null}
           {withSettings ? <SettingsButton /> : null}
         </ThemedView>
         {children}

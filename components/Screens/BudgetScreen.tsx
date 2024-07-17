@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import RecentRecurrings from '../RecentRecurrings'
 import { Page, Content, Padder } from '../Layout'
+import UserAvatars from '../UserAvatars'
 
 export default function BudgetScreen() {
   const { defaultBudget } = useLocalSettings()
@@ -22,6 +23,19 @@ export default function BudgetScreen() {
     <Page
       scroll
       title={defaultBudget?.name || 'Budget'}
+      mid={
+        <ThemedView
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            flex: 1,
+          }}
+        >
+          <Padder w={1} />
+          <UserAvatars members={defaultBudget?.team?.members || []} />
+        </ThemedView>
+      }
       refreshing={false}
       onRefresh={onRefresh}
       footer={<HomePageFooter />}

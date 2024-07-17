@@ -3,9 +3,26 @@ import { getDataManyObj, storeDataObj } from '@/utils/async-storage'
 import { SplashScreen } from 'expo-router'
 import React, { useEffect, useMemo, useState } from 'react'
 
+export interface User {
+  id: string
+  username: string
+  avatar_url: string
+}
+
+export interface Member {
+  id: string
+  user: User
+}
+
+export interface Team {
+  id: string
+  members: Member[]
+}
+
 export interface Budget {
   id: string
   name: string
+  team: Team
 }
 
 const LocalSettingsContext = React.createContext<{

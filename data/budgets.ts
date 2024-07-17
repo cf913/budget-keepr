@@ -1,8 +1,8 @@
 import { supabase } from '@/lib/supabase'
-import { getSupabaseUser } from './api'
+import { getSupabaseSession } from './api'
 
 export const getBudgets = async () => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   let query = supabase.from('budgets').select()

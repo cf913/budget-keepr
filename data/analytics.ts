@@ -1,10 +1,10 @@
 import { supabase } from '@/lib/supabase'
-import { getSupabaseUser } from './api'
+import { getSupabaseSession } from './api'
 import { getSQLFriendlyMonth, getWeekNumber } from '@/utils/helpers'
 import dayjs from 'dayjs'
 
 export const getAllTimeSpend = async (budget_id?: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
   let query = supabase.from('entries').select('amount.sum()')
   if (budget_id) query = query.eq('budget_id', budget_id)
@@ -16,7 +16,7 @@ export const getAllTimeSpend = async (budget_id?: string) => {
 }
 
 export const getThisYearSpend = async (budget_id?: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   const yearNumber = new Date().getFullYear()
@@ -33,7 +33,7 @@ export const getThisYearSpend = async (budget_id?: string) => {
 }
 
 export const getCurrentMonthSpend = async (budget_id?: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   const monthNumber = getSQLFriendlyMonth()
@@ -50,7 +50,7 @@ export const getCurrentMonthSpend = async (budget_id?: string) => {
 }
 
 export const getAvgDailySpend = async (budget_id?: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   let query = supabase.from('entries').select('created_at')
@@ -69,7 +69,7 @@ export const getAvgDailySpend = async (budget_id?: string) => {
 }
 
 export const getLastWeekSpend = async (budget_id?: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   const currentWeek = getWeekNumber() - 1
@@ -86,7 +86,7 @@ export const getLastWeekSpend = async (budget_id?: string) => {
 }
 
 export const getCurrentWeekSpend = async (budget_id?: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   const currentWeek = getWeekNumber()
@@ -103,7 +103,7 @@ export const getCurrentWeekSpend = async (budget_id?: string) => {
 }
 
 export const getTodaySpend = async (budget_id?: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   const now = dayjs()
@@ -129,7 +129,7 @@ export const getTodaySpend = async (budget_id?: string) => {
 }
 
 export const getBreakdown = async (budget_id: string | null, timeframe: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) throw new Error('User not found')
 
   let tf = timeframe

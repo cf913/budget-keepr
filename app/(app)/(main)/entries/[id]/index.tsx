@@ -130,6 +130,7 @@ function EntryScreen({ entry }: { entry: Entry; isLoading: boolean }) {
       id: entry.id,
       amount: Math.round(+amount * 100),
       created_at: date.toISOString(),
+      updated_at: new Date().toISOString(),
       sub_category_id: subCategory.id,
       category_id: subCategory.category?.id,
       year: date.getFullYear(),

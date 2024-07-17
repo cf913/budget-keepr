@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase'
-import { getSupabaseUser } from './api'
+import { getSupabaseSession } from './api'
 import { logRes } from '@/utils/helpers'
 import { SubCategory } from '@/components/RecentEntries'
 
@@ -10,7 +10,7 @@ export const getSubCategories = async ({
   categoryId?: string
   budget_id?: string
 }): Promise<SubCategory[]> => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) throw new Error('Current user not found')
 
   console.log('budget_id', budget_id)
@@ -43,7 +43,7 @@ export interface SubCategoryInput {
 }
 
 export const createSubCategory = async (sub_category: SubCategoryInput) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   // await new Promise(res => setTimeout(res, 2000))
@@ -61,7 +61,7 @@ export const createSubCategory = async (sub_category: SubCategoryInput) => {
 }
 
 export const searchSubCategories = async (searchText?: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   let query = supabase

@@ -21,6 +21,7 @@ import { isRunningInExpoGo } from 'expo'
 import { TempStoreProvider } from '@/stores/tempStore'
 import { Toasts } from '@backpackapp-io/react-native-toast'
 import Toasty from '@/lib/Toasty'
+import { WithUser } from '@/stores/userStore'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -61,7 +62,6 @@ function RootLayout() {
   useEffect(() => {
     if (loaded) {
       // SplashScreen.hideAsync()
-      Toasty.success('App ready!')
     }
   }, [loaded])
 
@@ -79,8 +79,10 @@ function RootLayout() {
             <LocalSettingsProvider>
               <TempStoreProvider>
                 <QueryClientProvider client={queryClient}>
-                  <Slot />
-                  <Toasts />
+                  <WithUser>
+                    <Slot />
+                    <Toasts />
+                  </WithUser>
                 </QueryClientProvider>
               </TempStoreProvider>
             </LocalSettingsProvider>

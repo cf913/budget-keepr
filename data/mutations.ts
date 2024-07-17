@@ -1,9 +1,9 @@
 import { supabase } from '@/lib/supabase'
 import { logRes } from '@/utils/helpers'
-import { getSupabaseUser } from './api'
+import { getSupabaseSession } from './api'
 
 export const createEntry = async (entry: any) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   let { data, error }: any = await supabase
@@ -18,7 +18,7 @@ export const createEntry = async (entry: any) => {
 }
 
 export const updateEntry = async (entry: any) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   let { data, error }: any = await supabase

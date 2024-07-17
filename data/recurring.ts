@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import { logRes } from '@/utils/helpers'
-import { getSupabaseUser } from './api'
+import { getSupabaseSession } from './api'
 import { Frequency } from '@/components/RecurringInputs'
 import { Category, SubCategory } from '@/components/RecentEntries'
 
@@ -37,7 +37,7 @@ export type Recurring = {
 }
 
 export const createRecurring = async (recurring: RecurringInput) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) return
 
   let { data, error }: any = await supabase
@@ -56,7 +56,7 @@ export const getRecurrings = async (
   filters?: { active?: boolean; archived?: boolean },
   limit?: number,
 ): Promise<Recurring[]> => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) throw new Error('No user found')
 
   let query = supabase.from('recurring').select(
@@ -102,7 +102,7 @@ export const getRecurrings = async (
 }
 
 export const updateRecurring = async (recurring: RecurringUpdateInput) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) throw new Error('No user found')
 
   if (!recurring.id) throw new Error('No recurring id provided')
@@ -120,7 +120,7 @@ export const updateRecurring = async (recurring: RecurringUpdateInput) => {
 }
 
 export const deleteRecurring = async (id: string) => {
-  const user = await getSupabaseUser()
+  const user = await getSupabaseSession()
   if (!user) throw new Error('No user found')
 
   if (!id) throw new Error('No recurring id provided')

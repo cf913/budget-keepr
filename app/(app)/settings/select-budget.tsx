@@ -1,4 +1,4 @@
-import Page from '@/components/Layout/Page'
+import { Page } from '@/components/Layout'
 import SelectBudget from '@/components/Selects/SelectBudget'
 import { router } from 'expo-router'
 

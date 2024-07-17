@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { ThemedButton } from '../Buttons/ThemedButton'
-import Footer from '../Layout/Footer'
 import { AnimatedView, ThemedView } from '../ThemedView'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { Fragment, useState } from 'react'
@@ -21,9 +20,8 @@ import SelectBudget from '../Selects/SelectBudget'
 import { PADDING, RADIUS, TYPO } from '@/constants/Styles'
 import { BlurView } from 'expo-blur'
 import { ThemedText } from '../ThemedText'
-import Content from '../Layout/Content'
-import Padder from '../Layout/Padder'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import { Footer, Content, Padder } from '../Layout'
 
 export default function HomePageFooter() {
   const offset = useSharedValue(0)

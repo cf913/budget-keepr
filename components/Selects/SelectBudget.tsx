@@ -1,12 +1,12 @@
+import { getBudgets } from '@/data/queries'
 import { Budget, useLocalSettings } from '@/stores/localSettings'
 import { isLastItem } from '@/utils/helpers'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import ErrorContainer from '../ErrorContainer'
-import Content from '../Layout/Content'
+import { Content } from '../Layout'
 import List from '../Lists/List'
 import ListItem from '../Lists/ListItem'
 import { Loader } from '../Loader'
-import { getBudgets } from '@/data/queries'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 type SelectBudgetProps = {
   callback?: () => void

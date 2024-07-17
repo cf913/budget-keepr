@@ -13,13 +13,13 @@ import { useMemo } from 'react'
 import { Pressable, Switch } from 'react-native'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { ThemedButtonCompact } from './Buttons/ThemedButtonCompact'
-import Padder from './Layout/Padder'
 import List from './Lists/List'
 import ListItem from './Lists/ListItem'
 import PreviewDisclaimer from './Preview/PreviewDisclaimer'
 import { SubCategory } from './RecentEntries'
 import { ThemedText } from './ThemedText'
 import { AnimatedView, ThemedView } from './ThemedView'
+import { Padder } from './Layout'
 
 export type Frequency =
   | 'daily'
@@ -32,7 +32,7 @@ export type Frequency =
 
 export default function RecurringInputs({
   date,
-  setDate,
+  // setDate,
   isRecurring,
   setRecurring,
   subCategory,
@@ -48,10 +48,10 @@ export default function RecurringInputs({
   const { selectedFrequency } = useTempStore()
   const tintColor = useThemeColor({}, 'tint')
 
-  const onChange = (_event: any, selectedDate?: Date) => {
-    if (!selectedDate) return
-    setDate(selectedDate)
-  }
+  // const onChange = (_event: any, selectedDate?: Date) => {
+  //   if (!selectedDate) return
+  //   setDate(selectedDate)
+  // }
 
   const nextEntry = useMemo(() => {
     const [unit, frequencyString] =
@@ -156,7 +156,8 @@ export default function RecurringInputs({
                   ...TYPO.small,
                 }}
               >
-                NEXT {getTimeStringFromFrequency(selectedFrequency).toUpperCase()}
+                NEXT{' '}
+                {getTimeStringFromFrequency(selectedFrequency).toUpperCase()}
               </ThemedText>
               <Padder h={0.5} />
               <List>

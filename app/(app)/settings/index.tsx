@@ -1,39 +1,13 @@
-import { ThemedButton } from '@/components/Buttons/ThemedButton'
-import Content from '@/components/Layout/Content'
-import Padder from '@/components/Layout/Padder'
-import Page from '@/components/Layout/Page'
-import Spacer from '@/components/Layout/Spacer'
+import { Page, Content, Padder } from '@/components/Layout'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
-import { ThemedView } from '@/components/ThemedView'
-import { PADDING } from '@/constants/Styles'
 import { VERSION } from '@/constants/config'
-import { supabase } from '@/lib/supabase'
 import { useLocalSettings } from '@/stores/localSettings'
 import * as Application from 'expo-application'
-import { Alert } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Settings() {
-  const { defaultBudget, resetState } = useLocalSettings()
-  const insets = useSafeAreaInsets()
+  const { defaultBudget } = useLocalSettings()
 
-  const signOut = async () => {
-    await supabase.auth.signOut()
-    // clean up localSettings
-    resetState()
-  }
-
-  const onSignOut = async () => {
-    Alert.alert('Confirm', 'Do you really want to do this?', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      { text: 'Sign Out', onPress: signOut, style: 'destructive' },
-    ])
-  }
   return (
     <Page title="Settings" back>
       {/* TODO: build a list of clickable items relating to each setting */}
@@ -50,6 +24,10 @@ export default function Settings() {
         </List>
         <Padder />
         <List>
+          <ListItem title="Account" href="/settings/account" lastItem />
+        </List>
+        <Padder />
+        <List>
           <ListItem
             title={`${Application.nativeApplicationVersion}`}
             description={`${VERSION}${__DEV__ ? ' ' + process.env.EXPO_PUBLIC_SUPABASE_URL : ''}`}
@@ -58,16 +36,6 @@ export default function Settings() {
         </List>
       </Content>
       {/* ///////////////////////// */}
-      <Spacer />
-      <ThemedView
-        style={{
-          padding: PADDING,
-          backgroundColor: 'transparent',
-          paddingBottom: insets.bottom,
-        }}
-      >
-        <ThemedButton title="Sign Out" onPress={onSignOut}></ThemedButton>
-      </ThemedView>
     </Page>
   )
 }

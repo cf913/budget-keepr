@@ -2,11 +2,9 @@ import { PADDING } from '@/constants/Styles'
 import { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Analytics from '../Analytics'
-import Content from '../Layout/Content'
-import Padder from '../Layout/Padder'
-import Page from '../Layout/Page'
 import CardVersusAll from '../Cards/CardVersusAll'
 import RecentRecurrings from '../RecentRecurrings'
+import { Page, Content, Padder } from '../Layout'
 
 export default function AllTimeAnalytics() {
   const insets = useSafeAreaInsets()

@@ -1,10 +1,8 @@
 import { PADDING } from '@/constants/Styles'
-import Content from '../Layout/Content'
-import Padder from '../Layout/Padder'
-import Page from '../Layout/Page'
 import { ThemedView } from '../ThemedView'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ErrorContainer from '../ErrorContainer'
+import { Page, Content, Padder } from '../Layout'
 
 interface ErrorScreenProps {
   error: string

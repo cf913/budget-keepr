@@ -3,12 +3,13 @@ import { Recurring, getRecurrings } from '@/data/recurring'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { BlurView } from 'expo-blur'
 import { ScrollView } from 'react-native-gesture-handler'
-import Padder from './Layout/Padder'
 import List from './Lists/List'
 import ListItemRecurring from './Lists/ListItemRecurring'
 import ListItemSkeleton from './Lists/ListItemSkeleton'
 import { ThemedText } from './ThemedText'
 import { useQuery } from '@tanstack/react-query'
+import { Padder } from './Layout'
+import Toasty from '@/lib/Toasty'
 
 export default function RecentRecurrings({ id }: { id?: string }) {
   const textColor = useThemeColor({}, 'text')
@@ -17,12 +18,13 @@ export default function RecentRecurrings({ id }: { id?: string }) {
     data: recurrings = [],
     error,
     isLoading,
-    refetch,
     isRefetching,
   } = useQuery({
     queryKey: ['recurrings', id],
     queryFn: () => getRecurrings(id, {}, 2),
   })
+
+  if (error) Toasty.error('RecentRecurrings: ' + error.message)
 
   // TODO: error handling
 

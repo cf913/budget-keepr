@@ -4,7 +4,7 @@ import { Recurring, RecurringUpdateInput } from '@/data/recurring'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { isLastItem } from '@/utils/helpers'
 import { Feather } from '@expo/vector-icons'
-import Content from './Layout/Content'
+import { Content } from './Layout'
 import List from './Lists/List'
 import ListItemRecurring from './Lists/ListItemRecurring'
 import { Loader } from './Loader'
@@ -47,7 +47,9 @@ export default function RecurringList({
         >
           <Feather name="archive" size={22} color={textColor} />
           <ThemedView style={{ marginLeft: PADDING / 2 }} />
-          <ThemedText style={{ ...TYPO.title_compact, marginTop: 3 }}>{title}</ThemedText>
+          <ThemedText style={{ ...TYPO.title_compact, marginTop: 3 }}>
+            {title}
+          </ThemedText>
         </ThemedView>
       ) : null}
       {isLoading ? <Loader /> : null}

@@ -1,15 +1,13 @@
 import { PADDING } from '@/constants/Styles'
 import Analytics from '../Analytics'
 import HomePageFooter from '../Footers/HomePageFooter'
-import Content from '../Layout/Content'
-import Padder from '../Layout/Padder'
-import Page from '../Layout/Page'
 import RecentEntries from '../RecentEntries'
 import { ThemedView } from '../ThemedView'
 import { useLocalSettings } from '@/stores/localSettings'
 import { useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import RecentRecurrings from '../RecentRecurrings'
+import { Page, Content, Padder } from '../Layout'
 
 export default function BudgetScreen() {
   const { defaultBudget } = useLocalSettings()

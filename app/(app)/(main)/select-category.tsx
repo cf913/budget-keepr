@@ -1,4 +1,4 @@
-import Page from '@/components/Layout/Page'
+import { Page } from '@/components/Layout'
 import { Category } from '@/components/RecentEntries'
 import SelectCategory from '@/components/Selects/SelectCategory'
 import { useTempStore } from '@/stores/tempStore'

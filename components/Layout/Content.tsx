@@ -3,7 +3,7 @@ import { ThemedView } from '@/components/ThemedView'
 import { ReactNode } from 'react'
 import { ViewStyle } from 'react-native'
 
-export default function Content({
+export function Content({
   floating = false,
   style,
   children,

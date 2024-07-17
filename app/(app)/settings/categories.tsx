@@ -1,7 +1,5 @@
 import { ThemedButton } from '@/components/Buttons/ThemedButton'
-import Content from '@/components/Layout/Content'
-import Padder from '@/components/Layout/Padder'
-import Page from '@/components/Layout/Page'
+import { Content, Padder, Page } from '@/components/Layout'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import { Loader } from '@/components/Loader'
@@ -13,7 +11,7 @@ import { isLastItem } from '@/utils/helpers'
 import { Feather } from '@expo/vector-icons'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { Animated } from 'react-native'
 import { RectButton, Swipeable } from 'react-native-gesture-handler'
 
@@ -65,7 +63,6 @@ export default function Categories() {
           <List>
             {(data || []).map((category, i) => {
               return (
-
                 <Swipeable
                   key={category.id}
                   renderRightActions={() => (

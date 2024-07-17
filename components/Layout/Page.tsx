@@ -1,11 +1,7 @@
 import { PADDING, TYPO } from '@/constants/Styles'
-import { useThemeColor } from '@/hooks/useThemeColor'
-import { Feather } from '@expo/vector-icons'
 import { useHeaderHeight } from '@react-navigation/elements'
-import { router } from 'expo-router'
 import { ReactNode } from 'react'
 import {
-  Pressable,
   RefreshControl,
   ScrollView,
   ScrollViewProps,
@@ -15,11 +11,11 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import SettingsButton from '../Buttons/SettingsButton'
-import { Header } from './Header'
-import { ThemedText } from '../ThemedText'
 import { ThemedView } from '../ThemedView'
-import Footer from './Footer'
-import Padder from './Padder'
+import { Header } from './Header'
+import { Footer } from './Footer'
+import { Padder } from './Padder'
+
 const Wrapper = ({
   scroll,
   refreshControl,
@@ -55,7 +51,7 @@ type PageProps = {
   children: ReactNode
 }
 
-export default function Page({
+export function Page({
   scroll = false,
   back = false,
   down = false,
@@ -64,14 +60,12 @@ export default function Page({
   withSettings = false,
   withHeader = false,
   title,
-  subtitle,
   style,
   footer = null,
   children,
 }: PageProps) {
   const insets = useSafeAreaInsets()
   const headerHeight = useHeaderHeight()
-  const colorText = useThemeColor({}, 'mid')
 
   const refreshControl = onRefresh ? (
     <RefreshControl

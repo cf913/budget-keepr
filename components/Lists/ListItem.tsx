@@ -1,4 +1,3 @@
-import { ExpoRouter } from '@/.expo/types/router'
 import { HEIGHT, PADDING, RADIUS, TYPO } from '@/constants/Styles'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { Feather } from '@expo/vector-icons'
@@ -6,10 +5,10 @@ import { Link } from 'expo-router'
 import { ReactNode } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { FadeIn } from 'react-native-reanimated'
+import { Padder } from '../Layout'
 import { Category } from '../RecentEntries'
 import { ThemedText } from '../ThemedText'
 import { AnimatedView, ThemedView } from '../ThemedView'
-import Padder from '../Layout/Padder'
 
 const Wrapper = ({
   href,

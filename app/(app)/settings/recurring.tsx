@@ -1,5 +1,4 @@
-import Padder from '@/components/Layout/Padder'
-import Page from '@/components/Layout/Page'
+import { Page, Padder } from '@/components/Layout'
 import RecurringListActive from '@/components/Lists/RecurringListActive'
 import RecurringListArchived from '@/components/Lists/RecurringListArchived'
 import { RecurringUpdateInput, updateRecurring } from '@/data/recurring'
@@ -7,7 +6,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
 import { Alert } from 'react-native'
 
-// TODO: split into two lists: active and archived
 // TODO: use forwardRef + useImperativeHandle to call refetch for both lists on pull down
 
 export type RecurringUpdateType = 'active' | 'archived'

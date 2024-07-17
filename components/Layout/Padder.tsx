@@ -2,7 +2,7 @@ import { PADDING } from '@/constants/Styles'
 import { ThemedView } from '@/components/ThemedView'
 import { ViewStyle } from 'react-native'
 
-export default function Padder({
+export function Padder({
   h = 1,
   w = 0,
   hv,
@@ -16,7 +16,11 @@ export default function Padder({
   return (
     <ThemedView
       style={[
-        { height: hv || h * PADDING, width: w * PADDING, backgroundColor: 'transparent' },
+        {
+          height: hv || h * PADDING,
+          width: w * PADDING,
+          backgroundColor: 'transparent',
+        },
         style,
       ]}
     />

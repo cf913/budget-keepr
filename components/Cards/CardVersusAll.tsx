@@ -6,12 +6,12 @@ import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { useQuery } from '@tanstack/react-query'
 import React, { Fragment, useMemo, useState } from 'react'
 import { StyleSheet, useWindowDimensions } from 'react-native'
-import Padder from '../Layout/Padder'
 import { Loader } from '../Loader'
 import { ThemedText } from '../ThemedText'
 import { AnimatedView, ThemedView } from '../ThemedView'
 import { FadeIn, FadeOut } from 'react-native-reanimated'
 import { ScrollView } from 'react-native-gesture-handler'
+import { Padder } from '../Layout'
 
 type CardVersusProps = {
   counter: number

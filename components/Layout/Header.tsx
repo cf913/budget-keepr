@@ -9,8 +9,8 @@ import {
   FadeOutRight,
 } from 'react-native-reanimated'
 import { AnimatedView, ThemedView } from '../ThemedView'
-import Padder from './Padder'
 import { ThemedText } from '../ThemedText'
+import { Padder } from './Padder'
 
 type HeaderProps = {
   title?: string
@@ -20,7 +20,6 @@ type HeaderProps = {
 
 export function Header(props: HeaderProps) {
   const { title, back = true, down = false } = props
-  const colorText = useThemeColor({}, 'text')
   const colorMid = useThemeColor({}, 'mid')
   return (
     <ThemedView>

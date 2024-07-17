@@ -1,9 +1,9 @@
-import React from 'react'
-import { ThemedView } from '@/components/ThemedView'
-import { ThemedText } from '@/components/ThemedText'
-import Padder from '@/components/Layout/Padder'
 import { Loader } from '@/components/Loader'
+import { ThemedText } from '@/components/ThemedText'
+import { ThemedView } from '@/components/ThemedView'
 import { TYPO } from '@/constants/Styles'
+import React from 'react'
+import { Padder } from '../Layout'
 
 interface ListFooterProps {
   isFetchingNextPage: boolean

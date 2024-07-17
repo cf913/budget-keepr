@@ -1,6 +1,6 @@
 import { AppleSignInButton } from '@/components/AppleSignInButton'
 import { Divider } from '@/components/Divider'
-import Padder from '@/components/Layout/Padder'
+import { Padder } from '@/components/Layout'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 import { Colors } from '@/constants/Colors'

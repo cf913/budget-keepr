@@ -6,7 +6,7 @@ import { Redirect } from 'expo-router'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import PagerView from 'react-native-pager-view'
-import Settings from '../settings'
+// import Settings from '../settings'
 
 export default function HomeScreen() {
   const { defaultBudget } = useLocalSettings()

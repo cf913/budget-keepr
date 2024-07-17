@@ -1,5 +1,4 @@
-import Content from '@/components/Layout/Content'
-import Page from '@/components/Layout/Page'
+import { Page, Content } from '@/components/Layout'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import { Frequency } from '@/components/RecurringInputs'

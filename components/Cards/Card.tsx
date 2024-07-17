@@ -1,13 +1,8 @@
 import { PADDING, RADIUS, TYPO } from '@/constants/Styles'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { StyleSheet } from 'react-native'
-import {
-  FadeIn,
-  FadeOut,
-  FlipInXUp,
-  FlipOutXDown,
-} from 'react-native-reanimated'
-import Padder from '../Layout/Padder'
+import { FadeIn } from 'react-native-reanimated'
+import { Padder } from '../Layout'
 import { Loader } from '../Loader'
 import { ThemedText } from '../ThemedText'
 import { AnimatedView, ThemedView } from '../ThemedView'

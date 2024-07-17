@@ -9,8 +9,6 @@ import React, { useCallback } from 'react'
 import { Alert, RefreshControl } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import Content from '@/components/Layout/Content'
-import Page from '@/components/Layout/Page'
 import EntryListItem from '@/components/Lists/EntryListItem'
 import List from '@/components/Lists/List'
 import ListEmpty from '@/components/Lists/ListEmpty'
@@ -24,6 +22,7 @@ import { useRefreshOnFocus } from '@/hooks/useRefreshOnFocus'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import Toasty from '@/lib/Toasty'
 import { useLocalSettings } from '@/stores/localSettings'
+import { Page, Content } from '@/components/Layout'
 
 const PAGE_SIZE = 18
 

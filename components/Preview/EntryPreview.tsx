@@ -1,4 +1,3 @@
-import Padder from '@/components/Layout/Padder'
 import { ThemedText } from '@/components/ThemedText'
 import { TYPO } from '@/constants/Styles'
 import { toMoney } from '@/utils/helpers'
@@ -6,6 +5,7 @@ import dayjs from 'dayjs'
 import { SubCategory } from '../RecentEntries'
 import List from './../Lists/List'
 import ListItem from './../Lists/ListItem'
+import { Padder } from '../Layout'
 
 type EntryPreviewProps = {
   subCategory: null | SubCategory
@@ -13,7 +13,11 @@ type EntryPreviewProps = {
   description?: string
 }
 
-export default function EntryPreview({ subCategory, amount, description }: EntryPreviewProps) {
+export default function EntryPreview({
+  subCategory,
+  amount,
+  description,
+}: EntryPreviewProps) {
   return subCategory ? (
     <>
       <ThemedText
@@ -30,7 +34,9 @@ export default function EntryPreview({ subCategory, amount, description }: Entry
         <ListItem
           lastItem
           title={subCategory.name}
-          description={description ? description : dayjs().format('HH:mm - ddd D MMM')}
+          description={
+            description ? description : dayjs().format('HH:mm - ddd D MMM')
+          }
           category={subCategory.category}
           right={toMoney(+amount * 100)}
         />

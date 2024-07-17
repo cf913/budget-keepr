@@ -1,23 +1,19 @@
 import { PADDING, TYPO } from '@/constants/Styles'
-import { deleteEntry, getEntries } from '@/data/entries'
+import { getEntries } from '@/data/entries'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import Toasty from '@/lib/Toasty'
 import { useLocalSettings } from '@/stores/localSettings'
 import { toMoney } from '@/utils/helpers'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { BlurView } from 'expo-blur'
-import { Alert } from 'react-native'
+import { useEffect } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
-import { AnalyticsQueryKeys } from './Analytics'
-import Padder from './Layout/Padder'
+import { Padder } from './Layout'
 import List from './Lists/List'
 import ListItem from './Lists/ListItem'
 import ListItemSkeleton from './Lists/ListItemSkeleton'
 import { ThemedText } from './ThemedText'
-
-import { useEffect } from 'react'
-import Toasty from '@/lib/Toasty'
-import { useRefreshOnFocus } from '@/hooks/useRefreshOnFocus'
 
 export interface Category {
   id: string
@@ -41,7 +37,6 @@ export interface Entry {
 
 export default function RecentEntries({
   counter,
-  setCounter,
 }: {
   counter: number
   setCounter: (value: number) => void
@@ -54,7 +49,6 @@ export default function RecentEntries({
     error,
     isLoading,
     refetch,
-    isRefetching,
   } = useQuery({
     queryKey: ['recent_entries', defaultBudget?.id],
     queryFn: () => getEntries(defaultBudget?.id, { limit: 3, offset: 0 }),

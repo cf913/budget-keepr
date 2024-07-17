@@ -17,10 +17,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import CategorySuggestions from '@/components/CategorySuggestions'
 import ThemedInput from '@/components/Inputs/ThemedInput'
-import Content from '@/components/Layout/Content'
-import Padder from '@/components/Layout/Padder'
-import Page from '@/components/Layout/Page'
-import Spacer from '@/components/Layout/Spacer'
 import EntryPreview from '@/components/Preview/EntryPreview'
 import PreviewDisclaimer from '@/components/Preview/PreviewDisclaimer'
 import { SubCategory } from '@/components/RecentEntries'
@@ -39,6 +35,7 @@ import {
   getWeekNumber,
 } from '@/utils/helpers'
 import dayjs from 'dayjs'
+import { Page, Content, Padder, Spacer } from '@/components/Layout'
 
 export default function AddNewEntry() {
   const subCategoryInput = useRef<TextInput>(null)

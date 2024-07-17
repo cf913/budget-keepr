@@ -1,35 +1,23 @@
-import { AnalyticsQueryKeys } from '@/components/Analytics'
 import { ThemedButton } from '@/components/Buttons/ThemedButton'
 import CategorySuggestions from '@/components/CategorySuggestions'
 import ThemedInput from '@/components/Inputs/ThemedInput'
-import Content from '@/components/Layout/Content'
-import Padder from '@/components/Layout/Padder'
-import Page from '@/components/Layout/Page'
-import Spacer from '@/components/Layout/Spacer'
+import { Content, Padder, Page, Spacer } from '@/components/Layout'
 import { Loader } from '@/components/Loader'
 import EntryPreview from '@/components/Preview/EntryPreview'
 import PreviewDisclaimer from '@/components/Preview/PreviewDisclaimer'
 import { Entry, SubCategory } from '@/components/RecentEntries'
-import RecurringInputs from '@/components/RecurringInputs'
 import { ThemedText } from '@/components/ThemedText'
 import { AnimatedView, ThemedView } from '@/components/ThemedView'
 import { getEntry } from '@/data/entries'
-import { createEntry, updateEntry } from '@/data/mutations'
-import { createRecurring } from '@/data/recurring'
+import { updateEntry } from '@/data/mutations'
 import { useColors } from '@/hooks/useColors'
 import Toasty from '@/lib/Toasty'
-import { useLocalSettings } from '@/stores/localSettings'
-import { useTempStore } from '@/stores/tempStore'
-import {
-  getDayJSFrequencyFromString,
-  getSQLFriendlyMonth,
-  getWeekNumber,
-} from '@/utils/helpers'
+import { getSQLFriendlyMonth, getWeekNumber } from '@/utils/helpers'
 import { Feather } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { Redirect, router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import React, { useRef, useState } from 'react'
 import { Keyboard, Pressable, TextInput } from 'react-native'
 import {
@@ -79,13 +67,7 @@ export default function EntryPresenter() {
   return <EntryScreen {...screenProps} />
 }
 
-function EntryScreen({
-  entry,
-  isLoading,
-}: {
-  entry: Entry
-  isLoading: boolean
-}) {
+function EntryScreen({ entry }: { entry: Entry; isLoading: boolean }) {
   // hooks
   const subCategoryInput = useRef<TextInput>(null)
   const insets = useSafeAreaInsets()
@@ -93,10 +75,6 @@ function EntryScreen({
   const opacityValue = useSharedValue(1)
   const { textColor, bgColor2 } = useColors()
   const queryClient = useQueryClient()
-
-  // stores
-  const { defaultBudget } = useLocalSettings()
-  const { selectedFrequency } = useTempStore()
 
   // state
   const [date, setDate] = useState<Date>(new Date(entry.created_at))
@@ -124,11 +102,11 @@ function EntryScreen({
         queryKey: ['infinite_entries'],
       })
 
-      for (const qk of AnalyticsQueryKeys) {
-        queryClient.invalidateQueries({
-          queryKey: [qk],
-        })
-      }
+      // for (const qk of AnalyticsQueryKeys) {
+      //   queryClient.invalidateQueries({
+      //     queryKey: [qk],
+      //   })
+      // }
 
       setSaving(false)
       Toasty.success('Entry updated ✅')

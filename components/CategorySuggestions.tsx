@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import Fuse from 'fuse.js'
 import { useEffect, useState } from 'react'
 import { ThemedButton } from './Buttons/ThemedButton'
-import Padder from './Layout/Padder'
 import List from './Lists/List'
 import ListItemWithMatch from './Lists/ListItemWithMatch'
 import { Loader } from './Loader'
@@ -11,6 +10,7 @@ import { SubCategory } from './RecentEntries'
 import { ThemedText } from './ThemedText'
 import { ThemedView } from './ThemedView'
 import { useLocalSettings } from '@/stores/localSettings'
+import { Padder } from './Layout'
 
 export default function CategorySuggestions({
   visible,

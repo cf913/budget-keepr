@@ -1,5 +1,11 @@
 import { supabase } from '@/lib/supabase'
 
+type UserProfile = {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
 type UserProfileUpdate = {
   username: string
   avatarUrl: string | null
@@ -47,6 +53,27 @@ export async function updateUserProfile({
     }
   } catch (error) {
     console.error('Error updating user profile:', error)
+    throw error
+  }
+}
+
+export async function getUserProfile(
+  userdId: string,
+): Promise<UserProfile | null> {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, username, avatar_url')
+      .eq('id', userdId)
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error getting user:', error)
     throw error
   }
 }

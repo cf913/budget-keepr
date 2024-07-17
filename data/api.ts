@@ -1,5 +1,4 @@
 import { supabase } from '@/lib/supabase'
-import { BUCKET_NAME } from '@/utils/imageUpload'
 import { Session, User } from '@supabase/supabase-js'
 
 export const getSupabaseSession = async () => {

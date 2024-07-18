@@ -288,7 +288,6 @@ export default function AddNewEntry() {
           </Animated.View>
         )}
         <Padder />
-        <ThemedText>Bonjour from add new entry screen</ThemedText>
       </Content>
       <Spacer />
       <Content>

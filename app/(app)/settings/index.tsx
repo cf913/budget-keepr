@@ -1,12 +1,33 @@
-import { Page, Content, Padder } from '@/components/Layout'
+import { ThemedButton } from '@/components/Buttons/ThemedButton'
+import { Content, Padder, Page, Spacer } from '@/components/Layout'
 import List from '@/components/Lists/List'
 import ListItem from '@/components/Lists/ListItem'
 import { VERSION } from '@/constants/config'
+import { supabase } from '@/lib/supabase'
 import { useLocalSettings } from '@/stores/localSettings'
 import * as Application from 'expo-application'
+import { Alert } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Settings() {
-  const { defaultBudget } = useLocalSettings()
+  const { defaultBudget, resetState } = useLocalSettings()
+  const insets = useSafeAreaInsets()
+
+  const signOut = async () => {
+    await supabase.auth.signOut()
+    resetState()
+  }
+
+  const onSignOut = async () => {
+    Alert.alert('Confirm', 'Do you really want to do this?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'Sign Out', onPress: signOut, style: 'destructive' },
+    ])
+  }
 
   return (
     <Page title="Settings" back>
@@ -36,6 +57,10 @@ export default function Settings() {
         </List>
       </Content>
       {/* ///////////////////////// */}
+      <Spacer />
+      <Content style={{ paddingBottom: insets.bottom }}>
+        <ThemedButton title="Logout" onPress={onSignOut} />
+      </Content>
     </Page>
   )
 }

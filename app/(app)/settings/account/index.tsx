@@ -25,8 +25,7 @@ export default function AccountPresenter() {
 
 function AccountScreen() {
   const queryClient = useQueryClient()
-  const { user } = useUser()
-  console.log('user', user?.user_metadata)
+  const { user, refetch: userRefetch } = useUser()
   const [username, setUsername] = useState(user?.user_metadata?.username || '')
   const [email, setEmail] = useState(user?.user_metadata?.email || '')
   const [saving, setSaving] = useState(false)
@@ -39,6 +38,7 @@ function AccountScreen() {
     mutationFn: updateUserProfile,
     onSuccess: () => {
       Toasty.success('Profile updated successfully!')
+      userRefetch()
     },
     onError: error => {
       console.error('Error updating profile:', error)

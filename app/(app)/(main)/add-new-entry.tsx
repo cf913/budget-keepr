@@ -287,6 +287,7 @@ export default function AddNewEntry() {
             <PreviewDisclaimer />
           </Animated.View>
         )}
+        <ThemedText>Attemp to create a merge conflict</ThemedText>
         <Padder />
       </Content>
       <Spacer />

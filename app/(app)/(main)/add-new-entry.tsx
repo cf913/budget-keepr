@@ -287,6 +287,7 @@ export default function AddNewEntry() {
             <PreviewDisclaimer />
           </Animated.View>
         )}
+        <ThemedText>This is from the lint branch</ThemedText>
         <Padder />
       </Content>
       <Spacer />

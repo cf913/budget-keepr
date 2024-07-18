@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image, Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -15,7 +15,6 @@ import Toasty from '@/lib/Toasty'
 import { uploadImage } from '@/utils/imageUpload'
 import { updateUserProfile } from '@/data/user'
 import { useUser } from '@/stores/userStore'
-import SupabaseImage from '@/components/Images/SupabaseImage'
 import LazyImage from '@/components/Images/LazyImage'
 
 const AVATAR_SIZE = 150

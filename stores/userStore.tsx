@@ -3,7 +3,6 @@ import { View, ActivityIndicator } from 'react-native'
 import { User } from '@supabase/supabase-js'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase' // Adjust this import based on your Supabase client location
-import { ThemedText } from '@/components/ThemedText'
 import { useColors } from '@/hooks/useColors'
 import { getSupabaseUser } from '@/data/api'
 import Toasty from '@/lib/Toasty'
@@ -52,8 +51,11 @@ function UserProvider({ children }: WithUserProps) {
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+      (
+        event,
+        // session
+      ) => {
+        if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
           queryClient.invalidateQueries({ queryKey: ['user'] })
         }
       },

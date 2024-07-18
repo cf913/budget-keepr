@@ -8,7 +8,6 @@ import { Slot, useNavigationContainerRef } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useEffect } from 'react'
 import 'react-native-reanimated'
-
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { SessionProvider } from '@/stores/session'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -20,7 +19,6 @@ import * as Sentry from '@sentry/react-native'
 import { isRunningInExpoGo } from 'expo'
 import { TempStoreProvider } from '@/stores/tempStore'
 import { Toasts } from '@backpackapp-io/react-native-toast'
-import Toasty from '@/lib/Toasty'
 import { WithUser } from '@/stores/userStore'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.

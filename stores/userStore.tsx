@@ -73,11 +73,7 @@ function UserProvider({ children }: WithUserProps) {
   }
 
   if (error) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ThemedText>Error: {error.message}</ThemedText>
-      </View>
-    )
+    Toasty.error(error.message)
   }
 
   if (user?.user_metadata?.username) {

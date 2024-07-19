@@ -1,13 +1,18 @@
-import {StyleSheet, Pressable, View, type ViewProps} from 'react-native'
+import { Pressable, StyleSheet, type ViewProps } from 'react-native'
 
-import {useThemeColor} from '@/hooks/useThemeColor'
-import {ThemedText} from '../ThemedText'
-import {HEIGHT, RADIUS} from '@/constants/Styles'
-import {Feather} from '@expo/vector-icons'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { Feather } from '@expo/vector-icons'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
+import { Loader } from '../Loader'
+import { ThemedText } from '../ThemedText'
+import { AnimatedView } from '../ThemedView'
+import { HEIGHT, RADIUS } from '@/constants/Styles'
 
 export type ThemedViewProps = ViewProps & {
   round?: boolean
+  loading?: boolean
   title: string
+  icon?: React.ReactNode
   onPress?: () => void
   lightColor?: string
   darkColor?: string
@@ -17,6 +22,8 @@ const ROUND_WIDTH = HEIGHT.item * 1.2
 
 export function ThemedButton({
   round = false,
+  icon,
+  loading = false,
   title,
   onPress,
   style,
@@ -25,7 +32,7 @@ export function ThemedButton({
   ...otherProps
 }: ThemedViewProps) {
   const backgroundColor = useThemeColor(
-    {light: lightColor, dark: darkColor},
+    { light: lightColor, dark: darkColor },
     'bg_secondary',
   )
 
@@ -34,20 +41,25 @@ export function ThemedButton({
   return (
     <Pressable
       onPress={onPress}
+      disabled={loading}
       style={[
-        {backgroundColor},
+        { backgroundColor },
         round ? styles.round : styles.default_shape,
         style,
       ]}
       hitSlop={20}
       {...otherProps}
     >
-      {round ? (
+      {loading ? (
+        <Loader size="small" />
+      ) : round ? (
         // ICON
-        <Feather name="plus" size={ROUND_WIDTH / 2} color={textColor} />
+        icon ? icon : <Feather name={'plus'} size={ROUND_WIDTH / 2} color={textColor} />
       ) : (
         // TEXT
-        <ThemedText style={styles.text}>{title}</ThemedText>
+        <AnimatedView exiting={FadeOut} entering={FadeIn}>
+          <ThemedText style={styles.text}>{title}</ThemedText>
+        </AnimatedView>
       )}
     </Pressable>
   )

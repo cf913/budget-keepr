@@ -1,9 +1,9 @@
-import {Slot, Stack} from 'expo-router'
+import { Stack } from 'expo-router'
 
 export default function SettingsLayout() {
   // return <Slot />
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="index"
         options={{
@@ -12,7 +12,39 @@ export default function SettingsLayout() {
         }}
       />
       <Stack.Screen
+        name="entries/[id]/index"
+        options={{
+          // Set the presentation mode to modal for our modal route.
+          presentation: 'modal',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="add-new-entry"
+        options={{
+          // Set the presentation mode to modal for our modal route.
+          presentation: 'modal',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="new-category"
+        options={{
+          // Set the presentation mode to modal for our modal route.
+          presentation: 'modal',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="select-frequency"
+        options={{
+          // Set the presentation mode to modal for our modal route.
+          presentation: 'modal',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="select-category"
         options={{
           // Set the presentation mode to modal for our modal route.
           presentation: 'modal',

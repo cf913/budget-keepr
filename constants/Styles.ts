@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native'
-import {Colors} from './Colors'
+import { StyleSheet } from 'react-native'
+import { Colors } from './Colors'
 
-export const RADIUS = 12
+export const RADIUS = 16
 
 export const PADDING = 16
 
@@ -10,9 +10,29 @@ export const HEIGHT = {
 }
 
 export const TYPO = StyleSheet.create({
+  card_value: {
+    fontWeight: 'bold',
+    fontSize: 22,
+    lineHeight: 24,
+  },
+  card_value_compact: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    lineHeight: 22,
+  },
   title: {
     fontSize: 30,
     lineHeight: 32,
+    fontWeight: 'bold',
+  },
+  title_compact: {
+    fontSize: 24,
+    lineHeight: 26,
+    fontWeight: 'bold',
+  },
+  title_mini: {
+    fontSize: 20,
+    lineHeight: 22,
     fontWeight: 'bold',
   },
   small: {

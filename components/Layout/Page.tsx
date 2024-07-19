@@ -1,24 +1,20 @@
-import {ReactNode} from 'react'
-import {ThemedView} from '../ThemedView'
-import {useSafeAreaInsets} from 'react-native-safe-area-context'
+import { PADDING, TYPO } from '@/constants/Styles'
+import { useHeaderHeight } from '@react-navigation/elements'
+import { ReactNode } from 'react'
 import {
-  Pressable,
   RefreshControl,
-  RefreshControlProps,
   ScrollView,
   ScrollViewProps,
   StyleSheet,
   ViewProps,
   ViewStyle,
 } from 'react-native'
-import {ThemedText} from '../ThemedText'
-import {PADDING, TYPO} from '@/constants/Styles'
-import {useHeaderHeight} from '@react-navigation/elements'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import SettingsButton from '../Buttons/SettingsButton'
-import {Feather} from '@expo/vector-icons'
-import {useThemeColor} from '@/hooks/useThemeColor'
-import {router} from 'expo-router'
-import Content from './Content'
+import { ThemedView } from '../ThemedView'
+import { Header } from './Header'
+import { Footer } from './Footer'
+import { Padder } from './Padder'
 
 const Wrapper = ({
   scroll,
@@ -40,9 +36,27 @@ const Wrapper = ({
   )
 }
 
-export default function Page({
+type PageProps = {
+  scroll?: boolean
+  back?: boolean
+  down?: boolean
+  mid?: ReactNode
+  refreshing?: boolean
+  onRefresh?: () => void
+  withSettings?: boolean
+  withHeader?: boolean
+  title?: string
+  subtitle?: string
+  style?: ViewStyle
+  footer?: ReactNode
+  children: ReactNode
+}
+
+export function Page({
   scroll = false,
   back = false,
+  down = false,
+  mid,
   refreshing = false,
   onRefresh,
   withSettings = false,
@@ -51,21 +65,9 @@ export default function Page({
   style,
   footer = null,
   children,
-}: {
-  scroll?: boolean
-  back?: boolean
-  refreshing?: boolean
-  onRefresh?: () => void
-  withSettings?: boolean
-  withHeader?: boolean
-  title?: string
-  style?: ViewStyle
-  footer?: ReactNode
-  children: ReactNode
-}) {
+}: PageProps) {
   const insets = useSafeAreaInsets()
   const headerHeight = useHeaderHeight()
-  const colorText = useThemeColor({}, 'mid')
 
   const refreshControl = onRefresh ? (
     <RefreshControl
@@ -84,51 +86,29 @@ export default function Page({
           // paddingBottom: insets.bottom,
         },
         styles.container,
-        {...style},
+        { ...style },
       ]}
     >
       <Wrapper
         scroll={scroll}
         refreshControl={refreshControl}
         style={{
-          paddingTop: withHeader ? headerHeight : insets.top,
-          flex: 1,
+          // paddingTop: withHeader ? headerHeight : insets.top,
           flexGrow: 1,
         }}
-        contentContainerStyle={{flex: 1, flexGrow: 1}}
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
       >
+        <Padder style={{ height: withHeader ? headerHeight : insets.top }} />
         <ThemedView style={[{}, styles.header]}>
-          {title ? (
-            <ThemedView style={styles.title_container}>
-              {back ? (
-                <Pressable
-                  onPress={() => router.back()}
-                  hitSlop={30}
-                  style={{zIndex: 2}}
-                >
-                  <Feather
-                    name="chevron-left"
-                    size={28}
-                    color={colorText}
-                    style={{marginLeft: -10}}
-                  />
-                </Pressable>
-              ) : null}
-              <ThemedText style={[{}, styles.title]}>{title}</ThemedText>
-            </ThemedView>
-          ) : null}
+          {title ? <Header title={title} back={back} down={down} /> : null}
+          {mid ? mid : null}
           {withSettings ? <SettingsButton /> : null}
         </ThemedView>
         {children}
       </Wrapper>
-      {footer ? (
-        <Content
-          floating
-          style={{paddingBottom: insets.bottom, backgroundColor: 'transparent'}}
-        >
-          {footer}
-        </Content>
-      ) : null}
+      {footer ? <Footer>{footer}</Footer> : null}
     </ThemedView>
   )
 }
@@ -145,10 +125,16 @@ const styles = StyleSheet.create({
   title: {
     ...TYPO.title,
   },
+  subtitle: {
+    fontSize: 14,
+    lineHeight: 15,
+    opacity: 0.5,
+  },
   header: {
-    padding: PADDING,
+    paddingHorizontal: PADDING,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
 })

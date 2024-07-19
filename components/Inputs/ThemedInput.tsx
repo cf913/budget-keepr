@@ -1,10 +1,9 @@
-import {useThemeColor} from '@/hooks/useThemeColor'
-import React, {forwardRef, useCallback, useMemo, useState} from 'react'
-import {StyleSheet, TextInput, TextInputProps, ViewStyle} from 'react-native'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import React, { forwardRef, useCallback } from 'react'
+import { StyleSheet, TextInput, TextInputProps, ViewStyle } from 'react-native'
 import Animated, {
   Easing,
   ReduceMotion,
-  interpolate,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
@@ -19,9 +18,12 @@ const withTimingConfig = {
   reduceMotion: ReduceMotion.System,
 }
 
+// eslint-disable-next-line react/display-name
 const ThemedInput = forwardRef(
   (
     {
+      onInputFocus,
+      onInputBlur,
       value,
       onChangeText,
       placeholder,
@@ -29,8 +31,10 @@ const ThemedInput = forwardRef(
       autofocus = false,
       ...props
     }: TextInputProps & {
+      onInputFocus?: () => void
+      onInputBlur?: () => void
       value: string
-      onChangeText: any
+      onChangeText: (text: string) => void
       placeholder?: string
       style?: ViewStyle
       autofocus?: boolean
@@ -38,7 +42,6 @@ const ThemedInput = forwardRef(
     ref: any,
   ) => {
     const animatedColor = useSharedValue(0)
-    const [focused, setFocus] = useState(false)
     const color = useThemeColor({}, 'text')
     const borderColor = useThemeColor({}, 'mid')
     const tintColor = useThemeColor({}, 'tint')
@@ -55,11 +58,14 @@ const ThemedInput = forwardRef(
     }))
 
     const onFocus = useCallback(() => {
+      if (onInputFocus) onInputFocus()
       animatedColor.value = withTiming(1, withTimingConfig)
-    }, [])
+    }, [animatedColor, onInputFocus])
+
     const onBlur = useCallback(() => {
+      if (onInputBlur) onInputBlur()
       animatedColor.value = withTiming(0, withTimingConfig)
-    }, [])
+    }, [animatedColor, onInputBlur])
 
     return (
       <AnimatedTextInput

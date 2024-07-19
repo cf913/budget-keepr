@@ -1,6 +1,7 @@
 import {View, type ViewProps} from 'react-native'
 
 import {useThemeColor} from '@/hooks/useThemeColor'
+import Animated from 'react-native-reanimated'
 
 export type ThemedViewProps = ViewProps & {
   lightColor?: string
@@ -20,3 +21,5 @@ export function ThemedView({
 
   return <View style={[{backgroundColor}, style]} {...otherProps} />
 }
+
+export const AnimatedView = Animated.createAnimatedComponent(View)

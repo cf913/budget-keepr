@@ -1,9 +1,11 @@
-import React, {useRef, useEffect} from 'react'
-import {Animated, Text, View} from 'react-native'
-import type {PropsWithChildren} from 'react'
-import type {ViewStyle} from 'react-native'
+import React, { useRef, useEffect } from 'react'
+import { Animated } from 'react-native'
+import type { PropsWithChildren } from 'react'
+import type { ViewStyle } from 'react-native'
 
-export default function FadeInView(props: PropsWithChildren) {
+export default function FadeInView(
+  props: PropsWithChildren & { style: ViewStyle },
+) {
   const fadeAnim = useRef(new Animated.Value(0)).current // Initial value for opacity: 0
 
   useEffect(() => {
@@ -16,10 +18,10 @@ export default function FadeInView(props: PropsWithChildren) {
 
   return (
     <Animated.View // Special animatable View
-      style={{
-        ...props.style,
-        opacity: fadeAnim, // Bind opacity to animated value
-      }}
+      style={[
+        props.style,
+        { opacity: fadeAnim }, // Bind opacity to animated value
+      ]}
     >
       {props.children}
     </Animated.View>

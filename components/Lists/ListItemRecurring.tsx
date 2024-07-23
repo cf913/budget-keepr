@@ -72,28 +72,30 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
       enabled={enabled}
       containerStyle={{ backgroundColor: bgColor }}
       renderRightActions={() =>
-        isExpired ? null : (
+        isExpired && recurring.archived ? null : (
           <>
-            <RectButton
-              style={[
-                {},
-                {
-                  width: 50,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: bgColor,
-                },
-              ]}
-              onPress={onUpdateActive}
-            >
-              <Animated.Text style={[{}]}>
-                <Feather
-                  name={recurring.active ? 'pause' : 'play'}
-                  size={24}
-                  color={tintColor}
-                />
-              </Animated.Text>
-            </RectButton>
+            {!isExpired ? (
+              <RectButton
+                style={[
+                  {},
+                  {
+                    width: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: bgColor,
+                  },
+                ]}
+                onPress={onUpdateActive}
+              >
+                <Animated.Text style={[{}]}>
+                  <Feather
+                    name={recurring.active ? 'pause' : 'play'}
+                    size={24}
+                    color={tintColor}
+                  />
+                </Animated.Text>
+              </RectButton>
+            ) : null}
             <RectButton
               style={[
                 {},

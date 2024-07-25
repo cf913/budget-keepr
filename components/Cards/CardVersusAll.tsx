@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: PADDING / 1.5,
     paddingVertical: PADDING / 1.5,
+    paddingBottom: 0,
     width: '100%',
     height: 0,
     position: 'relative',

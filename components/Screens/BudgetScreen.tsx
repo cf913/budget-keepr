@@ -51,7 +51,6 @@ export default function BudgetScreen() {
             flexGrow: 1,
             width: '100%',
             backgroundColor: 'transparent',
-            height: 0, // INVESTIGATE WHY THIS IS REQUIRED
           }}
         >
           <RecentEntries {...{ counter, setCounter }} />

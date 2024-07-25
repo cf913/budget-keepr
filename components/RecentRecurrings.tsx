@@ -21,7 +21,7 @@ export default function RecentRecurrings({ id }: { id?: string }) {
     isRefetching,
   } = useQuery({
     queryKey: ['recurrings', id],
-    queryFn: () => getRecurrings(id, {}, 2),
+    queryFn: () => getRecurrings(id, { active: true }, 2),
   })
 
   if (error) Toasty.error('RecentRecurrings: ' + error.message)

@@ -65,6 +65,10 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
     ref.current?.close()
   }
 
+  const onEdit = () => {
+    alert('navitae to edit recurring screen')
+  }
+
   return (
     <Swipeable
       ref={ref}
@@ -74,7 +78,25 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
       renderRightActions={() =>
         isExpired && recurring.archived ? null : (
           <>
+            {/* EDIT BUTTON */}
+            <RectButton
+              style={[
+                {},
+                {
+                  width: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: bgColor,
+                },
+              ]}
+              onPress={onEdit}
+            >
+              <Animated.Text style={[{}]}>
+                <Feather name={'edit'} size={21} color={'white'} />
+              </Animated.Text>
+            </RectButton>
             {!isExpired ? (
+              // ACTIVE BUTTON
               <RectButton
                 style={[
                   {},
@@ -96,6 +118,7 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
                 </Animated.Text>
               </RectButton>
             ) : null}
+            {/* ARCHIVE BUTTON */}
             <RectButton
               style={[
                 {},

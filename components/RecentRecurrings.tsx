@@ -59,6 +59,7 @@ export default function RecentRecurrings({ id }: { id?: string }) {
           return (
             <ListItemRecurring
               key={recurring.id}
+              href={'recurrings'}
               lastItem={i === (recurrings || []).length - 1}
               recurring={recurring}
               onDelete={() => alert('Delete recurring')}

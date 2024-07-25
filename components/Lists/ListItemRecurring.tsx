@@ -1,4 +1,3 @@
-import { RecurringUpdateType } from '@/app/(app)/settings/recurring'
 import { Recurring, RecurringUpdateInput } from '@/data/recurring'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import { Feather } from '@expo/vector-icons'
@@ -8,9 +7,12 @@ import { Animated } from 'react-native'
 import { RectButton, Swipeable } from 'react-native-gesture-handler'
 import ListItem from './ListItem'
 import { toMoney } from '@/utils/helpers'
+import { router } from 'expo-router'
+import { RecurringUpdateType } from '@/app/(app)/(main)/recurrings'
 
 interface ListItemRecurringProps {
   recurring: Recurring
+  href?: string
   lastItem: boolean
   onDelete: (id: string) => void
   onUpdate: (
@@ -22,7 +24,7 @@ interface ListItemRecurringProps {
 
 export default function ListItemRecurring(props: ListItemRecurringProps) {
   const ref = useRef<Swipeable>(null)
-  const { recurring, lastItem, onUpdate, enabled = true } = props
+  const { recurring, lastItem, onUpdate, enabled = true, href } = props
 
   const bgColor = useThemeColor({}, 'bg_secondary')
   const tintColor = useThemeColor({}, 'tint')
@@ -37,8 +39,6 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
         now.isAfter(recurring.next_at, 'day'))
 
     const verb = isExpired ? 'Expired on' : isExpiring ? 'Expires' : 'Renews'
-
-    // const listItemRightRaw = isExpired ? 'Expired' : recurring.active ? 'Active' : 'Inactive'
 
     const listItemRight = toMoney(recurring.amount)
 
@@ -66,7 +66,7 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
   }
 
   const onEdit = () => {
-    alert('navitae to edit recurring screen')
+    router.navigate(`/(main)/recurrings/${recurring.id}`)
   }
 
   return (
@@ -145,6 +145,8 @@ export default function ListItemRecurring(props: ListItemRecurringProps) {
     >
       <ListItem
         title={recurring.sub_category.name}
+        href={href}
+        showHrefIcon={false}
         right={listItemRight}
         rightColorOverride={recurring.active ? '' : 'gray'}
         key={recurring.id}

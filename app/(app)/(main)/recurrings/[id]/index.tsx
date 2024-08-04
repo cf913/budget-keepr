@@ -9,7 +9,7 @@ export default function EditRecurringScreen() {
   return (
     <Page
       down
-      title="Edit Entry"
+      title="Edit Recurring"
       withHeader
       style={{
         position: 'relative',

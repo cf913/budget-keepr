@@ -33,6 +33,7 @@ export type Frequency =
 export default function RecurringInputs({
   date,
   // setDate,
+  recurring = false,
   isRecurring,
   setRecurring,
   subCategory,
@@ -40,6 +41,7 @@ export default function RecurringInputs({
 }: {
   date: Date
   setDate: (v: Date) => void
+  recurring?: boolean
   isRecurring: boolean
   setRecurring: (v: boolean) => void
   subCategory: null | SubCategory
@@ -85,6 +87,7 @@ export default function RecurringInputs({
           ios_backgroundColor="#3e3e3e"
           onValueChange={() => setRecurring(!isRecurring)}
           value={isRecurring}
+          disabled={recurring}
         />
         {/* <ThemedCheckbox
           checked={isRecurring}
@@ -108,23 +111,6 @@ export default function RecurringInputs({
             />
           </ThemedView>
           <Padder />
-          {/* <ThemedView
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <ThemedText>Start Date</ThemedText>
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={'date'}
-              is24Hour={true}
-              onChange={onChange}
-              key={date.toISOString()}
-            />
-          </ThemedView> */}
           {subCategory ? (
             <>
               <Padder h={1} />
@@ -174,8 +160,12 @@ export default function RecurringInputs({
                   right={toMoney(+amount * 100)}
                 />
               </List>
-              <Padder h={0.5} />
-              <PreviewDisclaimer />
+              {!recurring ? (
+                <>
+                  <Padder h={0.5} />
+                  <PreviewDisclaimer />
+                </>
+              ) : null}
             </>
           ) : null}
         </AnimatedView>

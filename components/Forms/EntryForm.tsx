@@ -31,14 +31,12 @@ type EntryFormProps = {
   setSubCategory: React.Dispatch<React.SetStateAction<SubCategory | null>>
   date: Date
   setDate: React.Dispatch<React.SetStateAction<Date>>
+  recurring?: boolean
   isRecurring: boolean
   setRecurring: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function EntryForm(props: EntryFormProps) {
-  const subCategoryInput = useRef<TextInput>(null)
-  const [subCategorySearchText, setSubCategorySearchText] = useState<string>('')
-  const [suggestionsVisible, setSuggestionsVisible] = useState(false)
   const {
     amount,
     setAmount,
@@ -46,9 +44,17 @@ export default function EntryForm(props: EntryFormProps) {
     setSubCategory,
     date,
     setDate,
+    recurring = false,
     isRecurring,
     setRecurring,
   } = props
+  const subCategoryInput = useRef<TextInput>(null)
+  const [subCategorySearchText, setSubCategorySearchText] = useState<string>(
+    subCategory?.name || '',
+  )
+  const [suggestionsVisible, setSuggestionsVisible] = useState(false)
+
+  console.log('========== DATE ========', date)
   const translateValue = useSharedValue(56)
   const opacityValue = useSharedValue(1)
   const { textColor, bgColor2 } = useColors()
@@ -147,18 +153,18 @@ export default function EntryForm(props: EntryFormProps) {
           justifyContent: 'space-between',
         }}
       >
-        <ThemedText>Date</ThemedText>
+        <ThemedText>{recurring ? 'Next Date' : 'Date'}</ThemedText>
         <DateTimePicker
           testID="dateTimePicker"
           value={date}
           mode={'date'}
           is24Hour={true}
           onChange={onChangeDate}
-          key={date.toISOString()}
         />
       </ThemedView>
       <Padder />
       <RecurringInputs
+        recurring={recurring}
         isRecurring={isRecurring}
         setRecurring={setRecurring}
         subCategory={subCategory}

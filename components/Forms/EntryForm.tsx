@@ -161,6 +161,7 @@ export default function EntryForm(props: EntryFormProps) {
           mode={'date'}
           is24Hour={true}
           onChange={onChangeDate}
+          key={(date || new Date()).toISOString()}
         />
       </ThemedView>
       <Padder />

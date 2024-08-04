@@ -79,7 +79,8 @@ function EditRecurringScreen({
     },
     onError: error => {
       console.error('Error creating entry:', error)
-      Toasty.error('Failed to create entry')
+      Toasty.error(error.message)
+      setSaving(false)
     },
   })
 
@@ -87,7 +88,7 @@ function EditRecurringScreen({
     setSaving(true)
     mutation.mutate({
       id: recurring.id,
-      amount: Number(amount) * 100,
+      amount: Math.round(+amount * 100),
       next_at: date.toISOString(),
       // sub_category: subCategory,
       frequency: selectedFrequency,

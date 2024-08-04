@@ -41,7 +41,12 @@ export default function Settings() {
             description={defaultBudget?.name}
           />
           <ListItem title="Categories" href="/settings/categories" />
-          <ListItem title="Recurring" href="/settings/recurring" lastItem />
+          <ListItem
+            title="Recurring"
+            href="/(main)/recurrings"
+            lastItem
+            replace
+          />
         </List>
         <Padder />
         <List>

@@ -6,6 +6,9 @@ import { Category, SubCategory } from '@/components/RecentEntries'
 
 export type RecurringUpdateInput = {
   id: string
+  amount?: number
+  frequency?: string
+  next_at?: string
   active?: boolean
   archived?: boolean
 }
@@ -49,6 +52,38 @@ export const createRecurring = async (recurring: RecurringInput) => {
   logRes('createRecurring', data, error)
 
   return { data, error }
+}
+
+export const getRecurring = async (
+  id: string,
+): Promise<Recurring | undefined> => {
+  const user = await getSupabaseSession()
+  if (!user) throw new Error('No user found')
+
+  if (!id) throw new Error('No recurring id provided')
+
+  const { data, error } = await supabase
+    .from('recurring')
+    .select(
+      `
+      id,
+      category:category_id(id, name, color),
+      sub_category:sub_category_id(id, name),
+      amount,
+      created_at,
+      next_at,
+      frequency,
+      active,
+      archived
+      `,
+    )
+    .eq('id', id)
+    .returns<Recurring>()
+    .single()
+
+  if (error) throw new Error(error.message)
+
+  return data
 }
 
 export const getRecurrings = async (

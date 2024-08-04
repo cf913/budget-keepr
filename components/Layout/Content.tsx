@@ -1,17 +1,18 @@
 import { PADDING } from '@/constants/Styles'
 import { ThemedView } from '@/components/ThemedView'
 import { ReactNode } from 'react'
-import { ViewStyle } from 'react-native'
+import { ViewProps, ViewStyle } from 'react-native'
 
 export function Content({
   floating = false,
   style,
   children,
+  ...props
 }: {
   floating?: boolean
   style?: ViewStyle
   children: ReactNode
-}) {
+} & ViewProps) {
   const positionStyles: ViewStyle = floating
     ? {
       position: 'absolute',
@@ -21,7 +22,10 @@ export function Content({
     }
     : {}
   return (
-    <ThemedView style={[positionStyles, { paddingHorizontal: PADDING }, style]}>
+    <ThemedView
+      style={[positionStyles, { paddingHorizontal: PADDING }, style]}
+      {...props}
+    >
       {children}
     </ThemedView>
   )

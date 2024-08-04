@@ -47,11 +47,11 @@ export default function HomePageFooter() {
   }
 
   const pan = Gesture.Pan()
-    .onBegin(() => { })
+    .onBegin(() => {})
     .onChange(event => {
       offset.value += event.changeY
     })
-    .onEnd(() => { })
+    .onEnd(() => {})
     .onFinalize(event => {
       if (event.translationY > 30) {
         if (event.velocityY > 200) {
@@ -174,13 +174,23 @@ export default function HomePageFooter() {
                   icon={<Feather name="list" size={24} color={textColor} />}
                   onPress={toggleMenu}
                   title="BUDGET"
-                  style={{ zIndex: 99 }}
+                  style={{
+                    zIndex: 99,
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                  }}
                 ></ThemedButton>
                 <ThemedButton
                   round
                   onPress={() => router.navigate('add-new-entry')}
                   title="ADD NEW ENTRY"
-                  style={{ zIndex: 95 }}
+                  style={{
+                    zIndex: 99,
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                  }}
                 ></ThemedButton>
               </ThemedView>
             ) : null}

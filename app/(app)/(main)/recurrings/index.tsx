@@ -10,7 +10,7 @@ import { Alert } from 'react-native'
 
 export type RecurringUpdateType = 'active' | 'archived'
 
-export default function Recurrings() {
+export default function RecurringsScreen() {
   const activeListRef = useRef<any>() // HACK: make this not <any>
   const archivedListRef = useRef<any>() // HACK: make this not <any>
   const [refreshing, setRefreshing] = useState(false)

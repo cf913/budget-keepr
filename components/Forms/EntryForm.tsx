@@ -54,7 +54,6 @@ export default function EntryForm(props: EntryFormProps) {
   )
   const [suggestionsVisible, setSuggestionsVisible] = useState(false)
 
-  console.log('========== DATE ========', date)
   const translateValue = useSharedValue(56)
   const opacityValue = useSharedValue(1)
   const { textColor, bgColor2 } = useColors()
@@ -101,10 +100,12 @@ export default function EntryForm(props: EntryFormProps) {
       <ThemedView style={{ flexDirection: 'row', alignItems: 'center' }}>
         <ThemedView style={{ flex: 1 }}>
           <ThemedInput
+            editable={!recurring}
             ref={subCategoryInput}
             value={subCategorySearchText}
             placeholder="Name (Coles, Maccas)"
             onChangeText={setSubCategorySearchText}
+            style={recurring ? { opacity: 0.4 } : {}}
             returnKeyType="search"
             onInputFocus={() => {
               opacityValue.value = withTiming(0, { duration: 200 })

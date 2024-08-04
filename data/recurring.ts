@@ -6,6 +6,9 @@ import { Category, SubCategory } from '@/components/RecentEntries'
 
 export type RecurringUpdateInput = {
   id: string
+  amount?: number
+  frequency?: string
+  next_at?: string
   active?: boolean
   archived?: boolean
 }
@@ -59,7 +62,7 @@ export const getRecurring = async (
 
   if (!id) throw new Error('No recurring id provided')
 
-  let { data, error } = await supabase
+  const { data, error } = await supabase
     .from('recurring')
     .select(
       `

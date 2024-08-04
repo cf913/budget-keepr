@@ -3,20 +3,17 @@ import EntryForm from '@/components/Forms/EntryForm'
 import { Page, Content, Padder, Spacer } from '@/components/Layout'
 import { Loader } from '@/components/Loader'
 import { SubCategory } from '@/components/RecentEntries'
-import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
-import { Recurring, getRecurring } from '@/data/recurring'
+import { Recurring, getRecurring, updateRecurring } from '@/data/recurring'
 import Toasty from '@/lib/Toasty'
 import { useTempStore } from '@/stores/tempStore'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useState, useCallback, useEffect } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function EditRecurringPresenter() {
   const { id } = useLocalSearchParams<{ id: string }>()
-
-  console.log('ID', id)
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['recurring', id],
@@ -58,7 +55,7 @@ function EditRecurringScreen({
   recurring: Recurring
   isLoading: boolean
 }) {
-  const { setSelectedFrequency } = useTempStore()
+  const { selectedFrequency, setSelectedFrequency } = useTempStore()
   // state
   const [date, setDate] = useState<Date>(new Date(recurring.next_at))
 
@@ -74,11 +71,28 @@ function EditRecurringScreen({
     setSelectedFrequency(recurring.frequency)
   }, [recurring.frequency])
 
-  const handleSave = useCallback(() => {
+  const mutation = useMutation({
+    mutationFn: updateRecurring,
+    onSuccess: () => {
+      Toasty.success('Recurring payment updated!')
+      router.replace('/(main)')
+    },
+    onError: error => {
+      console.error('Error creating entry:', error)
+      Toasty.error('Failed to create entry')
+    },
+  })
+
+  const handleSave = () => {
     setSaving(true)
-    Toasty.success('Recurring payment saved!')
-    router.replace('/(main)')
-  }, [])
+    mutation.mutate({
+      id: recurring.id,
+      amount: Number(amount) * 100,
+      next_at: date.toISOString(),
+      // sub_category: subCategory,
+      frequency: selectedFrequency,
+    })
+  }
   const insets = useSafeAreaInsets()
   return (
     <Page

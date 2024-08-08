@@ -20,9 +20,9 @@ export default function AllTimeAnalytics() {
         {/* ANALYTICS */}
         <Analytics {...{ counter }} />
         <Padder h={2 / 3} />
-        <CardVersusAll counter={counter} />
-        <Padder h={2 / 3} />
         <RecentRecurrings />
+        <Padder h={2 / 3} />
+        <CardVersusAll counter={counter} />
         <Padder />
         <Padder style={{ height: insets.bottom ? insets.bottom : PADDING }} />
       </Content>

@@ -20,9 +20,11 @@ type CardVersusProps = {
 export default function CardVersus({ counter }: CardVersusProps) {
   const dims = useWindowDimensions()
   const TIME_FRAMES = ['Week', 'Month', 'Year']
+  const FILTER_BY = ['Category', 'Sub Category']
   const [maxAmountWidth, setMaxAmountWidth] = useState<number[] | null>(null)
   const [headerHeight, setHeaderHeight] = useState<number | null>(null)
   const [timeFrameIndex, setTimeFrameIndex] = useState(1)
+  const [filterByIndex, setFilterByIndex] = useState(1)
 
   const tintColor = useThemeColor({}, 'tint')
   const backgroundColor = useThemeColor({}, 'bg_secondary')
@@ -30,24 +32,31 @@ export default function CardVersus({ counter }: CardVersusProps) {
   const midColor = useThemeColor({}, 'mid')
 
   const timeframe = TIME_FRAMES[timeFrameIndex].toLowerCase()
+  const filterBy = FILTER_BY[filterByIndex]
 
   const weeklyData = useQuery({
-    queryKey: ['getBreakdown', counter, timeframe],
-    queryFn: () => getBreakdown(null, timeframe),
+    queryKey: ['getBreakdown', counter, timeframe, filterByIndex],
+    queryFn: () => getBreakdown(null, timeframe, filterByIndex === 1),
   })
 
   const [data, total] = useMemo(() => {
     const arr: any[] =
-      weeklyData.data?.map((item: any) => ({
-        value: item.sum,
-        label: item.category.name,
-        frontColor: item.category.color,
-      })) || []
+      filterByIndex === 0
+        ? weeklyData.data?.map((item: any) => ({
+            value: item.sum,
+            label: item.category?.name || 'no name',
+            frontColor: item.category?.color || 'pink',
+          })) || []
+        : weeklyData.data?.map((item: any) => ({
+            value: item.sum,
+            label: item.sub_category?.name || 'no_name',
+            frontColor: item.sub_category?.category?.color || 'yellow',
+          })) || []
 
     const total = arr.reduce((acc, next) => acc + next.value, 0)
 
     return [sortByKey(arr, 'value'), total]
-  }, [weeklyData.data])
+  }, [weeklyData.data, timeframe, filterByIndex])
 
   const normalizedWidth = (percentage: number) => {
     if (!maxAmountWidth) return 0
@@ -77,12 +86,15 @@ export default function CardVersus({ counter }: CardVersusProps) {
       {/* WITH DATA */}
       {data && data.length && headerHeight ? (
         // TOP 4
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ height: dims.height - headerHeight - 100 }}
+        >
           <Padder hv={headerHeight} />
           {data.map((item: any, index: number) => {
             const percentage = (item.value / (total || 1)) * 100
             return (
-              <ThemedView key={item.label} style={styles.inner}>
+              <ThemedView key={item.label + index} style={styles.inner}>
                 <ThemedText style={[styles.title, { color: textColor }]}>
                   {item.label}
                 </ThemedText>
@@ -143,6 +155,17 @@ export default function CardVersus({ counter }: CardVersusProps) {
         }}
       >
         <SegmentedControl
+          values={FILTER_BY}
+          selectedIndex={filterByIndex}
+          backgroundColor={backgroundColor}
+          onChange={(event: {
+            nativeEvent: { selectedSegmentIndex: number }
+          }) => {
+            setFilterByIndex(event.nativeEvent.selectedSegmentIndex)
+          }}
+        />
+        <Padder h={0.3} />
+        <SegmentedControl
           values={TIME_FRAMES}
           selectedIndex={timeFrameIndex}
           backgroundColor={backgroundColor}
@@ -166,7 +189,7 @@ const styles = StyleSheet.create({
     paddingVertical: PADDING / 1.5,
     paddingBottom: 0,
     width: '100%',
-    height: 0,
+    // height: 0,
     position: 'relative',
   },
   inner: {

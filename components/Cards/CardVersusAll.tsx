@@ -84,14 +84,14 @@ export default function CardVersus({ counter }: CardVersusProps) {
         </Fragment>
       ) : null}
       {/* WITH DATA */}
-      {data && data.length && headerHeight ? (
+      {headerHeight ? (
         // TOP 4
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{ height: dims.height - headerHeight - 100 }}
         >
           <Padder hv={headerHeight} />
-          {data.map((item: any, index: number) => {
+          {(data || []).map((item: any, index: number) => {
             const percentage = (item.value / (total || 1)) * 100
             return (
               <ThemedView key={item.label + index} style={styles.inner}>

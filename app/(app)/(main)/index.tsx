@@ -1,4 +1,5 @@
 import BudgetScreen from '@/components/Screens/BudgetScreen'
+import IncomeScreen from '@/components/Screens/IncomeScreen'
 import Overview from '@/components/Screens/OverviewScreen'
 import { ThemedView } from '@/components/ThemedView'
 import { useLocalSettings } from '@/stores/localSettings'
@@ -22,6 +23,10 @@ export default function HomeScreen() {
         <ThemedView style={styles.page} key="1">
           <BudgetScreen />
         </ThemedView>
+        <ThemedView style={styles.page} key="2">
+          <IncomeScreen />
+        </ThemedView>
+
         {/* <ThemedView style={styles.page} key="2"> */}
         {/*   <Settings /> */}
         {/* </ThemedView> */}

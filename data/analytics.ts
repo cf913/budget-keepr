@@ -128,7 +128,11 @@ export const getTodaySpend = async (budget_id?: string) => {
   return data.sum
 }
 
-export const getBreakdown = async (budget_id: string | null, timeframe: string) => {
+export const getBreakdown = async (
+  budget_id: string | null,
+  timeframe: string,
+  sub: boolean,
+) => {
   const user = await getSupabaseSession()
   if (!user) throw new Error('User not found')
 
@@ -149,9 +153,19 @@ export const getBreakdown = async (budget_id: string | null, timeframe: string) 
       throw new Error('Invalid timeframe')
   }
 
-  let query = supabase
-    .from('entries')
-    .select('amount.sum(), category:category_id(name, color))')
+  let query
+
+  if (sub) {
+    query = supabase
+      .from('entries')
+      .select(
+        'amount.sum(), sub_category:sub_category_id(id, name,category:parent_id(id, name, color)))',
+      )
+  } else {
+    query = supabase
+      .from('entries')
+      .select('amount.sum(), category:category_id(name, color))')
+  }
 
   if (budget_id) query = query.eq('budget_id', budget_id)
 

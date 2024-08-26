@@ -30,7 +30,7 @@ export const getBudgets = async () => {
 
   const { data, error } = await query
 
-  logRes('getBudgets', data, error)
+  // logRes('getBudgets', data, error)
   if (error) throw new Error(error.message)
 
   return data

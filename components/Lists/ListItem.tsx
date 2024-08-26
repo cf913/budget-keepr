@@ -12,16 +12,18 @@ import { AnimatedView, ThemedView } from '../ThemedView'
 
 const Wrapper = ({
   href,
+  replace,
   onSelectItem,
   children,
 }: {
   href?: string
+  replace?: boolean
   onSelectItem: (item: any) => void
   children: ReactNode
 }) => {
   if (href)
     return (
-      <Link href={href} asChild>
+      <Link href={href} asChild replace={replace}>
         <Pressable>{children}</Pressable>
       </Link>
     )
@@ -36,6 +38,7 @@ export default function ListItem({
   item,
   onSelect,
   href,
+  replace = false,
   showHrefIcon = true,
   title,
   description,
@@ -49,6 +52,7 @@ export default function ListItem({
   item?: any
   onSelect?: (item: any) => void
   href?: string
+  replace?: boolean
   showHrefIcon?: boolean
   title: string
   description?: string | null
@@ -70,7 +74,7 @@ export default function ListItem({
   const onSelectItem = () => (onSelect ? onSelect(item) : null)
 
   return (
-    <Wrapper href={href} onSelectItem={onSelectItem}>
+    <Wrapper href={href} onSelectItem={onSelectItem} replace={replace}>
       <ThemedView
         style={[
           styles.container,

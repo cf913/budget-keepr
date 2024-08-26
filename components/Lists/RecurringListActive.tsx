@@ -1,50 +1,51 @@
-import { RecurringUpdateType } from "@/app/(app)/settings/recurring";
-import { RecurringUpdateInput, getRecurrings } from "@/data/recurring";
-import { useLocalSettings } from "@/stores/localSettings";
-import { useQuery } from "@tanstack/react-query";
-import { forwardRef, useImperativeHandle } from "react";
-import RecurringList from "../RecurringList";
-import { Loader } from "../Loader";
-
+import { RecurringUpdateType } from '@/app/(app)/(main)/recurrings'
+import { RecurringUpdateInput, getRecurrings } from '@/data/recurring'
+import { useQuery } from '@tanstack/react-query'
+import { forwardRef, useImperativeHandle } from 'react'
+import { Loader } from '../Loader'
+import RecurringList from '../RecurringList'
 export type RecurringListActiveProps = {
   onDelete: (id: string) => void
-  onUpdate: (recurringType: RecurringUpdateType, recurring: RecurringUpdateInput) => void
+  onUpdate: (
+    recurringType: RecurringUpdateType,
+    recurring: RecurringUpdateInput,
+  ) => void
 }
 
-const RecurringListActive = forwardRef(({
-  onDelete,
-  onUpdate,
-}: RecurringListActiveProps, ref) => {
+const RecurringListActive = forwardRef(
+  ({ onDelete, onUpdate }: RecurringListActiveProps, ref) => {
+    const { data, error, refetch, isLoading } = useQuery({
+      queryKey: ['recurringActive'],
+      queryFn: () => getRecurrings(undefined, { archived: false }),
+    })
 
-  const { defaultBudget } = useLocalSettings()
+    useImperativeHandle(
+      ref,
+      () => ({
+        refetch,
+      }),
+      [],
+    )
 
-  const { data, error, refetch, isLoading } = useQuery({
-    queryKey: ['recurringActive'],
-    queryFn: () => getRecurrings(defaultBudget?.id, { archived: false }),
-  })
+    if (error) {
+      console.log('error', error.message)
+      alert('Oops. ' + error.message)
+    }
 
-  useImperativeHandle(ref, () => ({
-    refetch,
-  }), [])
+    if (isLoading) {
+      return <Loader />
+    }
 
-  if (error) {
-    console.log('error', error.message)
-    alert('Oops. ' + error.message)
-  }
-
-  if (isLoading) {
-    return <Loader />
-  }
-
-  return (
-    <RecurringList
-      data={data}
-      onDelete={onDelete}
-      onUpdate={onUpdate}
-      isLoading={isLoading}
-      error={error}
-    />
-  )
-})
+    return (
+      <RecurringList
+        data={data}
+        onDelete={onDelete}
+        onUpdate={onUpdate}
+        isLoading={isLoading}
+        error={error}
+      />
+    )
+  },
+)
 
 export default RecurringListActive

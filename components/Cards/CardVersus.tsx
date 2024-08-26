@@ -20,15 +20,15 @@ export default function CardVersus({ counter }: { counter: number }) {
 
   const weeklyData = useQuery({
     queryKey: ['getBreakdown', counter, 'week'],
-    queryFn: () => getBreakdown(defaultBudget?.id!, 'week'),
+    queryFn: () => getBreakdown(defaultBudget?.id!, 'week', false),
   })
 
   const [data, total] = useMemo(() => {
     const arr: any[] =
       weeklyData.data?.map((item: any) => ({
         value: item.sum,
-        label: item.category.name,
-        frontColor: item.category.color,
+        label: item.category?.name || 'no_label',
+        frontColor: item.category?.color || 'brown',
       })) || []
 
     const total = arr.reduce((acc, next) => acc + next.value, 0)

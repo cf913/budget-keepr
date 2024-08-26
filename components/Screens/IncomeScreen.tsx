@@ -1,16 +1,14 @@
 import { PADDING } from '@/constants/Styles'
+import { useLocalSettings } from '@/stores/localSettings'
+import React, { useState } from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Analytics from '../Analytics'
 import HomePageFooter from '../Footers/HomePageFooter'
-import RecentEntries from '../RecentEntries'
+import { Content, Padder, Page } from '../Layout'
 import { ThemedView } from '../ThemedView'
-import { useLocalSettings } from '@/stores/localSettings'
-import { useState } from 'react'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import RecentRecurrings from '../RecentRecurrings'
-import { Page, Content, Padder } from '../Layout'
-import UserAvatars from '../UserAvatars'
+import { ThemedText } from '../ThemedText'
 
-export default function BudgetScreen() {
+export default function IncomeScreen() {
   const { defaultBudget } = useLocalSettings()
   const insets = useSafeAreaInsets()
   const [counter, setCounter] = useState(0)
@@ -22,23 +20,9 @@ export default function BudgetScreen() {
   return (
     <Page
       scroll
-      title={defaultBudget?.name || 'Budget'}
-      mid={
-        <ThemedView
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            flex: 1,
-          }}
-        >
-          <Padder w={1} />
-          <UserAvatars members={defaultBudget?.team?.members || []} />
-        </ThemedView>
-      }
+      title={'Income'}
       refreshing={false}
       onRefresh={onRefresh}
-      footer={<HomePageFooter />}
       withSettings
     >
       <Content style={{ flex: 1 }}>
@@ -53,9 +37,7 @@ export default function BudgetScreen() {
             backgroundColor: 'transparent',
           }}
         >
-          <RecentEntries {...{ counter, setCounter }} />
-          <Padder h={2 / 3} />
-          <RecentRecurrings id={defaultBudget?.id} />
+          <ThemedText>Show Income entries</ThemedText>
         </ThemedView>
         <Padder />
         <Padder style={{ height: insets.bottom ? insets.bottom : PADDING }} />

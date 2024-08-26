@@ -22,7 +22,7 @@ export default function CategoryCreate() {
   const mutation = useMutation({
     mutationFn: createSubCategory,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sub_categories', id] })
+      queryClient.invalidateQueries({ queryKey: ['sub_categories'] })
       router.back()
     },
     onError: error => {

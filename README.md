@@ -1,5 +1,27 @@
 # Welcome to your Expo app 👋
 
+![screenshots](https://github.com/user-attachments/assets/a36bdb5f-ff37-4407-8d5e-97a79a3c7448)
+
+Why?
+- Took a year off work and wanted to see how long I could stretch my holidays with no income but I didn't know how much I spent
+  per week. Tried tracking everything on paper, or using a spreadsheet, but it was always too complicated to stay on track.
+- Now I can just open the app on the go, press Add Entry, fill in 2 inputs real quick, and forget.
+- I can share a budget with my partner and track our Food spending together.
+
+Goal
+- Easy login process, email + password or apple signin.
+- Wanted to make it as simple as possible with no unecessary feature. No connecting to banks or what.
+- Manual inputs only.
+- Use case: I'm at the store, while waiting for receipt to print or while walking back to the car,
+i can easily input amount and category. Done.
+- Recurring payments are also easily handled. Created them once let the magic happen.
+- I want to add income tracking as well to extrapolate net worth over time based on current spending and income.
+
+What's the deal?
+- Ridiculously simple to use
+- One feature: Track your spending
+- No financial wizardry required
+
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started

@@ -11,6 +11,8 @@ import PagerView from 'react-native-pager-view'
 
 export default function HomeScreen() {
   const { defaultBudget } = useLocalSettings()
+
+  console.log('home screen')
   if (!defaultBudget) return <Redirect href="select-budget-onboarding" />
 
   // TODO: make pages lazy load

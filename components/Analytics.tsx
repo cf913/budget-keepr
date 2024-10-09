@@ -73,6 +73,7 @@ export default function Analytics({ counter, budget_id }: AnalyticsProps) {
   ] = queries
 
   React.useEffect(() => {
+    console.log('analytics')
     const error = queries.find(query => query.error)?.error
     if (error) {
       Toasty.error(`Analytics error: ${error.message}`)

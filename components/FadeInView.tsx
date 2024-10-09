@@ -9,6 +9,7 @@ export default function FadeInView(
   const fadeAnim = useRef(new Animated.Value(0)).current // Initial value for opacity: 0
 
   useEffect(() => {
+    console.log('fadeinview')
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 300,

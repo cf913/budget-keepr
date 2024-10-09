@@ -56,6 +56,7 @@ export default function RecentEntries({
   })
 
   useEffect(() => {
+    console.log('recententries')
     refetch()
   }, [refetch, counter])
 

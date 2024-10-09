@@ -68,6 +68,7 @@ function EditRecurringScreen({
   )
 
   useEffect(() => {
+    console.log('editrecurringscreen')
     setSelectedFrequency(recurring.frequency)
   }, [recurring.frequency])
 
@@ -115,7 +116,7 @@ function EditRecurringScreen({
           setDate,
           recurring: true,
           isRecurring: true,
-          setRecurring: () => {},
+          setRecurring: () => { },
         }}
       />
       <Spacer />

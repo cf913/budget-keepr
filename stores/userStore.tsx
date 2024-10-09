@@ -50,6 +50,7 @@ function UserProvider({ children }: WithUserProps) {
   })
 
   useEffect(() => {
+    console.log('auth thingssss')
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (
         event,
@@ -67,6 +68,7 @@ function UserProvider({ children }: WithUserProps) {
   }, [])
 
   if (isLoading) {
+    console.log('loading')
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color={textColor} />
@@ -75,6 +77,7 @@ function UserProvider({ children }: WithUserProps) {
   }
 
   if (error) {
+    console.log('error')
     Toasty.error(error.message)
   }
 
@@ -86,6 +89,7 @@ function UserProvider({ children }: WithUserProps) {
 
   const contextValue = { user, isLoading, error, refetch }
 
+  console.log('bu')
   return (
     <UserContext.Provider value={contextValue}>
       {typeof children === 'function' ? children(contextValue) : children}
@@ -94,5 +98,6 @@ function UserProvider({ children }: WithUserProps) {
 }
 
 export function WithUser({ children }: WithUserProps) {
+  console.log('with user')
   return <UserProvider>{children}</UserProvider>
 }

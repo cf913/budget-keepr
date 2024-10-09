@@ -64,8 +64,10 @@ export function LocalSettingsProvider(props: React.PropsWithChildren) {
   )
 
   useEffect(() => {
+    console.log('localsettings')
     const load = async () => {
       const values = await getDataManyObj([KEYS.DEFAULT_BUDGET.key])
+      console.log('values', JSON.stringify(values, null, 2))
       if (values) {
         const nextValues = values.map(([k, v]) => {
           KEYS[k].setter(v)

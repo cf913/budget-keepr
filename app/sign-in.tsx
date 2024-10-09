@@ -21,12 +21,17 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Auth() {
+  console.log('Auth session')
+  return null
   const insets = useSafeAreaInsets()
+  console.log('1')
   const theme = useColorScheme() ?? 'light'
+  console.log('2')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const { session } = useSession()
+  console.log('3')
 
   if (session) return <Redirect href="/(main)" />
 

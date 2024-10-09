@@ -42,7 +42,9 @@ const getDataMany = async (keys: string[]) => {
 
 const getDataManyObj = async (keys: string[]) => {
   try {
+    console.log('keys', keys)
     const value = await AsyncStorage.multiGet(keys)
+    console.log('value', value)
     if (value !== null) {
       return value.map(([k, v]) => [k, v != null ? JSON.parse(v) : null])
     }

@@ -57,6 +57,7 @@ function CategorySuggestionsScreen({
   const [subCategories, setSubCategories] = useState<SubCategory[] | null>(null)
 
   useEffect(() => {
+    console.log('categorysuggestionscreen')
     if (!data) return
 
     const options = {

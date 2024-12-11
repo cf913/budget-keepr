@@ -40,14 +40,6 @@
       "expo-apple-authentication",
       "expo-font",
       [
-        "@sentry/react-native/expo",
-        {
-          "organization": "cf913",
-          "project": "react-native",
-          "url": "https://sentry.io"
-        }
-      ],
-      [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."

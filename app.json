@@ -2,7 +2,8 @@
   "expo": {
     "name": "Capito",
     "slug": "budget-keepr",
-    "version": "1.0.11",
+    "version": "2.0.0",
+    "runtimeVersion": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/app_icon.png",
     "scheme": "myapp",
@@ -17,14 +18,17 @@
       "supportsTablet": true,
       "usesAppleSignIn": true,
       "bundleIdentifier": "com.budgetkeepr",
-      "buildNumber": "0"
+      "appleTeamId": "JGB33Y2CF3"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.budgetkeepr"
+      "package": "com.budgetkeepr",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -62,9 +66,6 @@
       }
     },
     "owner": "chad_fallotin",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
     "updates": {
       "url": "https://u.expo.dev/160e0efd-d9b3-4f6e-b454-6a41cf0e32fd",
       "requestHeaders": {
